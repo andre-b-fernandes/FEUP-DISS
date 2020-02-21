@@ -17,3 +17,5 @@ Dissertation topic on a **Software Library for Stream Based Recommender Systems*
 
 This diagram describes the process done whenever a new data stream
 is provided by the user. If no new data stream arrives, then obviously, the model update part does not happen.
+
+## Dependencies
