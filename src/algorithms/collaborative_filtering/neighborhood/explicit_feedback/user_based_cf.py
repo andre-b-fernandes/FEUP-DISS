@@ -1,4 +1,5 @@
 import numpy as np
+from math import sqrt
 from ...model import CollaborativeFiltering
 
 class UserBasedCollaborativeFiltering(CollaborativeFiltering):
@@ -37,11 +38,13 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
     
     # Assuming user in rows and items in columns
     def _init_model(self):
+        self.model = np.zeros((len(self.matrix), len(self.matrix)))
         for index , user in enumerate(self.matrix):
             copy_matrix = np.copy(self.matrix)
             np.delete(copy_matrix, index, 0)
-            for another_user in copy_matrix:
+            for another_index, another_user in enumerate(copy_matrix):
                 sim = self.calculate_pearson_similarity(user, another_user)
+                self.model[index][another_index] = sim
                 
 
     def _validate_model(self):
@@ -49,6 +52,14 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
     
     #Uses the Pearson Similarity Coefficient to calculate the similarities between both users.
     def calculate_pearson_similarity(self, user, another_user):
+        #id's of co_rated items
         co_ratings = [ user_tuple[0] for user_tuple, another_user_tuple in zip(enumerate(user), enumerate(another_user)) if (user_tuple[1] != None and another_user_tuple[1] != None) ]
-        return 0
+        user_avg = sum(user)/len(user)
+        another_user_avg = sum(another_user)/len(another_user)
+
+        covariance = sum([ (user[item_id] - user_avg)*(another_user[item_id] - another_user_avg) for item_id in co_ratings])
+        std_dev_user = sqrt(sum([ (user[item_id] - user_avg)**2 for item_id in co_ratings]))
+        std_dev_another_user = sqrt(sum([ (another_user[item_id] - another_user_avg)**2 for item_id in co_ratings]))
+        
+        return (covariance/(std_dev_user * std_dev_another_user))
     
