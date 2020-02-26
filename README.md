@@ -22,4 +22,4 @@ is provided by the user. If no new data stream arrives, then obviously, the mode
 Pipenv
 
 ## Tests
-`pipenv run python3 -m unittest discover -s src -p "*_test.py"`
+`pipenv run python3 -m unittest discover -v -s src -p "*_test.py"`

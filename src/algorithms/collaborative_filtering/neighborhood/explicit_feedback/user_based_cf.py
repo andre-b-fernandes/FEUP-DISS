@@ -1,6 +1,7 @@
 import numpy as np
 from math import sqrt
 from ...model import CollaborativeFiltering
+from .....utils.utils import covariance, standard_deviation, pearson_correlation
 
 AVG_RATINGS_KEY = "avg_ratings"
 CO_RATED_KEY = "co_rated"
@@ -28,7 +29,7 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
 
         
     """
-    def __init__(self, matrix, similarities = [], avg_ratings = dict(), co_rated = []):
+    def __init__(self, matrix = np.array([]), similarities = np.array([]), avg_ratings = dict(), co_rated = np.array([])):
         """
             Constructor
 
@@ -41,7 +42,7 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
             avg_ratings:
                 A dictionary indexed by user_id with average ratings
         """
-        super(matrix)
+        super().__init__(matrix)
         self._init_model(avg_ratings, AVG_RATINGS_KEY, self._init_avg_ratings)
         self._init_model(co_rated, CO_RATED_KEY, self._init_co_rated)
         self._init_model(similarities, SIMILARITIES_KEY, self._init_similarities)        
@@ -54,50 +55,37 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
     
     #initializing the co rated items with the item id's
     def _init_co_rated(self):
-        self.model[CO_RATED_KEY] = np.zeros((len(self.matrix), len(self.matrix)))
+        self.model[CO_RATED_KEY] = [ [ np.array([]) for _c in range(0, len(self.matrix)) ] for _i in range(0, len(self.matrix)) ]
         for index , user in enumerate(self.matrix):
             for another_index, another_user in enumerate(self.matrix):
-                self.model[CO_RATED_KEY][index][another_index] = [ user_tuple[0] for user_tuple, another_user_tuple in zip(enumerate(user), enumerate(another_user)) if (user_tuple[1] is not None and another_user_tuple[1] is not None) ]
+                self.model[CO_RATED_KEY][index][another_index] = np.array([ user_tuple[0] for user_tuple, another_user_tuple in zip(enumerate(user), enumerate(another_user)) if (user_tuple[1] is not None and another_user_tuple[1] is not None) ])
     
-    def _update_co_rated(self, rating):
-        for another_index, co_rated_list in enumerate(self.model[CO_RATED_KEY][rating[0]]):
-                if self.matrix[another_index][rating[1]] is not None:
-                    self.model[CO_RATED_KEY][rating[0]][another_index] = np.append(co_rated_list, rating[1])
+    def _update_co_rated(self, user_id, item_id):
+        for another_index, co_rated_list in enumerate(self.model[CO_RATED_KEY][user_id]):
+                if self.matrix[another_index][item_id] is not None:
+                    self.model[CO_RATED_KEY][user_id][another_index] = np.append(co_rated_list, item_id)
                 
     #initializing the average ratings
     def _init_avg_ratings(self):
         self.model[AVG_RATINGS_KEY] = dict()
         for index, user in enumerate(self.matrix):
-            self.model[AVG_RATINGS_KEY][index] = sum(user)/len(user)
+            self.model[AVG_RATINGS_KEY][index] = sum(filter(None,user))/len(list(filter(None,user)))
     
     # Assuming user in rows and items in columns
     def _init_similarities(self):
-        self.model[SIMILARITIES_KEY] = np.zeros((len(self.matrix), len(self.matrix)))
+        self.model[SIMILARITIES_KEY] = np.zeros((len(self.matrix), len(self.matrix)), dict)
         for index , user in enumerate(self.matrix):
             for another_index, another_user in enumerate(self.matrix):
-                sim = self._calculate_pearson_similarity((index, user), (another_index, another_user))
-                self._update_similarities(index, another_index, sim[0], sim[1], sim[2])
+                sim = pearson_correlation(self.model[CO_RATED_KEY][index][another_index], user, another_user, self.model[AVG_RATINGS_KEY][index], self.model[AVG_RATINGS_KEY][another_index])
+                self._update_similarities(index, another_index, sim[0], sim[1], sim[2], abs(round(sim[3], 5)))
 
-    def _update_similarities(self, user_id, another_user_id, cov, std_dev1, std_dev2):
+    def _update_similarities(self, user_id, another_user_id, cov, std_dev1, std_dev2, result):
         self.model[SIMILARITIES_KEY][user_id][another_user_id] = dict()
         self.model[SIMILARITIES_KEY][user_id][another_user_id][COVARIANCE_KEY] = cov
         self.model[SIMILARITIES_KEY][user_id][another_user_id][STD_DEV_FIRST_KEY] = std_dev1
         self.model[SIMILARITIES_KEY][user_id][another_user_id][STD_DEV_SEC_KEY] = std_dev2
-        self.model[SIMILARITIES_KEY][user_id][another_user_id][SIM_VALUE_KEY] = cov/(std_dev1 * std_dev2)
-                
-    #Uses the Pearson Similarity Coefficient to calculate the similarities between both users.
-    def _calculate_pearson_similarity(self, user, another_user):
-        #id's of co_rated items
-        co_ratings = self.model[CO_RATED_KEY][user[0]][another_user[0]]
-        user_avg = self.model[AVG_RATINGS_KEY][user[0]]
-        another_user_avg = self.model[AVG_RATINGS_KEY][another_user[0]]
-
-        covariance = sum([ (user[1][item_id] - user_avg)*(another_user[1][item_id] - another_user_avg) for item_id in co_ratings])
-        std_dev_user = sqrt(sum([ (user[1][item_id] - user_avg)**2 for item_id in co_ratings]))
-        std_dev_another_user = sqrt(sum([ (another_user[1][item_id] - another_user_avg)**2 for item_id in co_ratings]))
-        
-        return (covariance, std_dev_user, std_dev_another_user, (covariance/(std_dev_user * std_dev_another_user)))
-    
+        self.model[SIMILARITIES_KEY][user_id][another_user_id][SIM_VALUE_KEY] = result
+                    
     #new rating incoming as (user_id, item_id, rating)    
     def _new_rating(self, rating):
         old_avg_rating = self.model[AVG_RATINGS_KEY][rating[0]]
@@ -150,8 +138,21 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
             self._new_rating(rating)
         #new rating
         else:
-            self._update_co_rated(rating)
+            self._update_co_rated(rating[0], rating[1])
+            self._update_rating(rating)
         self.matrix[rating[0]][rating[1]] = rating[2]
+    
+    def similarities(self):
+        return self.model[SIMILARITIES_KEY]
+
+    def similarity_between(self, user, another_user):
+        return self.model[SIMILARITIES_KEY][user][another_user][SIM_VALUE_KEY]
+    
+    def avg_ratings(self):
+        return self.model[AVG_RATINGS_KEY]
+
+    def co_rated(self):
+        return self.model[CO_RATED_KEY]
     
 
         
