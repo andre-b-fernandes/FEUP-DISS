@@ -105,13 +105,10 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
         new_avg_rating = (rating[2]/new_size)+(old_avg_rating * (new_size - 1) / new_size)
         self.model[AVG_RATINGS_KEY][rating[0]] =  new_avg_rating
         difference_avg = new_avg_rating - old_avg_rating
-        copy_matrix = np.copy(self.matrix)
-        #remove element from the copy matrix
-        np.delete(copy_matrix, rating[0], 0)
         e,f,g = 0,0,0
-        for another_index, another_user in enumerate(copy_matrix):
+        for another_index, another_user in enumerate(self.matrix):
             #had rated
-            if another_user[rating[1]] != None:
+            if another_user[rating[1]] is not None:
                 e = ( rating[2] - new_avg_rating) * (another_user[rating[1]] - self.model[AVG_RATINGS_KEY][another_index]) - sum([ difference_avg * (another_user[rating[1]] - self.model[AVG_RATINGS_KEY][another_index]) for item_id in self.model[CO_RATED_KEY][rating[0]][another_index] ])
                 f = (rating[2] - new_avg_rating)**2 + len(self.model[CO_RATED_KEY][rating[0]][another_index])*difference_avg**2 - 2*sum([ difference_avg*( self.matrix[rating[0]][item_id] - old_avg_rating) for item_id in self.model[CO_RATED_KEY][rating[0]][another_index] ])
                 g = ( another_user[rating[1]] - self.model[AVG_RATINGS_KEY][another_index])**2
@@ -120,21 +117,41 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
                 e = sum([ (difference_avg) * ( another_user[item_id] - self.model[AVG_RATINGS_KEY][another_index] ) for item_id in self.model[CO_RATED_KEY][rating[0]][another_index] ])
                 g = 0
                 f = len(self.model[CO_RATED_KEY][rating[0]][another_index]) * (difference_avg)**2 - 2*sum([difference_avg * (self.matrix[rating[0]][item_id] - new_avg_rating) for item_id in self.model[CO_RATED_KEY][rating[0]][another_index]] )
-                
-        self._update_similarities(rating[0], another_index, self.model[SIMILARITIES_KEY][rating[0]][another_index][COVARIANCE_KEY] + e, self.model[SIMILARITIES_KEY][rating[0]][another_index][STD_DEV_FIRST_KEY] + f, self.model[SIMILARITIES_KEY][rating[0]][another_index][STD_DEV_SEC_KEY] + g)
 
+            self._update_similarities(rating[0], another_index, self.model[SIMILARITIES_KEY][rating[0]][another_index][COVARIANCE_KEY] + e, self.model[SIMILARITIES_KEY][rating[0]][another_index][STD_DEV_FIRST_KEY] + f, self.model[SIMILARITIES_KEY][rating[0]][another_index][STD_DEV_SEC_KEY] + g)
+
+    #update rating incoming as (user_id, item_id, rating)   
     def _update_rating(self, rating):
-        pass
+        diff_ratings = rating[2] - self.matrix[rating[0]][rating[1]]
+        old_avg_rating = self.model[AVG_RATINGS_KEY][rating[0]]
+        new_size = len(self.model[CO_RATED_KEY][rating[0]][rating[0]])
+        new_avg_rating = (diff_ratings/new_size - 1) + old_avg_rating
+        self.model[AVG_RATINGS_KEY][rating[0]] = new_avg_rating
+        difference_avg = new_avg_rating - old_avg_rating
+        e,f,g = 0,0,0
+        for another_index, another_user in enumerate(self.matrix):
+            #had rated
+            if another_user[rating[1]] is not None:
+                e = diff_ratings * (another_user[rating[1]] - self.model[AVG_RATINGS_KEY][another_index]) - sum([ difference_avg * ( another_user[item_id] - self.model[AVG_RATINGS_KEY][another_index]) for item_id in self.model[CO_RATED_KEY]][rating[0]][another_index])
+                f = diff_ratings**2 + 2*diff_ratings*(rating[2] - new_avg_rating) + len(self.model[CO_RATED_KEY][rating[0]][another_index])*difference_avg**2 - 2*sum([ difference_avg * ( self.matrix[rating[0]][item_id] - old_avg_rating) for item_id in self.model[CO_RATED_KEY][rating[0]][another_index]])
+                g = 0
+            #hadn't rated
+            else:
+                e = -sum([ difference_avg * ( another_user[item_id] - self.model[AVG_RATINGS_KEY][another_index]) for item_id in self.model[CO_RATED_KEY][rating[0]][another_index]])
+                f = len(self.model[CO_RATED_KEY][rating[0]][another_index])*difference_avg**2 - 2*sum([ difference_avg * ( self.matrix[rating[0]][item_id] - old_avg_rating ) for item_id in self.model[CO_RATED_KEY][rating[0]][another_index] ])
+                g = 0
+
+            self._update_similarities(rating[0], another_index, self.model[SIMILARITIES_KEY][rating[0]][another_index][COVARIANCE_KEY] + e, self.model[SIMILARITIES_KEY][rating[0]][another_index][STD_DEV_FIRST_KEY] + f, self.model[SIMILARITIES_KEY][rating[0]][another_index][STD_DEV_SEC_KEY] + g)
         
     #new stream incoming as (user_id, item_id, rating)
     def new_stream(self, rating):
         #rating update
-        self.matrix[rating[0]][rating[1]] = rating[2]
         if self.matrix[rating[0]][rating[1]] != None:
             self._new_rating(rating)
         #new rating
         else:
             self._update_co_rated(rating)
+        self.matrix[rating[0]][rating[1]] = rating[2]
     
 
         
