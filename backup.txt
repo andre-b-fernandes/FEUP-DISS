@@ -1,0 +1,40 @@
+#arguments as ((user_id, item_id, new_rating, new_avg_rating ), another_user_id)
+    # def _update_rating_terms(self, rating, another_user_id):
+    #     user_id, current_item_id, new_rating, new_avg_rating, another_user_avg_rating, another_user_ratings, co_rated, old_avg_rating, difference_avg, co_rated_length, another_user_rating = self._unpack_values(rating, another_user_id)
+    #     old_user_rating = self.matrix[user_id][current_item_id]
+    #     diff_ratings = new_rating - old_user_rating        
+        
+    #     #had rated
+    #     e,f,g = 0,0,0
+    #     if another_user_rating is not None:
+    #         e = diff_ratings * (another_user_rating - another_user_avg_rating) - sum([ difference_avg * ( another_user_ratings[item_id] - another_user_avg_rating) for item_id in co_rated])
+    #         f = diff_ratings**2 + 2*diff_ratings*(rating[2] - new_avg_rating) + co_rated_length*difference_avg**2 - 2*sum([ difference_avg * ( self.matrix[user_id][item_id] - old_avg_rating) for item_id in co_rated])
+    #     #hadn't rated
+    #     else:
+    #         e = -sum([ difference_avg * ( another_user_ratings[item_id] - another_user_avg_rating) for item_id in co_rated])
+    #         f = co_rated_length*difference_avg**2 - 2*sum([ difference_avg * ( self.matrix[user_id][item_id] - old_avg_rating ) for item_id in co_rated ])
+        
+    #     return e,f,g
+
+# e,f,g = self._new_rating_terms((user_id, item_id, rating, new_avg_rating), another_user_id)
+# self._update_similarities_with_terms(user_id, another_user_id, e, f, g)
+
+#arguments as ((user_id, item_id, new_rating, new_avg_rating ), another_user_id)
+    # def _new_rating_terms(self, rating, another_user_id):
+    #     user_id, _current_item_id, new_rating, new_avg_rating, another_user_avg_rating, another_user_ratings, co_rated, old_avg_rating, difference_avg, co_rated_length, another_user_rating = self._unpack_values(rating, another_user_id)
+    #     #had rated
+    #     e,f,g = 0,0,0
+    #     if another_user_rating is not None:
+    #         e = ( new_rating - new_avg_rating) * (another_user_rating - another_user_avg_rating) - sum([ difference_avg * (another_user_ratings[item_id] - another_user_avg_rating) for item_id in co_rated])
+    #         f = ( new_rating - new_avg_rating)**2 + co_rated_length*(difference_avg**2) - 2*sum([ difference_avg*( self.matrix[user_id][item_id] - old_avg_rating) for item_id in co_rated])
+    #         g = ( another_user_rating - another_user_avg_rating)**2
+    #     #had not rated
+    #     else:
+    #         e = sum([ (difference_avg) * ( another_user_ratings[item_id] - another_user_avg_rating ) for item_id in co_rated])
+    #         g = 0
+    #         f = co_rated_length * (difference_avg)**2 - 2*sum([difference_avg * (self.matrix[user_id][item_id] - new_avg_rating) for item_id in co_rated])
+    
+    #     return e,f,g
+
+# e,f,g = self._update_rating_terms((user_id, item_id, rating, new_avg_rating), another_user_id)
+# self._update_similarities_with_terms(user_id, another_user_id, e, f, g)
