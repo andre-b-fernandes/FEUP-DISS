@@ -5,6 +5,13 @@ from random import randint
 from src.algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based_cf import UserBasedCollaborativeFiltering
 from src.utils.utils import pearson_correlation_terms
 class UserBasedCollaborativeFilteringTest(unittest.TestCase):
+    def _test_similarity_terms(self, cf, user_id, another_user_id):
+        terms = pearson_correlation_terms(cf.co_rated_between(user_id, another_user_id), cf.matrix[user_id], cf.matrix[another_user_id], cf.avg_rating(user_id), cf.avg_rating(another_user_id))
+        self.assertEqual(cf.variance(user_id,another_user_id), terms[1])
+        self.assertEqual(cf.variance(another_user_id,user_id), terms[2])
+        self.assertEqual(cf.covariance_between(user_id, another_user_id), terms[0])
+        self.assertEqual(cf.similarity_between(user_id, another_user_id), round(terms[3],5))
+
     def test_asserts(self):
         matrix = np.array([1])
         similarities = np.array([1])
@@ -45,32 +52,41 @@ class UserBasedCollaborativeFilteringTest(unittest.TestCase):
         self.assertEqual(cf.similarity_between(1,4), 1)
     
     def test_new_rating(self):
-        value = 1
-        new_rating = 7
-        item_id = 0
         user_id = 3
         another_user_id = 4
         matrix = [
             [8, None, None, None, 7],
             [7, None, 1, None, 6],
             [None, 2, 9, None, 1],
-            [None, None, value, None, None],
-            [7, None, 1, None, 6],
+            [None, None, 2, None, None],
+            [7, None, 2, None, 6],
         ]
         cf = UserBasedCollaborativeFiltering(matrix)
-        self.assertNotIn(item_id, cf.co_rated_between(user_id, another_user_id))
-        cf.new_stream(user_id, item_id, new_rating)
-        self.assertEqual(cf.avg_rating(user_id), (value + new_rating)/2)
-        self.assertIn(item_id, cf.co_rated_between(user_id, another_user_id))
-        self.assertGreater(cf.similarity_between(user_id, another_user_id), cf.similarity_between(user_id, 2))
-        item_id = 4
-        new_rating = 6
-        cf.new_stream(user_id, item_id, new_rating)
-        self.assertEqual(cf.similarity_between(user_id, another_user_id), 1)
-
-    ##TODO
-    def test_update_rating(self):
-        pass
+        self.assertNotIn(0, cf.co_rated_between(user_id, another_user_id))
+        cf.new_stream(user_id, 0, 7)
+        self._test_similarity_terms(cf, user_id, another_user_id)
+        cf.new_stream(user_id, 4, 6)
+        self._test_similarity_terms(cf, user_id, another_user_id)
+        cf.new_stream(user_id, 1, 8)
+        self._test_similarity_terms(cf, user_id, another_user_id)
+        
+    #TODO
+    # def test_update_rating(self):
+    #     user_id = 0
+    #     another_user_id = 4
+    #     matrix = [
+    #         [1, None, 1, None, 1],
+    #         [7, None, 1, None, 6],
+    #         [None, 2, 9, None, 1],
+    #         [None, None, 1, None, None],
+    #         [7, None, 1, None, 6],
+    #     ]
+    #     cf = UserBasedCollaborativeFiltering(matrix)
+    #     print("")
+    #     print(cf.similarity_terms_between(user_id, another_user_id))
+    #     cf.new_stream(user_id, 0, 7)
+    #     print(cf.similarity_terms_between(user_id, another_user_id))
+    #     self._test_similarity_terms(cf, user_id, another_user_id)
         
             
 if __name__ == '__main__':
