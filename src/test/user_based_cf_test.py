@@ -7,8 +7,8 @@ from src.utils.utils import pearson_correlation_terms
 class UserBasedCollaborativeFilteringTest(unittest.TestCase):
     def _test_similarity_terms(self, cf, user_id, another_user_id):
         terms = pearson_correlation_terms(cf.co_rated_between(user_id, another_user_id), cf.matrix[user_id], cf.matrix[another_user_id], cf.avg_rating(user_id), cf.avg_rating(another_user_id))
-        self.assertEqual(cf.variance(user_id,another_user_id), terms[1])
-        self.assertEqual(cf.variance(another_user_id,user_id), terms[2])
+        self.assertEqual(cf.variance(user_id,another_user_id), terms[2])
+        self.assertEqual(cf.variance(another_user_id,user_id), terms[1])
         self.assertEqual(cf.covariance_between(user_id, another_user_id), terms[0])
         self.assertEqual(cf.similarity_between(user_id, another_user_id), round(terms[3],5))
 
