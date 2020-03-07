@@ -25,12 +25,16 @@ def file_generator(path,model_class,sep= " "):
     streams,dim_u,dim_i = parse_file(path, sep)
     matrix = [[None for _ in range(0,dim_i)] for _ in range(0,dim_u)]
     print("Empty matrix generated...")
+    start_time = time.time()
     model = model_class(matrix)
-    print("Empty model generated...")
+    end_time = time.time()
+    elapsed = end_time - start_time
+    print("Empty model generated... in " + str(elapsed) + " seconds.")
     for stream in streams:
+        print("New stream entering: " + str(stream))
         start_time = time.time()
-        model.new_stream(stream)
+        model.new_stream(stream[0], stream[1], stream[2])
         end_time = time.time()
         elapsed = end_time - start_time
-        print("Elapsed time on stream: " + elapsed)
+        print("Elapsed time on stream: " + str(elapsed) + " seconds.")
     return model
