@@ -2,11 +2,11 @@ import unittest
 import numpy as np
 import time
 from random import randint
-from src.algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based_cf import UserBasedCollaborativeFiltering
+from src.algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based_cf import UserBasedExplicitCF
 from src.utils.utils import pearson_correlation_terms
 from src.streams.file_loader import parse_file
 
-class UserBasedCollaborativeFilteringTest(unittest.TestCase):
+class UserBasedExplicitCFTest(unittest.TestCase):
     def _test_similarity_terms(self, cf, user_id, another_user_id):
         terms = pearson_correlation_terms(cf.co_rated_between(user_id, another_user_id), cf.matrix[user_id], cf.matrix[another_user_id], cf.avg_rating(user_id), cf.avg_rating(another_user_id))
         self.assertAlmostEqual(cf.variance(user_id,another_user_id), round(terms[1],5), delta=0.0001)
@@ -25,7 +25,7 @@ class UserBasedCollaborativeFilteringTest(unittest.TestCase):
         similarities = np.array([1])
         avg_ratings = {"teste":3}
         co_rated = np.array([1])
-        cf = UserBasedCollaborativeFiltering(matrix, similarities, avg_ratings, co_rated)
+        cf = UserBasedExplicitCF(matrix, similarities, avg_ratings, co_rated)
         self.assertEqual(matrix, cf.matrix)
         self.assertEqual(similarities, cf.similarities())
         self.assertEqual(co_rated, cf.co_rated())
@@ -37,7 +37,7 @@ class UserBasedCollaborativeFilteringTest(unittest.TestCase):
     def test_model_initialization(self):
         dimension = 10
         matrix = [[ randint(1,10) for _i in range(0,dimension)] for _c in range(0,dimension) ]
-        cf = UserBasedCollaborativeFiltering(matrix)
+        cf = UserBasedExplicitCF(matrix)
         self.assertEqual(len(cf.similarities()), len(matrix))
         self.assertEqual(len(cf.co_rated()), len(matrix))
         self.assertEqual(len(cf.avg_ratings()), len(matrix))
@@ -53,7 +53,7 @@ class UserBasedCollaborativeFilteringTest(unittest.TestCase):
             [None, 1, 9, None, None],
             [7, None, 1, None, 6],
         ]
-        cf = UserBasedCollaborativeFiltering(matrix)
+        cf = UserBasedExplicitCF(matrix)
         self._test_similarity_terms_users(cf,0)
         self._test_similarity_terms_users(cf,1)
         self._test_similarity_terms_users(cf,2)
@@ -69,7 +69,7 @@ class UserBasedCollaborativeFilteringTest(unittest.TestCase):
             [None, 2, 9, None, 1],            
             [7, None, 2, None, 6],
         ]
-        cf = UserBasedCollaborativeFiltering(matrix)
+        cf = UserBasedExplicitCF(matrix)
         self._test_similarity_terms_users(cf, user_id)
         self.assertNotIn(0, cf.co_rated_between(user_id, 4))
         cf.new_stream(user_id, 0, 7)

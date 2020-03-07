@@ -1,20 +1,17 @@
-import numpy as np
 from math import sqrt
-from ...model import CollaborativeFiltering
+from ...neighborhood.model import NeighborhoodUserCF, CO_RATED_KEY
 from .....utils.utils import covariance, variance, pearson_correlation_terms, pearson_correlation
 from .....data_structures.symmetric_matrix import SymmetricMatrix
+from .....data_structures.pair_variances import PairVariances
 
 AVG_RATINGS_KEY = "avg_ratings"
-CO_RATED_KEY = "co_rated"
 SIMILARITIES_KEY = "similarities"
 
 COVARIANCE_KEY = "B"
-VARIANCE_FIRST_KEY = "C"
-VARIANCE_SECOND_KEY = "D"
+VARIANCES_KEY = "variances"
 SIM_VALUE_KEY = "similarity_value"
 
-#TODO USE THE SIMETRIC MATRIX AND CHANGE THE TESTS
-class UserBasedCollaborativeFiltering(CollaborativeFiltering):
+class UserBasedExplicitCF(NeighborhoodUserCF):
     """
         The defion of the user based collaborative filtering algorithm.
         It extends the collaborative filtering base class.
@@ -43,29 +40,9 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
             avg_ratings:
                 A dictionary indexed by user_id with average ratings
         """
-        super().__init__(matrix)
+        super().__init__(matrix, co_rated)
         self._init_model(avg_ratings, AVG_RATINGS_KEY, self._init_avg_ratings)
-        self._init_model(co_rated, CO_RATED_KEY, self._init_co_rated)
         self._init_model(similarities, SIMILARITIES_KEY, self._init_similarities)        
-    
-    def _init_model(self, model, model_name, callback):
-        if len(model) == 0:
-            callback()
-        else:
-            self.model[model_name] = model
-    
-    #initializing the co rated items with the item id's
-    def _init_co_rated(self):
-        self.model[CO_RATED_KEY] = SymmetricMatrix(len(self.matrix), set())
-        for index , user in enumerate(self.matrix):
-            for another_index in range(0, index + 1):
-                another_user = self.matrix[another_index]
-                self.model[CO_RATED_KEY][(index,another_index)] = set([ user_tuple[0] for user_tuple, another_user_tuple in zip(enumerate(user), enumerate(another_user)) if (user_tuple[1] is not None and another_user_tuple[1] is not None) ]) 
-            
-    def _update_co_rated(self, user_id, item_id):
-        for another_user_id in range(0,len(self.matrix)):
-            if self.matrix[another_user_id][item_id] is not None:
-                self.model[CO_RATED_KEY][(user_id,another_user_id)].add(item_id)
                 
     #initializing the average ratings
     def _init_avg_ratings(self):
@@ -101,7 +78,8 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
     def _update_similarities(self, user_id, another_user_id, cov, variance_first, variance_second, result):        
         self.model[SIMILARITIES_KEY][(user_id,another_user_id)] = dict()
         self.model[SIMILARITIES_KEY][(user_id,another_user_id)][COVARIANCE_KEY] = cov
-        self.set_variance(user_id, another_user_id, variance_first, variance_second)
+        self.model[SIMILARITIES_KEY][(user_id,another_user_id)][VARIANCES_KEY] = PairVariances()
+        self.model[SIMILARITIES_KEY][(user_id,another_user_id)][VARIANCES_KEY].set_variance(user_id,another_user_id, variance_first, variance_second)
         self.model[SIMILARITIES_KEY][(user_id,another_user_id)][SIM_VALUE_KEY] = result
     
     def _update_similarities_with_terms(self, user_id, another_user_id, e, f, g):
@@ -160,7 +138,6 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
             self.matrix[user_id][item_id] = rating
             self._update_co_rated(user_id, item_id)
             
-    
     def similarities(self):
         return self.model[SIMILARITIES_KEY]
 
@@ -171,18 +148,7 @@ class UserBasedCollaborativeFiltering(CollaborativeFiltering):
         return self.model[SIMILARITIES_KEY][(user,another_user)][COVARIANCE_KEY]
     
     def variance(self, user, another_user):
-        if user > another_user:
-            return self.model[SIMILARITIES_KEY][(user,another_user)][VARIANCE_FIRST_KEY]
-        else:
-            return self.model[SIMILARITIES_KEY][(user,another_user)][VARIANCE_SECOND_KEY]
-    
-    def set_variance(self, user, another_user, value_first, value_second):
-        if user > another_user:
-            self.model[SIMILARITIES_KEY][(user,another_user)][VARIANCE_FIRST_KEY] = value_first
-            self.model[SIMILARITIES_KEY][(user,another_user)][VARIANCE_SECOND_KEY] = value_second
-        else:
-            self.model[SIMILARITIES_KEY][(user,another_user)][VARIANCE_FIRST_KEY] = value_second
-            self.model[SIMILARITIES_KEY][(user,another_user)][VARIANCE_SECOND_KEY] = value_first
+        return self.model[SIMILARITIES_KEY][(user,another_user)][VARIANCES_KEY].variance(user, another_user)
         
     def similarity_terms_between(self, user, another_user):
         return self.model[SIMILARITIES_KEY][(user,another_user)]
