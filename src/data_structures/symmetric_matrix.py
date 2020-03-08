@@ -26,3 +26,14 @@ class SymmetricMatrix:
     
     def __iter__(self):
         return iter(self._data)
+
+    def __str__(self):
+        ret = ""
+        for i in range(0, self._size):
+            ret += "[  "
+            for c in range(0, i + 1):
+                ret += str(self.__getitem__([i,c]))
+                ret +="  "
+            ret += "]\n"
+        return ret
+        

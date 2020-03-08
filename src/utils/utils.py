@@ -1,8 +1,8 @@
 from math import sqrt
 
-def cosine_similarity(first_element, second_element):
-    pass
-
+def cosine_similarity(n_co_elements, n_first_element, n_second_element):
+    return n_co_elements/(sqrt(n_first_element) * sqrt(n_second_element))
+    
 def covariance(co_elements, first_set, second_set, first_set_avg, second_set_avg):
     return sum([ (first_set[identifier] - first_set_avg)*(second_set[identifier] - second_set_avg) for identifier in co_elements])
 
@@ -21,3 +21,12 @@ def pearson_correlation(covariance, variance_first, variance_second):
         return covariance/ (sqrt(variance_first) * sqrt(variance_second))
     except ZeroDivisionError as _:
         return 0
+
+#returns the ids
+def knn(element_id, candidates, n, heuristic):
+    return sorted(range(len(candidates)), key = lambda another_element_id: heuristic(element_id, another_element_id))[-n:]
+
+def avg(elements):
+    not_none = list(filter(None, elements))
+    return 0 if len(not_none) == 0 else sum(not_none)/len(not_none)
+    
