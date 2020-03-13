@@ -1,4 +1,4 @@
-[!Build Status][https://api.travis-ci.com/Marko50/FEUP-DISS.svg?token=zxXmDKs9f8jTTEztxFW7&branch=master]
+[![Build Status](https://travis-ci.com/Marko50/FEUP-DISS.svg?token=zxXmDKs9f8jTTEztxFW7&branch=master)](https://travis-ci.com/Marko50/FEUP-DISS.svg?token=zxXmDKs9f8jTTEztxFW7&branch=master)
 
 # FEUP-DISS
 
