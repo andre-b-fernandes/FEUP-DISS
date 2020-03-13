@@ -8,6 +8,8 @@ the **Faculty of Engineering of the University of Porto**.
 
 ## General Overview
 
+![overview](./images/diagram.png)
+
 ## Install
 
 ## Run Tests
