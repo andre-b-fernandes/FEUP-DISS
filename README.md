@@ -1,3 +1,5 @@
+[!Build Status][https://api.travis-ci.com/Marko50/FEUP-DISS.svg?token=zxXmDKs9f8jTTEztxFW7&branch=master]
+
 # FEUP-DISS
 
 This repository hosts the **Software library on stream based recommender systems**. This is part of my thesis dissertation done at
