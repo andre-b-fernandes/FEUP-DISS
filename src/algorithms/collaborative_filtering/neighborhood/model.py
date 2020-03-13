@@ -1,16 +1,17 @@
-from ..model import CollaborativeFiltering
-from ....data_structures.symmetric_matrix import SymmetricMatrix
-from ....utils.utils import knn
+from src.algorithms.collaborative_filtering.model import CollaborativeFiltering
+from src.data_structures.symmetric_matrix import SymmetricMatrix
+from src.utils.utils import knn
 
 CO_RATED_KEY = "co_rated"
 SIMILARITIES_KEY = "similarities"
 NEIGHBORS_KEY = "neighbors"
 
 class NeighborhoodUserCF(CollaborativeFiltering):
-    def __init__(self, matrix, co_rated, neighbors):
+    def __init__(self, matrix, co_rated, neighbors, n_neighbors):
         super().__init__(matrix)
         self._init_model(co_rated, CO_RATED_KEY, self._init_co_rated)
         self.similarity_data_structure = float #for initialization
+        self.n_neighbors = n_neighbors
     
     def _init_model(self, model, model_name, callback):
         if len(model) == 0:
@@ -46,14 +47,16 @@ class NeighborhoodUserCF(CollaborativeFiltering):
     def _neighborhood(self, user_id):
         candidates = list(range(0, len(self.matrix)))
         candidates.remove(user_id)
-        return knn(user_id, candidates, 5, self.similarity_between)
+        return knn(user_id, candidates, self.n_neighbors, self.similarity_between)
 
-    def recommend(self, user_id):
-        nbs = self.neighborhood_of(user_id)
+    def recommend(self, user_id, n_products):
         item_ids = [ i for i in range (0, len(self.matrix[user_id])) if self.matrix[user_id][i] is None ]
-        activation_weights = [ (item_id, sum([ self.similarity_between(user_id, another_user_id) for another_user_id in nbs if self.matrix[another_user_id][item_id] is not None])/len(nbs)) for item_id in item_ids]
-        return sorted(activation_weights, key= lambda tup: tup[1], reverse=True)[-5:]
+        return sorted(item_ids, key= lambda item_id: self._activation_weight(user_id, item_id))[-n_products:]
     
+    def _activation_weight(self, user_id, item_id):
+        nbs = self.neighborhood_of(user_id)
+        return sum([ self.similarity_between(user_id, another_user_id) for another_user_id in nbs if self.matrix[another_user_id][item_id] is not None])/len(nbs)
+            
     def similarities(self):
         return self.model[SIMILARITIES_KEY]
     

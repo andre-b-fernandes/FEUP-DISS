@@ -1,9 +1,9 @@
-from ...neighborhood.model import NeighborhoodUserCF, SIMILARITIES_KEY, NEIGHBORS_KEY
-from .....utils.utils import cosine_similarity
+from src.algorithms.collaborative_filtering.neighborhood.model import NeighborhoodUserCF, SIMILARITIES_KEY, NEIGHBORS_KEY
+from src.utils.utils import cosine_similarity
 
 class UserBasedImplicitCF(NeighborhoodUserCF):
-    def __init__(self, matrix = [], similarities = [], co_rated = [], neighbors= []):
-        super().__init__(matrix, co_rated, neighbors)
+    def __init__(self, matrix = [], similarities = [], co_rated = [], neighbors= [], n_neighbors = 5):
+        super().__init__(matrix, co_rated, neighbors, n_neighbors)
         self._init_model(similarities, SIMILARITIES_KEY, self._init_similarities)
         self._init_model(neighbors, NEIGHBORS_KEY, self._init_neighborhood)
     
@@ -27,6 +27,4 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
         self._update_co_rated(user_id, item_id)
         self._update_similarities(user_id)
         self._init_neighborhood()
-
-
-
+        

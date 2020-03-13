@@ -1,8 +1,8 @@
 from math import sqrt
-from ...neighborhood.model import NeighborhoodUserCF, CO_RATED_KEY, SIMILARITIES_KEY, NEIGHBORS_KEY
-from .....utils.utils import covariance, variance, pearson_correlation_terms, pearson_correlation, avg
-from .....data_structures.symmetric_matrix import SymmetricMatrix
-from .....data_structures.pair_variances import PairVariances
+from src.algorithms.collaborative_filtering.neighborhood.model import NeighborhoodUserCF, CO_RATED_KEY, SIMILARITIES_KEY, NEIGHBORS_KEY
+from src.utils.utils import covariance, variance, pearson_correlation_terms, pearson_correlation, avg
+from src.data_structures.symmetric_matrix import SymmetricMatrix
+from src.data_structures.pair_variances import PairVariances
 
 AVG_RATINGS_KEY = "avg_ratings"
 
@@ -26,7 +26,7 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
 
         
     """
-    def __init__(self, matrix = [], similarities = [], avg_ratings = dict(), co_rated = [], neighbors = []):
+    def __init__(self, matrix = [], similarities = [], avg_ratings = dict(), co_rated = [], neighbors = [], n_neighbors = 5):
         """
             Constructor
 
@@ -39,7 +39,7 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
             avg_ratings:
                 A dictionary indexed by user_id with average ratings
         """
-        super().__init__(matrix, co_rated, neighbors)
+        super().__init__(matrix, co_rated, neighbors, n_neighbors)
         self.similarity_data_structure = dict
         self._init_model(avg_ratings, AVG_RATINGS_KEY, self._init_avg_ratings)
         self._init_model(similarities, SIMILARITIES_KEY, self._init_similarities)
@@ -137,12 +137,9 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         self.matrix[user_id][item_id] = rating
         self._update_co_rated(user_id, item_id)
         self._init_neighborhood()
-    
+
     def similarity_between(self, user, another_user):
         return self.model[SIMILARITIES_KEY][(user,another_user)][SIM_VALUE_KEY]
-    
-    def similarity_terms_between(self, user, another_user):
-        return self.model[SIMILARITIES_KEY][(user,another_user)]
 
     def covariance_between(self, user, another_user):
         return self.model[SIMILARITIES_KEY][(user,another_user)][COVARIANCE_KEY]

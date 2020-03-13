@@ -1,3 +1,4 @@
 datasets/*
 .vscode/
 */**/*.pyc
+.coverage

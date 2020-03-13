@@ -24,7 +24,7 @@ def pearson_correlation(covariance, variance_first, variance_second):
 
 #returns the ids
 def knn(element_id, candidates, n, heuristic):
-    return sorted(range(len(candidates)), key = lambda another_element_id: heuristic(element_id, another_element_id))[-n:]
+    return sorted(candidates, key = lambda another_element_id: heuristic(element_id, another_element_id))[-n:]
 
 def avg(elements):
     not_none = list(filter(None, elements))
