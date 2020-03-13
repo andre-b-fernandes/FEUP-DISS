@@ -16,4 +16,4 @@ install:
 
 script:
   - pipenv run python -m unittest discover -v -s src -p "*_test.py"
-
+  - pipenv run flake8 --ignore=E501

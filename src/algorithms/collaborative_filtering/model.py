@@ -1,5 +1,6 @@
 from abc import ABC
 
+
 class CollaborativeFiltering(ABC):
     """
         The definition of a Collaborative Filtering Model.\n
@@ -22,4 +23,4 @@ class CollaborativeFiltering(ABC):
                 Ratings matrix.
         """
         self.matrix = matrix
-        self.model = dict()   
+        self.model = dict()
