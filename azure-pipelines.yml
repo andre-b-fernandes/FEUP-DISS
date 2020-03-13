@@ -38,5 +38,5 @@ steps:
   displayName: 'unit testing'
 
 - script: |
-    pipenv run python -m flake8 --ignore=E501
+    flake8 --ignore=E501
   displayName: 'linter'
