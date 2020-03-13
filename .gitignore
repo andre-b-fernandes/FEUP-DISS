@@ -3,3 +3,4 @@ backup.txt
 .vscode/
 */**/*.pyc
 .coverage
+*.swp
