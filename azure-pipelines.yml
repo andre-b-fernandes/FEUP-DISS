@@ -21,7 +21,7 @@ steps:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
 
-- script: apt-get install pipenv
+- script: sudo apt-get install pipenv
   displayName: 'Install Pipenv'      
 
 - script: python -m pipenv lock -r > requirements.txt
