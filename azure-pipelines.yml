@@ -34,5 +34,8 @@ steps:
 
 - script: |
     python -m unittest discover -v -s src -p "*_test.py"
+  displayName: 'unit testing'
+
+- script: |
     pipenv run python -m flake8 --ignore=E501
-  displayName: 'unittesting'
+  displayName: 'linter'

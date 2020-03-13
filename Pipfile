@@ -6,11 +6,11 @@ verify_ssl = true
 [dev-packages]
 pylint = "*"
 coverage = "*"
-flake8 = "*"
 
 [packages]
 pandas = "*"
 numpy = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.7"
