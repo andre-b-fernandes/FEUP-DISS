@@ -1,4 +1,5 @@
 datasets/*
+backup.txt
 .vscode/
 */**/*.pyc
 .coverage
