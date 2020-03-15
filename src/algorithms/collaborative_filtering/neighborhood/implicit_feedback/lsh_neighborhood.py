@@ -9,10 +9,14 @@ BUCKETS_KEY = "buckets"
 
 class LSHBased(CollaborativeFiltering):
 
-    def __init__(self, matrix, n_perms=5, n_bands=2):
+    def __init__(self, matrix, signature_matrix=[], buckets=[], n_perms=6,
+                 n_bands=2):
         super().__init__(matrix)
         self.n_permutations = n_perms
         self.n_bands = n_bands
+        self._init_model(signature_matrix, SIGNATURE_MATRIX_KEY,
+                         self._init_signature_matrix)
+        self._init_model(buckets, BUCKETS_KEY, self._init_buckets)
 
     def _init_signature_matrix(self):
         signatures = self._calculate_signatures(self.matrix)
@@ -47,7 +51,7 @@ class LSHBased(CollaborativeFiltering):
 
     def _add_to_bucket(self, h, element):
         if h in self.model[BUCKETS_KEY]:
-            self.model[BUCKETS_KEY].add(element)
+            self.model[BUCKETS_KEY][h].add(element)
         else:
             self.model[BUCKETS_KEY][h] = {element}
 
@@ -55,10 +59,18 @@ class LSHBased(CollaborativeFiltering):
         return [tuple(column[c:c + self.n_bands])
                 for c in range(0, len(column), self.n_bands)]
 
+    def _update_signature_matrix(self, item_id):
+        df = DataFrame(self.matrix)
+        column = df[item_id]
+        sign = [self._min_hash(permutation(column))
+                for _ in range(self.n_permutations)]
+        self.model[SIGNATURE_MATRIX_KEY][item_id] = sign
+
     # Assuming users in the rows and items in the columns
-    def new_stream(self, user_id, item_id):
+    def new_stream(self, stream):
+        user_id, item_id = stream[0], stream[1]
         self.matrix[user_id][item_id] = 1
-        self._init_signature_matrix()
+        self._update_signature_matrix(item_id)
         self._init_buckets()
 
     def recommend(self, user_id):

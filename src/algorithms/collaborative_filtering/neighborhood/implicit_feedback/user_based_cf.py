@@ -30,7 +30,8 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
     def similarity_between(self, user, another_user):
         return self.model[SIMILARITIES_KEY][(user, another_user)]
 
-    def new_stream(self, user_id, item_id):
+    def new_stream(self, stream):
+        user_id, item_id = stream[0], stream[1]
         self.matrix[user_id][item_id] = 1
         self._update_co_rated(user_id, item_id)
         self._update_similarities(user_id)

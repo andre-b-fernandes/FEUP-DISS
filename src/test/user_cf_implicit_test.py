@@ -66,13 +66,13 @@ class UserBasedImplicitCFTest(unittest.TestCase):
         cf = UserBasedImplicitCF(matrix)
         self._test_similarity_user(cf, user_id)
         self.assertNotIn(0, cf.co_rated_between(user_id, 4))
-        cf.new_stream(user_id, 0)
+        cf.new_stream((user_id, 0))
         self._test_similarity_user(cf, user_id)
-        cf.new_stream(user_id, 4)
+        cf.new_stream((user_id, 4))
         self._test_similarity_user(cf, user_id)
-        cf.new_stream(user_id, 1)
+        cf.new_stream((user_id, 1))
         self._test_similarity_user(cf, user_id)
-        cf.new_stream(user_id, 3)
+        cf.new_stream((user_id, 3))
         self._test_similarity_user(cf, user_id)
 
     def test_recommendation(self):

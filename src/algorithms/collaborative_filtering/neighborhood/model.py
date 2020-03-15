@@ -15,12 +15,6 @@ class NeighborhoodUserCF(CollaborativeFiltering):
         self.similarity_data_structure = float  # for initialization
         self.n_neighbors = n_neighbors
 
-    def _init_model(self, model, model_name, callback):
-        if len(model) == 0:
-            callback()
-        else:
-            self.model[model_name] = model
-
     def _init_similarities(self):
         self.model[SIMILARITIES_KEY] = SymmetricMatrix(
             len(self.matrix), self.similarity_data_structure())
