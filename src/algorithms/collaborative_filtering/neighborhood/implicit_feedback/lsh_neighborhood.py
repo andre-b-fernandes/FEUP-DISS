@@ -1,7 +1,6 @@
 from src.algorithms.collaborative_filtering.model import CollaborativeFiltering
 from numpy.random import permutation
 from pandas import DataFrame
-from functools import reduce
 
 SIGNATURE_MATRIX_KEY = "signature_matrix"
 BUCKETS_KEY = "buckets"
@@ -85,7 +84,6 @@ class LSHBased(CollaborativeFiltering):
             for candidate in candidates:
                 rec = rec.union(self.model[BUCKETS_KEY][candidate])
         return rec.difference(set(row_filtered))
-
 
     def signature_matrix(self):
         return self.model[SIGNATURE_MATRIX_KEY]

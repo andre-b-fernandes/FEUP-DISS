@@ -19,10 +19,13 @@ class LSHBasedTest(unittest.TestCase):
 
     def test_model_initialization(self):
         dimension = 10
-        matrix = [[choice([1, None]) for _ in range(dimension)] for _ in range(dimension)]
+        matrix = [[choice([1, None]) for _ in range(dimension)]
+                  for _ in range(dimension)]
         lh_based = LSHBased(matrix)
-        self.assertEqual(lh_based.n_permutations, len(lh_based.signature_matrix()))
-        self.assertEqual(len(lh_based.signature_matrix().loc[0]), len(matrix[0]))
+        self.assertEqual(lh_based.n_permutations,
+                         len(lh_based.signature_matrix()))
+        self.assertEqual(len(lh_based.signature_matrix().loc[0]),
+                         len(matrix[0]))
         self.assertNotEqual(len(lh_based.buckets()), 0)
 
     def test_recommendation(self):
@@ -34,5 +37,5 @@ class LSHBasedTest(unittest.TestCase):
             [1, None, 1, None, 1],
         ]
         lh_based = LSHBased(matrix, n_perms=20)
-        lh_based.new_stream((1,1))
+        lh_based.new_stream((1, 1))
         self.assertIn(1, lh_based.recommend(4))
