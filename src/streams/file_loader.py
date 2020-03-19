@@ -36,7 +36,7 @@ def file_generator(path, model_class, sep=" "):
     for stream in streams:
         print("New stream entering: " + str(stream))
         start_time = time.time()
-        model.new_stream(stream[0], stream[1], stream[2])
+        model.new_stream(stream)
         end_time = time.time()
         elapsed = end_time - start_time
         print("Elapsed time on stream: " + str(elapsed) + " seconds.")

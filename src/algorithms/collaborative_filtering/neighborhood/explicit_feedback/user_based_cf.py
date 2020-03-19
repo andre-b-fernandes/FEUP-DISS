@@ -163,7 +163,8 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         self.model[AVG_RATINGS_KEY][user_id] = new_avg_rating
 
     # new stream incoming as (user_id, item_id, rating)
-    def new_stream(self, user_id, item_id, rating):
+    def new_stream(self, stream):
+        user_id, item_id, rating = stream[0], stream[1], stream[2]
         # rating update
         if self.matrix[user_id][item_id] is not None:
             pass

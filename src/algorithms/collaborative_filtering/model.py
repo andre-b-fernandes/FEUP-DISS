@@ -24,3 +24,9 @@ class CollaborativeFiltering(ABC):
         """
         self.matrix = matrix
         self.model = dict()
+
+    def _init_model(self, model, model_name, callback):
+        if len(model) == 0:
+            callback()
+        else:
+            self.model[model_name] = model

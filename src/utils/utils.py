@@ -2,7 +2,10 @@ from math import sqrt
 
 
 def cosine_similarity(n_co_elements, n_first_element, n_second_element):
-    return n_co_elements / (sqrt(n_first_element) * sqrt(n_second_element))
+    try:
+        return n_co_elements / (sqrt(n_first_element) * sqrt(n_second_element))
+    except ZeroDivisionError:
+        return 0
 
 
 def covariance(co_elements, first_set, second_set,
