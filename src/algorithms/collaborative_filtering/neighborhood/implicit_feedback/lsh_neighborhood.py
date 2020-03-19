@@ -68,20 +68,27 @@ class LSHBased(CollaborativeFiltering):
 
     # Assuming users in the rows and items in the columns
     def new_stream(self, stream):
-        user_id, item_id = stream[0], stream[1]
-        self.matrix[user_id][item_id] = 1
-        self._update_signature_matrix(item_id)
+        first_id, second_id = stream[0], stream[1]
+        self.matrix[first_id][second_id] = 1
+        self._update_signature_matrix(second_id)
         self._init_buckets()
 
-    def recommend(self, user_id):
-        ratings = self.matrix[user_id]
-        actual_ratings = [item_id for item_id in ratings
-                          if ratings[item_id] is not None]
-        signatures = [self.model[SIGNATURE_MATRIX_KEY][item_id]
-                      for item_id in actual_ratings]
+    def recommend(self, identifier):
+        row = self.matrix[identifier]
+        row_filtered = [index for index, value in enumerate(row)
+                        if value is not None]
+        signatures = [self.model[SIGNATURE_MATRIX_KEY][elem_id]
+                      for elem_id in row_filtered]
         rec = set()
         for sign in signatures:
             candidates = self._group_by_bands(sign)
-            reduce(lambda accumulator, candidate: accumulator.union(
-                self.model[BUCKETS_KEY][candidate]), candidates, rec)
-        return rec.difference(set(actual_ratings))
+            for candidate in candidates:
+                rec = rec.union(self.model[BUCKETS_KEY][candidate])
+        return rec.difference(set(row_filtered))
+
+
+    def signature_matrix(self):
+        return self.model[SIGNATURE_MATRIX_KEY]
+
+    def buckets(self):
+        return self.model[BUCKETS_KEY]
