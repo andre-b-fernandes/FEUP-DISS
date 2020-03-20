@@ -4,3 +4,6 @@ backup.txt
 */**/*.pyc
 .coverage
 *.swp
+dist/
+build/
+*.egg-info

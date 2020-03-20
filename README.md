@@ -10,8 +10,10 @@ the **Faculty of Engineering of the University of Porto**.
 
 ![overview](./images/diagram.png)
 
+## Contents
+
 ## Install
 
 ## Run Tests
 
-
+## Run Examples
