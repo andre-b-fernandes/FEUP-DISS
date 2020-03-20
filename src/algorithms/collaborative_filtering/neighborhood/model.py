@@ -47,8 +47,6 @@ class NeighborhoodUserCF(CollaborativeFiltering):
                 self.model[CO_RATED_KEY][(user_id, another_user_id)].add(
                     item_id)
 
-    # TODO Investigate better heuristics or approaches
-    # (Local Sensitive hashing?) than this standard knn.
     def _neighborhood(self, user_id):
         candidates = list(range(0, len(self.matrix)))
         candidates.remove(user_id)
