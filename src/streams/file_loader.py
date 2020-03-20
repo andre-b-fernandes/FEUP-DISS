@@ -41,3 +41,25 @@ def file_generator(path, model_class, sep=" "):
         elapsed = end_time - start_time
         print("Elapsed time on stream: " + str(elapsed) + " seconds.")
     return model
+
+
+def file_generator_evaluator(path, evaluator_class,
+                             model_class, sep=" "):
+    print("File: " + path)
+    streams, dim_u, dim_i = parse_file(path, sep)
+    matrix = [[None for _ in range(0, dim_i)] for _ in range(0, dim_u)]
+    print("Empty matrix generated...")
+    start_time = time.time()
+    model = model_class(matrix)
+    evaluator = evaluator_class(model)
+    end_time = time.time()
+    elapsed = end_time - start_time
+    print("Empty model generated... in " + str(elapsed) + " seconds.")
+    for stream in streams:
+        print("New stream entering: " + str(stream))
+        start_time = time.time()
+        evaluator.new_stream(stream)
+        end_time = time.time()
+        elapsed = end_time - start_time
+        print("Elapsed time on stream: " + str(elapsed) + " seconds.")
+    return model
