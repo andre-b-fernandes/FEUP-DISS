@@ -176,6 +176,14 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         self._update_co_rated(user_id, item_id)
         self._init_neighborhood()
 
+    def predict(self, user_id, item_id):
+        if self.matrix[user_id][item_id] is None:
+            nbs = self.neighborhood_of(user_id)
+            nbs_ratings = [self.matrix[u_id][item_id] for u_id in nbs]
+            return avg(nbs_ratings)
+        else:
+            return self.matrix[user_id][item_id]
+
     def similarity_between(self, user, another_user):
         return self.model[SIMILARITIES_KEY][
             (user, another_user)][SIM_VALUE_KEY]
