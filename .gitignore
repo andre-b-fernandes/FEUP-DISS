@@ -7,3 +7,4 @@ backup.txt
 dist/
 build/
 *.egg-info
+htmlcov/
