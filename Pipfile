@@ -4,16 +4,17 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
 coverage = "*"
 setuptools = "*"
 wheel = "*"
 twine = "*"
+flake8 = "*"
 
 [packages]
 pandas = "*"
 numpy = "*"
 flake8 = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.7"
