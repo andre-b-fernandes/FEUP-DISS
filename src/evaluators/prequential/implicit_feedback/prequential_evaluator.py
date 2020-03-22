@@ -5,7 +5,7 @@ class PrequentialEvaluatorImplicit(PrequentialEvaluator):
 
     def __init__(self, implicit_model, window=None):
         super().__init__(implicit_model, window)
-        
+
     def evaluate(self, user_id, item_id):
         item_ids = self.model.recommend(user_id)
         return item_id in item_ids

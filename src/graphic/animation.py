@@ -20,7 +20,7 @@ class EvaluationAnimation:
         self.ax.set_ylim(0, 1)
         self.line.set_data(self.x, self.y)
         return self.line,
-    
+
     def _animate(self, i):
         start = time.time()
         err = self.evaluator.new_stream(self.streams[i])
