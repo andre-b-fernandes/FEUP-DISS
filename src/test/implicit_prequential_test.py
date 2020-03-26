@@ -17,7 +17,7 @@ class PrequentialEvaluatorImplicitTest(unittest.TestCase):
         self.assertTrue(evaluator.evaluate(0, 2))
         self.assertFalse(evaluator.evaluate(0, 0))
 
-    def test_new_stream(self):
+    def test_new_rating(self):
         matrix = [
             [1, None, None, None, 1],
             [1, None, 1, None, 1],
@@ -27,7 +27,7 @@ class PrequentialEvaluatorImplicitTest(unittest.TestCase):
         ]
         lsh_based = LSHBased(matrix, n_perms=20)
         evaluator = PrequentialEvaluatorImplicit(lsh_based)
-        self.assertEqual(evaluator.new_stream((0, 2)), 0.0)
+        self.assertEqual(evaluator.new_rating((0, 2)), 0.0)
 
 
 if __name__ == "main":

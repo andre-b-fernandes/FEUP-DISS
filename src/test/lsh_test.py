@@ -37,5 +37,5 @@ class LSHBasedTest(unittest.TestCase):
             [1, None, 1, None, 1],
         ]
         lh_based = LSHBased(matrix, n_perms=20)
-        lh_based.new_stream((1, 1))
+        lh_based.new_rating((1, 1))
         self.assertIn(1, lh_based.recommend(4))

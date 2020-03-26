@@ -1,4 +1,7 @@
 class PairVariances:
+    def __init__(self):
+        self.first_variance = 0
+        self.second_variance = 0
 
     def set_variance(self, first, second, f_var, s_var):
         if first < second:

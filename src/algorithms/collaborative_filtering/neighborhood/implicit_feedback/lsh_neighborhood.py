@@ -65,9 +65,9 @@ class LSHBased(CollaborativeFiltering):
                 for _ in range(self.n_permutations)]
         self.model[SIGNATURE_MATRIX_KEY][item_id] = sign
 
-    # Assuming users in the rows and items in the columns
-    def new_stream(self, stream):
-        first_id, second_id = stream[0], stream[1]
+    def new_rating(self, rating):
+        super().new_rating(rating)
+        first_id, second_id = rating[0], rating[1]
         self.matrix[first_id][second_id] = 1
         self._update_signature_matrix(second_id)
         self._init_buckets()

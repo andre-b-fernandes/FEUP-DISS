@@ -2,74 +2,41 @@
 import time
 
 
-def parse_file(path, sep):
-    streams = []
-    with open(path, "r") as f:
-        dimension_users, dimension_items = 0, 0
-        line = f.readline()
-        while line:
-            stream_arr = line.split(sep)
-            user_id = int(stream_arr[0])
-            item_id = int(stream_arr[1])
-            rating = float(stream_arr[2])
-            streams.append((user_id, item_id, rating))
-            if user_id > dimension_users:
-                dimension_users = user_id
-            if item_id > dimension_items:
-                dimension_items = item_id
+class FileStream:
+
+    def __init__(self, path, sep=" "):
+        self.stream = self._parse_file(path, sep)
+
+    def _parse_file(self, path, sep):
+        stream = []
+        with open(path, "r") as f:
             line = f.readline()
-        f.close()
+            while line:
+                stream_arr = line.split(sep)
+                user_id = int(stream_arr[0])
+                item_id = int(stream_arr[1])
+                rating = float(stream_arr[2])
+                stream.append((user_id, item_id, rating))
+                line = f.readline()
+            f.close()
+        return stream
 
-    return streams, dimension_users + 1, dimension_items + 1
+    def process_stream(self, model):
+        for rating in self.stream:
+            print("New rating entering: " + str(rating))
+            start_time = time.time()
+            model.new_rating(rating)
+            end_time = time.time()
+            elapsed = end_time - start_time
+            print("Elapsed time on rating: " + str(elapsed) + " seconds.")
+        return model
 
-
-def calc_streams_mat(path, sep):
-    print("File: " + path)
-    streams, dim_u, dim_i = parse_file(path, sep)
-    matrix = [[None for _ in range(0, dim_i)] for _ in range(0, dim_u)]
-    print("Empty matrix generated...")
-    return streams, matrix
-
-
-def process_file(path, model_class, sep=" "):
-    streams, matrix = calc_streams_mat(path, sep)
-    start_time = time.time()
-    model = model_class(matrix)
-    end_time = time.time()
-    elapsed = end_time - start_time
-    print("Empty model generated... in " + str(elapsed) + " seconds.")
-    return process_streams(streams, model)
-
-
-def process_file_evaluator(path, evaluator_class, model_class, sep=" "):
-    streams, matrix = calc_streams_mat(path, sep)
-    start_time = time.time()
-    model = model_class(matrix)
-    evaluator = evaluator_class(model)
-    end_time = time.time()
-    elapsed = end_time - start_time
-    print("Empty model generated... in " + str(elapsed) + " seconds.")
-    return process_streams(streams, evaluator)
-
-
-def process_streams(streams, model):
-    for stream in streams:
-        print("New stream entering: " + str(stream))
+    def process_stream_eval_anim(self, eval_class, model_class, anim_class):
         start_time = time.time()
-        model.new_stream(stream)
+        model = model_class()
+        evaluator = eval_class(model)
         end_time = time.time()
         elapsed = end_time - start_time
-        print("Elapsed time on stream: " + str(elapsed) + " seconds.")
-    return model
-
-
-def process_file_evaluator_graph(path, evaluator_class, model_class, animation_class, sep=" "):
-    streams, matrix = calc_streams_mat(path, sep)
-    start_time = time.time()
-    model = model_class(matrix)
-    evaluator = evaluator_class(model)
-    end_time = time.time()
-    elapsed = end_time - start_time
-    print("Empty model generated... in " + str(elapsed) + " seconds.")
-    animation = animation_class(streams, evaluator)
-    animation.show()
+        print("Empty model generated... in " + str(elapsed) + " seconds.")
+        animation = anim_class(self.stream, evaluator)
+        animation.show()

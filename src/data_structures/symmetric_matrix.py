@@ -1,20 +1,25 @@
 class SymmetricMatrix:
 
     def __init__(self, size, value=None):
-        if size <= 0:
+        if size < 0:
             raise ValueError('size has to be positive')
 
         self._size = size
+        self._default = value
         self._data = [value for i in range((size + 1) * size // 2)]
 
     def __len__(self):
         return self._size
 
     def __setitem__(self, position, value):
+        if position[0] >= self._size:
+            self._add_elements(position)
         index = self._get_index(position)
         self._data[index] = value
 
     def __getitem__(self, position):
+        if position[0] >= self._size:
+            self._add_elements(position)
         index = self._get_index(position)
         return self._data[index]
 
@@ -37,3 +42,10 @@ class SymmetricMatrix:
                 ret += "  "
             ret += "]\n"
         return ret
+
+    def _add_elements(self, position):
+        row, _col = position
+        increments = row - self._size + 1
+        for increment in range(increments):
+            self._size += increment + 1
+            self._data += [self._default for _ in range(self._size)]

@@ -16,7 +16,7 @@ class PrequentialEvaluatorExplicitTest(unittest.TestCase):
         evaluator = PrequentialEvaluatorExplicit(cf)
         self.assertEqual(evaluator.evaluate(0, 2, 3), 0.2)
 
-    def test_new_stream(self):
+    def test_new_rating(self):
         matrix = [
             [1, None, None, None, 1],
             [1, None, 1, None, 1],
@@ -26,7 +26,7 @@ class PrequentialEvaluatorExplicitTest(unittest.TestCase):
         ]
         cf = UserBasedExplicitCF(matrix)
         evaluator = PrequentialEvaluatorExplicit(cf)
-        self.assertEqual(evaluator.new_stream((0, 2, 3)), 0.2)
+        self.assertEqual(evaluator.new_rating((0, 2, 3)), 0.2)
 
 
 if __name__ == "main":

@@ -1,6 +1,8 @@
-from src.algorithms.collaborative_filtering.model import CollaborativeFiltering
+from src.algorithms.collaborative_filtering.collaborative_filtering import CollaborativeFiltering
 from src.data_structures.symmetric_matrix import SymmetricMatrix
+from src.data_structures.dynamic_array import DynamicArray
 from src.utils.utils import knn
+from copy import copy
 
 
 CO_RATED_KEY = "co_rated"
@@ -12,12 +14,12 @@ class NeighborhoodUserCF(CollaborativeFiltering):
     def __init__(self, matrix, co_rated, neighbors, n_neighbors):
         super().__init__(matrix)
         self._init_model(co_rated, CO_RATED_KEY, self._init_co_rated)
-        self.similarity_data_structure = float  # for initialization
+        self.similarity_default = 0.0  # for initialization
         self.n_neighbors = n_neighbors
 
     def _init_similarities(self):
         self.model[SIMILARITIES_KEY] = SymmetricMatrix(
-            len(self.matrix), self.similarity_data_structure())
+            len(self.matrix), copy(self.similarity_default))
         for user_id in range(0, len(self.matrix)):
             for another_user_id in range(0, user_id + 1):
                 self._init_similarity(user_id, another_user_id)
@@ -37,8 +39,9 @@ class NeighborhoodUserCF(CollaborativeFiltering):
 
     # initialize neighborhood models
     def _init_neighborhood(self):
-        self.model[NEIGHBORS_KEY] = [self._neighborhood(user_id)
-                                     for user_id in range(0, len(self.matrix))]
+        self.model[NEIGHBORS_KEY] = DynamicArray(
+            [self._neighborhood(user_id) for user_id in range(
+                0, len(self.matrix))], default_value=list())
 
     # updating the co_rated matrix inside the model
     def _update_co_rated(self, user_id, item_id):
@@ -77,10 +80,10 @@ class NeighborhoodUserCF(CollaborativeFiltering):
         return self.model[CO_RATED_KEY][(user_id, another_user_id)]
 
     def _init_similarity(self, user_id, another_user_id):
-        return
+        raise NotImplementedError("The method is not implemented!")
 
     def similarity_between(self, user, another_user):
-        return
+        raise NotImplementedError("The method is not implemented!")
 
     def neighbors(self):
         return self.model[NEIGHBORS_KEY]
