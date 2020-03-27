@@ -1,7 +1,7 @@
-from src.algorithms.collaborative_filtering.collaborative_filtering import CollaborativeFiltering
-from src.data_structures.symmetric_matrix import SymmetricMatrix
-from src.data_structures.dynamic_array import DynamicArray
-from src.utils.utils import knn
+from src.algorithms.collaborative_filtering import CollaborativeFiltering
+from src.data_structures import SymmetricMatrix
+from src.data_structures import DynamicArray
+from src.utils import knn
 from copy import copy
 
 
@@ -26,6 +26,7 @@ class NeighborhoodUserCF(CollaborativeFiltering):
 
     # initializing the co rated items with the item id's
     def _init_co_rated(self):
+        import pdb; pdb.set_trace()
         self.model[CO_RATED_KEY] = SymmetricMatrix(len(self.matrix), set())
         for index, user in enumerate(self.matrix):
             for another_index in range(0, index + 1):
@@ -65,10 +66,11 @@ class NeighborhoodUserCF(CollaborativeFiltering):
 
     def _activation_weight(self, user_id, item_id):
         nbs = self.neighborhood_of(user_id)
+        len_nbs = len(nbs)
         return sum([self.similarity_between(user_id, another_user_id)
                     for another_user_id in nbs
                     if self.matrix[another_user_id][item_id]
-                    is not None]) / len(nbs)
+                    is not None]) / len_nbs
 
     def similarities(self):
         return self.model[SIMILARITIES_KEY]

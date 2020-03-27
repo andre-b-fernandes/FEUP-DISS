@@ -21,14 +21,13 @@ class UserBasedImplicitCFTest(unittest.TestCase):
                                                          another_user_id),
                                    sim, delta=0.0001)
 
-    def test_asserts(self):
-        matrix = [1]
-        similarities = [1]
-        co_rated = [1]
-        cf = UserBasedImplicitCF(matrix, similarities, co_rated)
-        self.assertEqual(matrix, cf.matrix)
-        self.assertEqual(similarities, cf.similarities())
-        self.assertEqual(co_rated, cf.co_rated())
+    def test_empty_matrix(self):
+        cf = UserBasedImplicitCF()
+        self.assertEqual(len(cf.matrix), 0)
+        self.assertEqual(len(cf.neighbors()), 0)
+        cf.new_rating((2, 0, 3))
+        self.assertEqual(len(cf.matrix), 3)
+        self.assertEqual(len(cf.matrix[2]), 1)
 
     def test_model_initialization(self):
         dimension = 10

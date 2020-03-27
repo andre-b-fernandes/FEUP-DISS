@@ -7,7 +7,8 @@ class PrequentialEvaluatorImplicit(PrequentialEvaluator):
         super().__init__(implicit_model, window)
 
     def evaluate(self, user_id, item_id):
-        item_ids = self.model.recommend(user_id)
+        item_ids = self.model.recommend(user_id, 10)
+        print(f"is {item_id} in {item_ids} ?")
         return item_id in item_ids
 
     def new_rating(self, rating):
@@ -17,4 +18,5 @@ class PrequentialEvaluatorImplicit(PrequentialEvaluator):
         self._increment_counter()
         self._check_counter()
         self.model.new_rating(rating)
+        print(f"Current window error: {self.window_avg_error}")
         return self.window_avg_error

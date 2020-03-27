@@ -1,3 +1,5 @@
+from copy import deepcopy
+import numpy as np
 class SymmetricMatrix:
 
     def __init__(self, size, value=None):
@@ -6,7 +8,7 @@ class SymmetricMatrix:
 
         self._size = size
         self._default = value
-        self._data = [value for i in range((size + 1) * size // 2)]
+        self._data = np.array([value for i in range((size + 1) * size // 2)])
 
     def __len__(self):
         return self._size
@@ -48,4 +50,4 @@ class SymmetricMatrix:
         increments = row - self._size + 1
         for increment in range(increments):
             self._size += increment + 1
-            self._data += [self._default for _ in range(self._size)]
+            self._data = np.concatenate((self._data, [deepcopy(self._default) for _ in range(self._size)]))

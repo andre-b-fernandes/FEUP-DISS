@@ -1,8 +1,12 @@
 from src.algorithms.collaborative_filtering.neighborhood.user_neighborhood import (
-    NeighborhoodUserCF, CO_RATED_KEY, SIMILARITIES_KEY, NEIGHBORS_KEY)
-from src.utils.utils import pearson_correlation_terms, pearson_correlation, avg
-from src.data_structures.pair_variances import PairVariances
-from src.data_structures.dynamic_array import DynamicArray
+    NeighborhoodUserCF,
+    CO_RATED_KEY,
+    SIMILARITIES_KEY,
+    NEIGHBORS_KEY
+)
+from src.utils import pearson_correlation_terms, pearson_correlation, avg
+from src.data_structures import PairVariances
+from src.data_structures import DynamicArray
 
 
 AVG_RATINGS_KEY = "avg_ratings"

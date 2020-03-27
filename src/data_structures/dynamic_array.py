@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 class DynamicArray:
     def __init__(self, data=None, default_value=None):
         self.default_value = default_value
@@ -22,6 +25,9 @@ class DynamicArray:
 
     def _add_elements(self, position):
         increments = position - self._size + 1
-        for inc in range(increments):
-            self._data.append(self.default_value)
+        ext = [deepcopy(self.default_value) for _ in range(increments)]
+        self._data.extend(ext)
         self._size += increments
+
+    def append(self, value):
+        self._data.append(value)

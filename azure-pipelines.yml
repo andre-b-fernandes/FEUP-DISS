@@ -38,5 +38,5 @@ steps:
   displayName: 'unit testing'
 
 - script: |
-    flake8 --ignore=E501
+    flake8
   displayName: 'linter'

@@ -1,4 +1,4 @@
-from src.algorithms.collaborative_filtering.model import CollaborativeFiltering
+from src.algorithms.collaborative_filtering import CollaborativeFiltering
 from numpy.random import permutation
 from pandas import DataFrame
 
@@ -6,7 +6,7 @@ SIGNATURE_MATRIX_KEY = "signature_matrix"
 BUCKETS_KEY = "buckets"
 
 
-class LSHBased(CollaborativeFiltering):
+class ItemLSH(CollaborativeFiltering):
 
     def __init__(self, matrix, signature_matrix=[], buckets=[], n_perms=6,
                  n_bands=2):
@@ -66,7 +66,6 @@ class LSHBased(CollaborativeFiltering):
         self.model[SIGNATURE_MATRIX_KEY][item_id] = sign
 
     def new_rating(self, rating):
-        super().new_rating(rating)
         first_id, second_id = rating[0], rating[1]
         self.matrix[first_id][second_id] = 1
         self._update_signature_matrix(second_id)

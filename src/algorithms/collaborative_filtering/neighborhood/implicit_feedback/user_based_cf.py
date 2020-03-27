@@ -1,6 +1,9 @@
-from src.algorithms.collaborative_filtering.neighborhood.user_neighborhood import (
-    NeighborhoodUserCF, SIMILARITIES_KEY, NEIGHBORS_KEY)
-from src.utils.utils import cosine_similarity as cos_sim
+from src.algorithms.collaborative_filtering.neighborhood import (
+    NeighborhoodUserCF,
+    SIMILARITIES_KEY,
+    NEIGHBORS_KEY
+)
+from src.utils import cosine_similarity as cos_sim
 
 
 class UserBasedImplicitCF(NeighborhoodUserCF):
@@ -31,7 +34,6 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
         return self.model[SIMILARITIES_KEY][(user, another_user)]
 
     def new_rating(self, rating):
-        super().new_rating(rating)
         user_id, item_id = rating[0], rating[1]
         self.matrix[user_id][item_id] = 1
         self._update_co_rated(user_id, item_id)

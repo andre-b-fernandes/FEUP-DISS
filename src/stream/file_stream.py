@@ -34,7 +34,7 @@ class FileStream:
     def process_stream_eval_anim(self, eval_class, model_class, anim_class):
         start_time = time.time()
         model = model_class()
-        evaluator = eval_class(model)
+        evaluator = eval_class(model, window=1)
         end_time = time.time()
         elapsed = end_time - start_time
         print("Empty model generated... in " + str(elapsed) + " seconds.")

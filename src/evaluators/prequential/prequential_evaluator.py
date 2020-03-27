@@ -19,7 +19,7 @@ class PrequentialEvaluator(ABC):
     def _check_counter(self):
         if self.window is None:
             self._calculate_window_error()
-        elif self.window_counter > self.window:
+        elif self.window_counter >= self.window:
             self._calculate_window_error()
             self.window_data = []
             self.window_counter = 0

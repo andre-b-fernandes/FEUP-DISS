@@ -1,5 +1,5 @@
 from abc import ABC
-from src.data_structures.dynamic_array import DynamicArray
+from src.data_structures import DynamicArray
 
 
 class CollaborativeFiltering(ABC):
@@ -23,9 +23,9 @@ class CollaborativeFiltering(ABC):
             matrix: array
                 Ratings matrix.
         """
-        self.matrix = DynamicArray(matrix, default_value=DynamicArray())
-        self.n_users = len(self.matrix)
-        self.n_items = len(self.matrix[0]) if self.n_users > 0 else 0
+        self.matrix = DynamicArray(default_value=DynamicArray(default_value=None))
+        for row in matrix:
+            self.matrix.append(DynamicArray(row, default_value=None))
         self.model = dict()
 
     def _init_model(self, model, model_name, callback):
