@@ -1,6 +1,7 @@
 import unittest
 from random import randint
-from src.algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based_cf import UserBasedExplicitCF
+from src.algorithms.collaborative_filtering.\
+    neighborhood.explicit_feedback import UserBasedExplicitCF
 from src.utils.utils import pearson_correlation_terms, avg
 
 
@@ -27,23 +28,6 @@ class UserBasedExplicitCFTest(unittest.TestCase):
         for another_user_id in members:
             self._test_similarity_terms(cf, user_id, another_user_id)
 
-    def test_asserts(self):
-        matrix = [1]
-        similarities = [1]
-        avg_ratings = {"teste": 3}
-        co_rated = [1]
-        neighbors = [1]
-        cf = UserBasedExplicitCF(matrix, similarities, avg_ratings, co_rated,
-                                 neighbors)
-        self.assertEqual(matrix, cf.matrix)
-        self.assertEqual(similarities, cf.similarities())
-        self.assertEqual(co_rated, cf.co_rated())
-        self.assertEqual(avg_ratings, cf.avg_ratings())
-        self.assertEqual(neighbors, cf.neighbors())
-        self.assertEqual(type(cf.similarities()), list)
-        self.assertEqual(type(cf.co_rated()), list)
-        self.assertEqual(type(cf.avg_ratings()), dict)
-
     def test_model_initialization(self):
         dimension = 10
         matrix = [[randint(1, 10) for _i in range(0, dimension)]
@@ -52,6 +36,7 @@ class UserBasedExplicitCFTest(unittest.TestCase):
         self.assertEqual(len(cf.similarities()), len(matrix))
         self.assertEqual(len(cf.co_rated()), len(matrix))
         self.assertEqual(len(cf.avg_ratings()), len(matrix))
+        self.assertEqual(len(cf.neighbors()), len(matrix))
         for i in range(0, dimension):
             with self.subTest(i=i):
                 self._test_similarity_terms_users(cf, i)
@@ -84,13 +69,13 @@ class UserBasedExplicitCFTest(unittest.TestCase):
         cf = UserBasedExplicitCF(matrix)
         self._test_similarity_terms_users(cf, user_id)
         self.assertNotIn(0, cf.co_rated_between(user_id, 4))
-        cf.new_stream((user_id, 0, 7))
+        cf.new_rating((user_id, 0, 7))
         self._test_similarity_terms_users(cf, user_id)
-        cf.new_stream((user_id, 4, 6))
+        cf.new_rating((user_id, 4, 6))
         self._test_similarity_terms_users(cf, user_id)
-        cf.new_stream((user_id, 1, 8))
+        cf.new_rating((user_id, 1, 8))
         self._test_similarity_terms_users(cf, user_id)
-        cf.new_stream((user_id, 3, 2))
+        cf.new_rating((user_id, 3, 2))
         self._test_similarity_terms_users(cf, user_id)
 
     def test_recommendation(self):

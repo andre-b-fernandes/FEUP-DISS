@@ -1,7 +1,8 @@
 import unittest
 from random import choice
 from src.utils.utils import cosine_similarity
-from src.algorithms.collaborative_filtering.neighborhood.implicit_feedback.user_based_cf import UserBasedImplicitCF
+from src.algorithms.collaborative_filtering.neighborhood.\
+    implicit_feedback import UserBasedImplicitCF
 
 
 class UserBasedImplicitCFTest(unittest.TestCase):
@@ -21,31 +22,23 @@ class UserBasedImplicitCFTest(unittest.TestCase):
                                                          another_user_id),
                                    sim, delta=0.0001)
 
-    def test_asserts(self):
-        matrix = [1]
-        similarities = [1]
-        co_rated = [1]
-        cf = UserBasedImplicitCF(matrix, similarities, co_rated)
-        self.assertEqual(matrix, cf.matrix)
-        self.assertEqual(similarities, cf.similarities())
-        self.assertEqual(co_rated, cf.co_rated())
-
     def test_model_initialization(self):
         dimension = 10
         matrix = [[choice([None, 1]) for _i in range(0, dimension)]
                   for _c in range(0, dimension)]
         cf = UserBasedImplicitCF(matrix)
+        self.assertEqual(len(matrix), len(cf.neighbors()))
         for i in range(dimension):
             with self.subTest(i=i):
                 self._test_similarity_user(cf, i)
 
     def test_similarities(self):
         matrix = [
-            [8, None, None, None, 7],
-            [7, None, 1, None, 6],
-            [None, 2, 9, None, 1],
-            [None, 1, 9, None, None],
-            [7, None, 1, None, 6],
+            [1, None, None, None, 1],
+            [1, None, 1, None, 1],
+            [None, 1, 1, None, 1],
+            [None, 1, 1, None, None],
+            [1, None, 1, None, 1],
         ]
         cf = UserBasedImplicitCF(matrix)
         self._test_similarity_user(cf, 0)
@@ -66,28 +59,29 @@ class UserBasedImplicitCFTest(unittest.TestCase):
         cf = UserBasedImplicitCF(matrix)
         self._test_similarity_user(cf, user_id)
         self.assertNotIn(0, cf.co_rated_between(user_id, 4))
-        cf.new_stream((user_id, 0))
+        cf.new_rating((user_id, 0))
         self._test_similarity_user(cf, user_id)
-        cf.new_stream((user_id, 4))
+        cf.new_rating((user_id, 4))
         self._test_similarity_user(cf, user_id)
-        cf.new_stream((user_id, 1))
+        cf.new_rating((user_id, 1))
         self._test_similarity_user(cf, user_id)
-        cf.new_stream((user_id, 3))
+        cf.new_rating((user_id, 3))
         self._test_similarity_user(cf, user_id)
 
     def test_recommendation(self):
         user_id = 2
         matrix = [
-            [8, None, None, None, 7, None, None, None, 3],
-            [7, None, 1, None, 6, None, 9, None, 4],
-            [None, None, 2, None, None, None, 9, None, None],
-            [None, 2, 9, None, 1, None, 5, None, None],
-            [7, None, 2, None, None, None, None, 8, None],
+            [1, None, None, None, 1, None, None, None, 1],
+            [1, None, 1, None, 1, None, 1, None, 1],
+            [None, None, 1, None, None, None, 1, None, None],
+            [None, 1, 1, None, 1, None, 1, None, None],
+            [1, None, 1, None, None, None, None, 1, None],
         ]
         cf = UserBasedImplicitCF(matrix, n_neighbors=2)
         self.assertNotIn(user_id, cf.neighborhood_of(user_id))
         self.assertIn(1, cf.neighborhood_of(user_id))
         self.assertIn(3, cf.neighborhood_of(user_id))
+        self.assertIn(8, cf.recommend(user_id, 3))
 
 
 if __name__ == "main":

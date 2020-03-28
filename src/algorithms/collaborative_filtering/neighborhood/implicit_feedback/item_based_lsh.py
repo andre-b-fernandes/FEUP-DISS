@@ -1,4 +1,4 @@
-from src.algorithms.collaborative_filtering.model import CollaborativeFiltering
+from src.algorithms.collaborative_filtering import CollaborativeFiltering
 from numpy.random import permutation
 from pandas import DataFrame
 
@@ -6,9 +6,9 @@ SIGNATURE_MATRIX_KEY = "signature_matrix"
 BUCKETS_KEY = "buckets"
 
 
-class LSHBased(CollaborativeFiltering):
+class ItemLSH(CollaborativeFiltering):
 
-    def __init__(self, matrix, signature_matrix=[], buckets=[], n_perms=6,
+    def __init__(self, matrix=[], signature_matrix=[], buckets=[], n_perms=6,
                  n_bands=2):
         super().__init__(matrix)
         self.n_permutations = n_perms
@@ -65,14 +65,13 @@ class LSHBased(CollaborativeFiltering):
                 for _ in range(self.n_permutations)]
         self.model[SIGNATURE_MATRIX_KEY][item_id] = sign
 
-    # Assuming users in the rows and items in the columns
-    def new_stream(self, stream):
-        first_id, second_id = stream[0], stream[1]
+    def new_rating(self, rating):
+        first_id, second_id = rating[0], rating[1]
         self.matrix[first_id][second_id] = 1
         self._update_signature_matrix(second_id)
         self._init_buckets()
 
-    def recommend(self, identifier):
+    def recommend(self, identifier, n_recomendations):
         row = self.matrix[identifier]
         row_filtered = [index for index, value in enumerate(row)
                         if value is not None]
@@ -83,7 +82,9 @@ class LSHBased(CollaborativeFiltering):
             candidates = self._group_by_bands(sign)
             for candidate in candidates:
                 rec = rec.union(self.model[BUCKETS_KEY][candidate])
-        return rec.difference(set(row_filtered))
+
+        final = list(rec.difference(set(row_filtered)))
+        return final[0:n_recomendations]
 
     def signature_matrix(self):
         return self.model[SIGNATURE_MATRIX_KEY]

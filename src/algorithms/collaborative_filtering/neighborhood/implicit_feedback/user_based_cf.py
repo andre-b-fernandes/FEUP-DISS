@@ -1,6 +1,9 @@
-from src.algorithms.collaborative_filtering.neighborhood.model import (
-    NeighborhoodUserCF, SIMILARITIES_KEY, NEIGHBORS_KEY)
-from src.utils.utils import cosine_similarity as cos_sim
+from src.algorithms.collaborative_filtering.neighborhood import (
+    NeighborhoodUserCF,
+    SIMILARITIES_KEY,
+    NEIGHBORS_KEY
+)
+from src.utils import cosine_similarity as cos_sim
 
 
 class UserBasedImplicitCF(NeighborhoodUserCF):
@@ -30,9 +33,24 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
     def similarity_between(self, user, another_user):
         return self.model[SIMILARITIES_KEY][(user, another_user)]
 
-    def new_stream(self, stream):
-        user_id, item_id = stream[0], stream[1]
+    def new_rating(self, rating):
+        user_id, item_id = rating[0], rating[1]
         self.matrix[user_id][item_id] = 1
         self._update_co_rated(user_id, item_id)
         self._update_similarities(user_id)
         self._init_neighborhood()
+
+    def recommend(self, user_id, n_products):
+        item_ids = [i for i in range(0, len(self.matrix[user_id]))
+                    if self.matrix[user_id][i] is None]
+        return sorted(item_ids,
+                      key=lambda item_id:
+                      self._activation_weight(user_id, item_id))[-n_products:]
+
+    def _activation_weight(self, user_id, item_id):
+        nbs = self.neighborhood_of(user_id)
+        len_nbs = len(nbs)
+        return sum([self.similarity_between(user_id, another_user_id)
+                    for another_user_id in nbs
+                    if self.matrix[another_user_id][item_id]
+                    is not None]) / len_nbs

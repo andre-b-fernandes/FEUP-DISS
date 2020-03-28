@@ -6,14 +6,11 @@ jobs:
     - before_install:
         - pip install --upgrade pip
         - pip install pipenv
-        - pip install codecov
-    - after_sucess:
-        - codecov -t 7ae0b673-79dc-4607-bb40-bdbbd13f33fa
 
 install:
   - python -m pipenv lock -r > requirements.txt
-  - pip install -r requirements.txt
+  - pipenv install -r requirements.txt
 
 script:
   - pipenv run python -m unittest discover -v -s src -p "*_test.py"
-  - pipenv run python -m flake8 --ignore=E501
+  - pipenv run flake8

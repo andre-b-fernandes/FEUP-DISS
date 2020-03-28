@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
-- master
+- master  
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -21,22 +21,23 @@ steps:
 
 - script: |
     python -m pip install --upgrade pip
-    pip install flake8
     pip install pipenv
   displayName: 'Install Pipenv'      
 
-- script: python -m pipenv lock -r > requirements.txt
+- script: pipenv lock -r > requirements.txt
   displayName: 'Create requirements.txt from Pipfile'
 
 - script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
+    pipenv install -r requirements.txt
   displayName: 'Install dependencies'
 
 - script: |
-    python -m unittest discover -v -s src -p "*_test.py"
+    pipenv run coverage run -m unittest discover -v -s src -p "*_test.py"
   displayName: 'unit testing'
 
 - script: |
-    flake8 --ignore=E501
+    pipenv run flake8
   displayName: 'linter'
+
+- script: pipenv run codecov -t 7ae0b673-79dc-4607-bb40-bdbbd13f33fa
+  displayName: 'codecov'
