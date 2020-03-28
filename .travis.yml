@@ -13,4 +13,4 @@ install:
 
 script:
   - pipenv run python -m unittest discover -v -s src -p "*_test.py"
-  - pipenv run python -m flake8
+  - pipenv run flake8
