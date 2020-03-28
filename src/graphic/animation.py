@@ -1,6 +1,5 @@
 from matplotlib import pyplot as plt
 from matplotlib import animation
-import time
 
 
 class EvaluationAnimation:
@@ -22,11 +21,7 @@ class EvaluationAnimation:
         return self.line,
 
     def _animate(self, i):
-        start = time.time()
         err = self.evaluator.new_rating(self.stream[i])
-        end = time.time()
-        diff = end - start
-        print(f"Elapsed time: {diff} seconds on stream {i}")
         self.x.append(i)
         self.y.append(err)
         self.line.set_data(self.x, self.y)

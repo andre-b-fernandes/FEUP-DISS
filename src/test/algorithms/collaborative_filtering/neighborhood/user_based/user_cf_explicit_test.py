@@ -1,6 +1,7 @@
 import unittest
 from random import randint
-from src.algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based_cf import UserBasedExplicitCF
+from src.algorithms.collaborative_filtering.\
+    neighborhood.explicit_feedback import UserBasedExplicitCF
 from src.utils.utils import pearson_correlation_terms, avg
 
 
@@ -27,13 +28,6 @@ class UserBasedExplicitCFTest(unittest.TestCase):
         for another_user_id in members:
             self._test_similarity_terms(cf, user_id, another_user_id)
 
-    def test_empty_matrix(self):
-        cf = UserBasedExplicitCF()
-        self.assertEqual(len(cf.matrix), 0)
-        cf.new_rating((2, 0, 3))
-        self.assertEqual(len(cf.matrix), 3)
-        self.assertEqual(len(cf.matrix[2]), 1)
-
     def test_model_initialization(self):
         dimension = 10
         matrix = [[randint(1, 10) for _i in range(0, dimension)]
@@ -42,6 +36,7 @@ class UserBasedExplicitCFTest(unittest.TestCase):
         self.assertEqual(len(cf.similarities()), len(matrix))
         self.assertEqual(len(cf.co_rated()), len(matrix))
         self.assertEqual(len(cf.avg_ratings()), len(matrix))
+        self.assertEqual(len(cf.neighbors()), len(matrix))
         for i in range(0, dimension):
             with self.subTest(i=i):
                 self._test_similarity_terms_users(cf, i)

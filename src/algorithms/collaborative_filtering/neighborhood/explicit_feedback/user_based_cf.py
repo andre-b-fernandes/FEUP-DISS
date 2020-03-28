@@ -192,6 +192,18 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         else:
             return self.matrix[user_id][item_id]
 
+    def recommend(self, user_id, n_rec):
+        item_ids = [i for i in range(0, len(self.matrix[user_id]))
+                    if self.matrix[user_id][i] is None]
+        nbs = self.neighborhood_of(user_id)
+        nbs_predictions = {
+            i: [self.predict(n, i) for n in nbs] for i in item_ids}
+        predictions = {
+            key: avg(nbs_predictions[key]) for key in nbs_predictions}
+        return sorted(
+            item_ids,
+            key=lambda item_id: predictions[item_id])[:-n_rec]
+
     def similarity_between(self, user, another_user):
         return self.model[SIMILARITIES_KEY][
             (user, another_user)][SIM_VALUE_KEY]

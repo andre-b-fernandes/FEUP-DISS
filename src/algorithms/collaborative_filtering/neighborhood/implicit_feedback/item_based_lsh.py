@@ -1,6 +1,7 @@
 from src.algorithms.collaborative_filtering import CollaborativeFiltering
 from numpy.random import permutation
 from pandas import DataFrame
+from src.utils import cosine_similarity
 
 SIGNATURE_MATRIX_KEY = "signature_matrix"
 BUCKETS_KEY = "buckets"
@@ -8,7 +9,7 @@ BUCKETS_KEY = "buckets"
 
 class ItemLSH(CollaborativeFiltering):
 
-    def __init__(self, matrix, signature_matrix=[], buckets=[], n_perms=6,
+    def __init__(self, matrix=[], signature_matrix=[], buckets=[], n_perms=6,
                  n_bands=2):
         super().__init__(matrix)
         self.n_permutations = n_perms
@@ -71,7 +72,7 @@ class ItemLSH(CollaborativeFiltering):
         self._update_signature_matrix(second_id)
         self._init_buckets()
 
-    def recommend(self, identifier):
+    def recommend(self, identifier, n_recomendations):
         row = self.matrix[identifier]
         row_filtered = [index for index, value in enumerate(row)
                         if value is not None]
@@ -82,7 +83,9 @@ class ItemLSH(CollaborativeFiltering):
             candidates = self._group_by_bands(sign)
             for candidate in candidates:
                 rec = rec.union(self.model[BUCKETS_KEY][candidate])
-        return rec.difference(set(row_filtered))
+
+        final = list(rec.difference(set(row_filtered)))
+        return final[0:n_recomendations]
 
     def signature_matrix(self):
         return self.model[SIGNATURE_MATRIX_KEY]

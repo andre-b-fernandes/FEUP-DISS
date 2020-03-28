@@ -1,6 +1,8 @@
 import unittest
-from src.algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based_cf import UserBasedExplicitCF
-from src.evaluators.prequential.explicit_feedback.prequential_evaluator import PrequentialEvaluatorExplicit
+from src.algorithms.collaborative_filtering.neighborhood.\
+    explicit_feedback import UserBasedExplicitCF
+from src.evaluators.prequential.explicit_feedback.\
+    prequential_evaluator import PrequentialEvaluatorExplicit
 
 
 class PrequentialEvaluatorExplicitTest(unittest.TestCase):

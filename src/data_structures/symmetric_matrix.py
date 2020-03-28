@@ -1,10 +1,12 @@
 from copy import deepcopy
 import numpy as np
+
+
 class SymmetricMatrix:
 
-    def __init__(self, size, value=None):
+    def __init__(self, size=0, value=None):
         if size < 0:
-            raise ValueError('size has to be positive')
+            raise ValueError('size cannot be negative')
 
         self._size = size
         self._default = value
@@ -50,4 +52,5 @@ class SymmetricMatrix:
         increments = row - self._size + 1
         for increment in range(increments):
             self._size += increment + 1
-            self._data = np.concatenate((self._data, [deepcopy(self._default) for _ in range(self._size)]))
+            self._data = np.concatenate((self._data, [
+                deepcopy(self._default) for _ in range(self._size)]))

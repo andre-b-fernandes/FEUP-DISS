@@ -23,7 +23,8 @@ class CollaborativeFiltering(ABC):
             matrix: array
                 Ratings matrix.
         """
-        self.matrix = DynamicArray(default_value=DynamicArray(default_value=None))
+        self.matrix = DynamicArray(default_value=DynamicArray(
+            default_value=None))
         for row in matrix:
             self.matrix.append(DynamicArray(row, default_value=None))
         self.model = dict()

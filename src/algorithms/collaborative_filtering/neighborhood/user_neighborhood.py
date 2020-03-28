@@ -26,11 +26,10 @@ class NeighborhoodUserCF(CollaborativeFiltering):
 
     # initializing the co rated items with the item id's
     def _init_co_rated(self):
-        import pdb; pdb.set_trace()
         self.model[CO_RATED_KEY] = SymmetricMatrix(len(self.matrix), set())
         for index, user in enumerate(self.matrix):
-            for another_index in range(0, index + 1):
-                another_user = self.matrix[another_index]
+            for another_index, another_user in enumerate(
+                    self.matrix[0:index + 1]):
                 self.model[CO_RATED_KEY][(index, another_index)] = set([
                     user_tuple[0]
                     for user_tuple, another_user_tuple
@@ -56,21 +55,6 @@ class NeighborhoodUserCF(CollaborativeFiltering):
         candidates.remove(user_id)
         return knn(user_id, candidates, self.n_neighbors,
                    self.similarity_between)
-
-    def recommend(self, user_id, n_products):
-        item_ids = [i for i in range(0, len(self.matrix[user_id]))
-                    if self.matrix[user_id][i] is None]
-        return sorted(item_ids,
-                      key=lambda item_id:
-                      self._activation_weight(user_id, item_id))[-n_products:]
-
-    def _activation_weight(self, user_id, item_id):
-        nbs = self.neighborhood_of(user_id)
-        len_nbs = len(nbs)
-        return sum([self.similarity_between(user_id, another_user_id)
-                    for another_user_id in nbs
-                    if self.matrix[another_user_id][item_id]
-                    is not None]) / len_nbs
 
     def similarities(self):
         return self.model[SIMILARITIES_KEY]

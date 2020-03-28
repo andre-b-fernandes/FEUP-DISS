@@ -1,6 +1,8 @@
 import unittest
-from src.algorithms.collaborative_filtering.neighborhood.implicit_feedback.lsh_neighborhood import LSHBased
-from src.evaluators.prequential.implicit_feedback.prequential_evaluator import PrequentialEvaluatorImplicit
+from src.algorithms.collaborative_filtering.neighborhood.\
+    implicit_feedback import UserBasedImplicitCF
+from src.evaluators.prequential.implicit_feedback.\
+    prequential_evaluator import PrequentialEvaluatorImplicit
 
 
 class PrequentialEvaluatorImplicitTest(unittest.TestCase):
@@ -12,7 +14,7 @@ class PrequentialEvaluatorImplicitTest(unittest.TestCase):
             [None, 1, 1, None, 1],
             [1, None, 1, None, 1],
         ]
-        lsh_based = LSHBased(matrix)
+        lsh_based = UserBasedImplicitCF(matrix)
         evaluator = PrequentialEvaluatorImplicit(lsh_based)
         self.assertTrue(evaluator.evaluate(0, 2))
         self.assertFalse(evaluator.evaluate(0, 0))
@@ -25,7 +27,7 @@ class PrequentialEvaluatorImplicitTest(unittest.TestCase):
             [None, 1, 1, None, 1],
             [1, None, 1, None, 1],
         ]
-        lsh_based = LSHBased(matrix, n_perms=20)
+        lsh_based = UserBasedImplicitCF(matrix)
         evaluator = PrequentialEvaluatorImplicit(lsh_based)
         self.assertEqual(evaluator.new_rating((0, 2)), 0.0)
 

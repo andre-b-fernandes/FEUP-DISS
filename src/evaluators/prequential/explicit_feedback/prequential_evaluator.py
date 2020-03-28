@@ -1,4 +1,5 @@
-from src.evaluators.prequential.prequential_evaluator import PrequentialEvaluator
+from src.evaluators.prequential.\
+    prequential_evaluator import PrequentialEvaluator
 
 
 class PrequentialEvaluatorExplicit(PrequentialEvaluator):
@@ -13,7 +14,6 @@ class PrequentialEvaluatorExplicit(PrequentialEvaluator):
     def evaluate(self, user_id, item_id, value):
         prediction = self.model.predict(user_id, item_id)
         error = abs(prediction - value) / self.n_ratings
-        print(f"Predicted rating as an error of {error} for {item_id}")
         return error
 
     def new_rating(self, rating):
@@ -23,5 +23,4 @@ class PrequentialEvaluatorExplicit(PrequentialEvaluator):
         self._increment_counter()
         self._check_counter()
         self.model.new_rating(rating)
-        print(f"Current window error: {self.window_avg_error}")
         return self.window_avg_error

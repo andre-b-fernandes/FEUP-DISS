@@ -23,20 +23,17 @@ class FileStream:
 
     def process_stream(self, model):
         for rating in self.stream:
-            print("New rating entering: " + str(rating))
+            print(f"New rating entering: {rating}")
             start_time = time.time()
             model.new_rating(rating)
             end_time = time.time()
             elapsed = end_time - start_time
-            print("Elapsed time on rating: " + str(elapsed) + " seconds.")
+            print(f"{elapsed} seconds elapsed.")
         return model
 
-    def process_stream_eval_anim(self, eval_class, model_class, anim_class):
-        start_time = time.time()
+    def process_stream_eval_anim(
+            self, eval_class, model_class, anim_class, window=10):
         model = model_class()
-        evaluator = eval_class(model, window=1)
-        end_time = time.time()
-        elapsed = end_time - start_time
-        print("Empty model generated... in " + str(elapsed) + " seconds.")
+        evaluator = eval_class(model, window=window)
         animation = anim_class(self.stream, evaluator)
         animation.show()

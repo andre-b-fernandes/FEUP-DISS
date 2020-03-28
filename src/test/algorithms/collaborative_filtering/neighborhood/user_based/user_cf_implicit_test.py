@@ -21,30 +21,23 @@ class UserBasedImplicitCFTest(unittest.TestCase):
                                                          another_user_id),
                                    sim, delta=0.0001)
 
-    def test_empty_matrix(self):
-        cf = UserBasedImplicitCF()
-        self.assertEqual(len(cf.matrix), 0)
-        self.assertEqual(len(cf.neighbors()), 0)
-        cf.new_rating((2, 0, 3))
-        self.assertEqual(len(cf.matrix), 3)
-        self.assertEqual(len(cf.matrix[2]), 1)
-
     def test_model_initialization(self):
         dimension = 10
         matrix = [[choice([None, 1]) for _i in range(0, dimension)]
                   for _c in range(0, dimension)]
         cf = UserBasedImplicitCF(matrix)
+        self.assertEqual(len(matrix), len(cf.neighbors()))
         for i in range(dimension):
             with self.subTest(i=i):
                 self._test_similarity_user(cf, i)
 
     def test_similarities(self):
         matrix = [
-            [8, None, None, None, 7],
-            [7, None, 1, None, 6],
-            [None, 2, 9, None, 1],
-            [None, 1, 9, None, None],
-            [7, None, 1, None, 6],
+            [1, None, None, None, 1],
+            [1, None, 1, None, 1],
+            [None, 1, 1, None, 1],
+            [None, 1, 1, None, None],
+            [1, None, 1, None, 1],
         ]
         cf = UserBasedImplicitCF(matrix)
         self._test_similarity_user(cf, 0)
@@ -77,16 +70,17 @@ class UserBasedImplicitCFTest(unittest.TestCase):
     def test_recommendation(self):
         user_id = 2
         matrix = [
-            [8, None, None, None, 7, None, None, None, 3],
-            [7, None, 1, None, 6, None, 9, None, 4],
-            [None, None, 2, None, None, None, 9, None, None],
-            [None, 2, 9, None, 1, None, 5, None, None],
-            [7, None, 2, None, None, None, None, 8, None],
+            [1, None, None, None, 1, None, None, None, 1],
+            [1, None, 1, None, 1, None, 1, None, 1],
+            [None, None, 1, None, None, None, 1, None, None],
+            [None, 1, 1, None, 1, None, 1, None, None],
+            [1, None, 1, None, None, None, None, 1, None],
         ]
         cf = UserBasedImplicitCF(matrix, n_neighbors=2)
         self.assertNotIn(user_id, cf.neighborhood_of(user_id))
         self.assertIn(1, cf.neighborhood_of(user_id))
         self.assertIn(3, cf.neighborhood_of(user_id))
+        self.assertIn(8, cf.recommend(user_id, 3))
 
 
 if __name__ == "main":

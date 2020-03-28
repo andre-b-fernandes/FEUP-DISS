@@ -14,6 +14,8 @@ class DynamicArray:
         return self._size
 
     def __getitem__(self, position):
+        if isinstance(position, slice):
+            return self._data[position]
         if position >= self._size:
             self._add_elements(position)
         return self._data[position]
@@ -31,3 +33,4 @@ class DynamicArray:
 
     def append(self, value):
         self._data.append(value)
+        self._size += 1
