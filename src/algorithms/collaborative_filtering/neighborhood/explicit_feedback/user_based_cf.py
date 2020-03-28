@@ -1,9 +1,10 @@
-from src.algorithms.collaborative_filtering.neighborhood.user_neighborhood import (
-    NeighborhoodUserCF,
-    CO_RATED_KEY,
-    SIMILARITIES_KEY,
-    NEIGHBORS_KEY
-)
+from src.algorithms.collaborative_filtering.neighborhood.\
+    user_neighborhood import (
+        NeighborhoodUserCF,
+        CO_RATED_KEY,
+        SIMILARITIES_KEY,
+        NEIGHBORS_KEY
+    )
 from src.utils import pearson_correlation_terms, pearson_correlation, avg
 from src.data_structures import PairVariances
 from src.data_structures import DynamicArray

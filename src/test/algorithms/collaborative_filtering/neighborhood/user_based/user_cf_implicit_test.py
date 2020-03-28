@@ -1,7 +1,8 @@
 import unittest
 from random import choice
 from src.utils.utils import cosine_similarity
-from src.algorithms.collaborative_filtering.neighborhood.implicit_feedback.user_based_cf import UserBasedImplicitCF
+from src.algorithms.collaborative_filtering.neighborhood.\
+    implicit_feedback import UserBasedImplicitCF
 
 
 class UserBasedImplicitCFTest(unittest.TestCase):

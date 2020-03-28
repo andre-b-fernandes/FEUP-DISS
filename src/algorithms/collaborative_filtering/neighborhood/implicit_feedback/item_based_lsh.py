@@ -1,7 +1,6 @@
 from src.algorithms.collaborative_filtering import CollaborativeFiltering
 from numpy.random import permutation
 from pandas import DataFrame
-from src.utils import cosine_similarity
 
 SIGNATURE_MATRIX_KEY = "signature_matrix"
 BUCKETS_KEY = "buckets"
