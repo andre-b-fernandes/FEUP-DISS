@@ -1,3 +1,4 @@
+from time import time
 from src.evaluators.prequential.\
     prequential_evaluator import PrequentialEvaluator
 
@@ -8,14 +9,17 @@ class PrequentialEvaluatorImplicit(PrequentialEvaluator):
         super().__init__(implicit_model, window)
 
     def evaluate(self, user_id, item_id):
+        start = time()
         item_ids = self.model.recommend(user_id, 10)
-        return item_id in item_ids
+        end = time()
+        diff = end - start
+        return (item_id in item_ids), diff
 
     def new_rating(self, rating):
         user_id, item_id = rating[0], rating[1]
-        evaluation = self.evaluate(user_id, item_id)
+        evaluation, elap = self.evaluate(user_id, item_id)
         self.window_data.append(int(evaluation))
         self._increment_counter()
         self._check_counter()
         self.model.new_rating(rating)
-        return self.window_avg_error
+        return self.window_avg_error, elap
