@@ -3,6 +3,9 @@
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
+trigger:
+- master  
+
 pool:
   vmImage: 'ubuntu-latest'
 strategy:
@@ -35,3 +38,6 @@ steps:
 - script: |
     pipenv run flake8
   displayName: 'linter'
+
+- script: pipenv run codecov -t 7ae0b673-79dc-4607-bb40-bdbbd13f33fa
+  displayName: 'codecov'
