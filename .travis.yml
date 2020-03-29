@@ -12,5 +12,17 @@ install:
   - pipenv install -r requirements.txt
 
 script:
-  - pipenv run python -m unittest discover -v -s src -p "*_test.py"
+  - pipenv run python -m unittest discover -v -p "*_test.py"
   - pipenv run flake8
+
+before_deploy:
+  - pipenv run python sdist bdist_wheel
+
+deploy: 
+  provider: pypi
+  user: "__token__"
+  password:
+    secure: "fZSndQAFfmBbMNMrhyVUGbkFMdDBKMwDUTFj1E45zP1KABA+pqFB5zihmFxnLTV7yIVTkKN2BVQN0P3N/nm3PZryLv/fJUbhCL23otbgUIkMDPVHEPy+j/9ydbyDmxow3ps0Z8mwUCyjAbOwNu/ZUQIoMi4PrdGUWvdeMP7EPJrO8JgSUeCJpaJluF1bzN7MGpV6UtLEIBcmsc6H8nY/NzvN7/nIEuuhvRfNv8UXsxJxwTGWkE/em6t0P2r0IWCv4LDrxAW/FxPfmb8LuDmj7by9J5GqUW3FaImtybTiTDwtnZaq32x2P02HqSDRcEetqrv5PfM2arSYn8Bv6EwDJyz+aMdovfqHKtG/JYr5fqkISa0YNI0Jpx7nFqU6vT264b5C9F/k5AIuwZDdL7veBulcy/+Q4KqRda5u2z07Q6FxcDF+dZbNAIMNHx46VXpxgAzDMLZD25yxOF+1/4fuxq0Hz6cbkEs9YX821k5PN+aLxN09QAzkrKiA8KzUtoH6vg9pOAHEPuD0AMXZZZKH3Y9k97VFGBLj4cs7B6pa14NrSJL0NA0IYPAe0N4SSCq1evkjb3Na8ZFvpZeDWMghbE/8+r44nbH8N7mcbDVWuYafyRpK4WaKgyHhKzdRytFi0v0EnPCmokPtmqrs1Ww5upsgTNGHm3PcJBHRni3Lci4="
+  on:
+    branch: master
+  server: https://test.pypi.org/legacy/
