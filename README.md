@@ -8,7 +8,7 @@ the **Faculty of Engineering of the University of Porto**.
 
 ## General Overview
 
-![general overview](https://raw.githubusercontent.com/Marko50/FEUP-DISS/feature/automatic-deployment/images/diagram.png?token=AEUVTHEMC2W33OLMWW2Z4HK6RHXDI)
+![general overview](https://i.ibb.co/59SbBS5/diagram.png)
 
 ## Contents
 

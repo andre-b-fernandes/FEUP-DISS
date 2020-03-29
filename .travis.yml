@@ -15,9 +15,6 @@ script:
   - pipenv run python -m unittest discover -v -p "*_test.py"
   - pipenv run flake8
 
-before_deploy:
-  - pipenv run python sdist bdist_wheel
-
 deploy: 
   provider: pypi
   user: "__token__"
