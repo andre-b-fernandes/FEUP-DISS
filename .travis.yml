@@ -1,25 +1,22 @@
 language: python
 python:
-  - "3.7"
+- '3.7'
 jobs:
   include:
-    - before_install:
-        - pip install --upgrade pip
-        - pip install pipenv
-
+  - before_install:
+    - pip install --upgrade pip
+    - pip install pipenv
 install:
-  - python -m pipenv lock -r > requirements.txt
-  - pipenv install -r requirements.txt
-
+- python -m pipenv lock -r > requirements.txt
+- pipenv install -r requirements.txt
 script:
-  - pipenv run python -m unittest discover -v -p "*_test.py"
-  - pipenv run flake8
-
-deploy: 
+- pipenv run python -m unittest discover -v -p "*_test.py"
+- pipenv run flake8
+deploy:
   provider: pypi
-  user: "__token__"
-  password:
-    secure: "fZSndQAFfmBbMNMrhyVUGbkFMdDBKMwDUTFj1E45zP1KABA+pqFB5zihmFxnLTV7yIVTkKN2BVQN0P3N/nm3PZryLv/fJUbhCL23otbgUIkMDPVHEPy+j/9ydbyDmxow3ps0Z8mwUCyjAbOwNu/ZUQIoMi4PrdGUWvdeMP7EPJrO8JgSUeCJpaJluF1bzN7MGpV6UtLEIBcmsc6H8nY/NzvN7/nIEuuhvRfNv8UXsxJxwTGWkE/em6t0P2r0IWCv4LDrxAW/FxPfmb8LuDmj7by9J5GqUW3FaImtybTiTDwtnZaq32x2P02HqSDRcEetqrv5PfM2arSYn8Bv6EwDJyz+aMdovfqHKtG/JYr5fqkISa0YNI0Jpx7nFqU6vT264b5C9F/k5AIuwZDdL7veBulcy/+Q4KqRda5u2z07Q6FxcDF+dZbNAIMNHx46VXpxgAzDMLZD25yxOF+1/4fuxq0Hz6cbkEs9YX821k5PN+aLxN09QAzkrKiA8KzUtoH6vg9pOAHEPuD0AMXZZZKH3Y9k97VFGBLj4cs7B6pa14NrSJL0NA0IYPAe0N4SSCq1evkjb3Na8ZFvpZeDWMghbE/8+r44nbH8N7mcbDVWuYafyRpK4WaKgyHhKzdRytFi0v0EnPCmokPtmqrs1Ww5upsgTNGHm3PcJBHRni3Lci4="
+  user: __token__
   on:
     branch: master
   server: https://test.pypi.org/legacy/
+  password:
+    secure: bZhCV948hLPpwHpM2SUdMw8BLdpWKetoy4KwxS4LKPAGymfDdb/b4e7or2I2xrugO2w/CGtN6vvLIg5iool/INWB6vHJLWscANKebB2kyTFtjPs5N0fXyM+XWok7cLm2V1rCrzeZu6qLJBPWls5zIwZDan8E5tOp5By2X2P8CWlt/JeLJSEcxU1jM/UDdCWErErocVm51nj1SdnOdC+eMPpCyjQq4UvmcwhvCB7nzxfn/HVenRS7tomQ7ubk1PcZ8jL2lLOFaX5amjBUuB3kHycaRcRaOvqib4H+MwCRyPHuQ7/ffHqv+a231Z/GPCgYHiEdQ+xNqzy7Fu1PZwTpyDklMKkCLdiApwBJfh8+0U2yPafASkBb4q5bv/1jPFMX6zHbB/U532os3xz7dnDpTDIgaCkWJMJxg+GZ42onEIVpYHClWfi1YCqhtyfCgD772haq3mzvNbfCfNvuZWBNSnqGv0caEiQ8Jpxfi5AHB2Pgmnq5hvS3LQ/+Ftzx3mwBOQIuSVbux9x1wkONiDJ+tD/ta9dYkjWze4ouhiiwh7aT1j6tVD51vo0yOUh1BxVC7INrKfzxt6HmBG/ZxThhQ6s9pqCo7UfJGoICKMJf1mBXKSPHy5+0oJyKdsHbj5Egukg0o9zZgZfZX03jnZ242bEoP43l35VBKCEYy2npPIg=
