@@ -17,9 +17,12 @@ class PrequentialEvaluatorImplicit(PrequentialEvaluator):
 
     def new_rating(self, rating):
         user_id, item_id = rating[0], rating[1]
-        evaluation, elap = self.evaluate(user_id, item_id)
+        evaluation, elap_eval = self.evaluate(user_id, item_id)        
         self.window_data.append(int(evaluation))
         self._increment_counter()
         self._check_counter()
+        start = time()
         self.model.new_rating(rating)
-        return self.window_avg_error, elap
+        end = time()
+        elap_nr = end - start
+        return self.window_avg_error, elap_eval, elap_nr

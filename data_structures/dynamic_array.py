@@ -1,5 +1,5 @@
 from copy import deepcopy
-
+from numpy import array
 
 class DynamicArray:
     def __init__(self, data=None, default_value=None):
@@ -34,3 +34,10 @@ class DynamicArray:
     def append(self, value):
         self._data.append(value)
         self._size += 1
+
+    def transpose(self):
+        arr = array(self._data).transpose()
+        mat = DynamicArray(default_value=DynamicArray())
+        for elem in arr:
+            mat.append(DynamicArray(elem))
+        return mat

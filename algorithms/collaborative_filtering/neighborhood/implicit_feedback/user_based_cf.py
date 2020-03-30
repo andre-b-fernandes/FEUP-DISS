@@ -53,4 +53,4 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
         return sum([self.similarity_between(user_id, another_user_id)
                     for another_user_id in nbs
                     if self.matrix[another_user_id][item_id]
-                    is not None]) / len_nbs
+                    is not None]) / len_nbs if len_nbs > 0 else 0

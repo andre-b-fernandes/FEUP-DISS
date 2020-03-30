@@ -39,9 +39,10 @@ class NeighborhoodUserCF(CollaborativeFiltering):
 
     # initialize neighborhood models
     def _init_neighborhood(self):
+        users = [u_id for u_id in range(
+            len(self.matrix)) if len(self.co_rated_between(u_id, u_id)) > 0]
         self.model[NEIGHBORS_KEY] = DynamicArray(
-            [self._neighborhood(user_id) for user_id in range(
-                0, len(self.matrix))], default_value=list())
+            [self._neighborhood(u_id) for u_id in users], default_value=list())
 
     # updating the co_rated matrix inside the model
     def _update_co_rated(self, user_id, item_id):
@@ -51,7 +52,7 @@ class NeighborhoodUserCF(CollaborativeFiltering):
                     item_id)
 
     def _neighborhood(self, user_id):
-        candidates = list(range(0, len(self.matrix)))
+        candidates = list(range(len(self.matrix)))
         candidates.remove(user_id)
         return knn(user_id, candidates, self.n_neighbors,
                    self.similarity_between)

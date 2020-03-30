@@ -59,7 +59,7 @@ class ItemLSH(CollaborativeFiltering):
                 for c in range(0, len(column), self.n_bands)]
 
     def _update_signature_matrix(self, item_id):
-        df = DataFrame(self.matrix)
+        df = DataFrame(self.matrix._data)
         column = df[item_id]
         sign = [self._min_hash(permutation(column))
                 for _ in range(self.n_permutations)]
