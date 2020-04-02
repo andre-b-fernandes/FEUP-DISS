@@ -17,7 +17,7 @@ class PrequentialEvaluatorExplicitTest(unittest.TestCase):
         cf = UserBasedExplicitCF(matrix)
         evaluator = PrequentialEvaluatorExplicit(cf)
         err, _elap = evaluator.evaluate(0, 2, 3)
-        self.assertEqual(err, 0.2)
+        self.assertEqual(err, 0.4)
 
     def test_new_rating(self):
         matrix = [
@@ -29,8 +29,8 @@ class PrequentialEvaluatorExplicitTest(unittest.TestCase):
         ]
         cf = UserBasedExplicitCF(matrix)
         evaluator = PrequentialEvaluatorExplicit(cf)
-        err, _elap = evaluator.new_rating((0, 2, 3))
-        self.assertEqual(err, 0.2)
+        err, _elap, _elap2 = evaluator.new_rating((0, 2, 3))
+        self.assertEqual(err, 0.4)
 
 
 if __name__ == "main":

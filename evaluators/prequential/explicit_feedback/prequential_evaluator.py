@@ -4,9 +4,8 @@ from evaluators.prequential.\
 
 
 class PrequentialEvaluatorExplicit(PrequentialEvaluator):
-    def __init__(self, explicit_model, window=None, n_ratings=10):
-        super().__init__(explicit_model, window)
-        self.n_ratings = n_ratings
+    def __init__(self, explicit_model, window=None, n_ratings=5, n_rec=20):
+        super().__init__(explicit_model, window, n_ratings, n_rec)
 
     def _calculate_window_error(self):
         self.window_avg_error = (sum(
@@ -22,9 +21,12 @@ class PrequentialEvaluatorExplicit(PrequentialEvaluator):
 
     def new_rating(self, rating):
         user_id, item_id, value = rating[0], rating[1], rating[2]
-        evaluation, elap = self.evaluate(user_id, item_id, value)
+        evaluation, elap_pred = self.evaluate(user_id, item_id, value)
         self.window_data.append(evaluation)
         self._increment_counter()
         self._check_counter()
+        start = time()
         self.model.new_rating(rating)
-        return self.window_avg_error, elap
+        end = time()
+        elap_nr = end - start
+        return self.window_avg_error, elap_pred, elap_nr

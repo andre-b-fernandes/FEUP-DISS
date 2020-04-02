@@ -34,3 +34,6 @@ class DynamicArray:
     def append(self, value):
         self._data.append(value)
         self._size += 1
+
+    def col(self, position):
+        return [elem[position] for elem in self._data]

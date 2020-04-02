@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="IncREC-Marko50",  # Replace with your own username
-    version="0.0.2",
+    name="increc",  # Replace with your own username
+    version="0.0.1",
     author="Fernando André Fernandes",
     author_email="fernandoandre49@gmail.com",
     description="Software library on stream based recommender systems",
