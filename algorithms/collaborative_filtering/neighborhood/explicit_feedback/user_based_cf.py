@@ -17,35 +17,8 @@ SIM_VALUE_KEY = "similarity_value"
 
 
 class UserBasedExplicitCF(NeighborhoodUserCF):
-    """
-        The defion of the user based collaborative filtering algorithm.
-        It extends the collaborative filtering base class.
-        This class is to be used for explicit feedback.
-
-        Attributes
-        ----------
-
-        matrix : array
-            The ratings matrix.
-        model: array.
-            The user-user similarities.
-
-
-    """
     def __init__(self, matrix=[], similarities=[], avg_ratings=dict(),
                  co_rated=[], neighbors=[], n_neighbors=5):
-        """
-            Constructor
-
-            Parameters
-            ----------
-            matrix : array
-                The ratings matrix.
-            similarities: array.
-                A user-user matrix containing similarities.
-            avg_ratings:
-                A dictionary indexed by user_id with average ratings
-        """
         super().__init__(matrix, co_rated, neighbors, n_neighbors)
         self.similarity_default = dict(
             {
@@ -171,7 +144,7 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
 
         self.model[AVG_RATINGS_KEY][user_id] = new_avg_rating
 
-    # new stream incoming as (user_id, item_id, rating)
+    # new rating incoming as (user_id, item_id, rating)
     def new_rating(self, rating):
         user_id, item_id, value = rating[0], rating[1], rating[2]
         # rating update
@@ -182,7 +155,8 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         else:
             self._new_rating(user_id, item_id, value)
         self.matrix[user_id][item_id] = value
-        self._update_co_rated(user_id, item_id)
+        self._update_co_rated(
+            user_id, item_id, lambda value: value is not None)
         self._init_neighborhood()
 
     def predict(self, user_id, item_id):

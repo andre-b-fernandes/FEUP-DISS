@@ -25,8 +25,7 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
             number_rated_items_another_user)
 
     def _update_similarities(self, user_id):
-        members = list(range(0, len(self.matrix)))
-        members.remove(user_id)
+        members = self.users.difference({user_id})
         for another_user_id in members:
             self._init_similarity(user_id, another_user_id)
 
@@ -34,14 +33,15 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
         return self.model[SIMILARITIES_KEY][(user, another_user)]
 
     def new_rating(self, rating):
-        user_id, item_id = rating[0], rating[1]
-        self.matrix[user_id][item_id] = 1
-        self._update_co_rated(user_id, item_id)
+        user_id, item_id, value = rating[0], rating[1], rating[2]
+        self.users.add(user_id)
+        self.matrix[user_id][item_id] = value
+        self._update_co_rated(user_id, item_id, lambda value: value == 1)
         self._update_similarities(user_id)
         self._init_neighborhood()
 
     def recommend(self, user_id, n_products):
-        item_ids = [i for i in range(0, len(self.matrix[user_id]))
+        item_ids = [i for i in range(len(self.matrix[user_id]))
                     if self.matrix[user_id][i] is None]
         return sorted(item_ids,
                       key=lambda item_id:

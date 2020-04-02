@@ -2,12 +2,14 @@ from abc import ABC
 
 
 class PrequentialEvaluator(ABC):
-    def __init__(self, model, window=None):
+    def __init__(self, model, window, n_ratings, n_rec):
         self.model = model
         self.window = window
         self.window_counter = 0
         self.window_data = []
         self.window_avg_error = 1
+        self.n_ratings = n_ratings
+        self.n_rec = n_rec
 
     def _calculate_window_error(self):
         self.window_avg_error = 1 - (sum(

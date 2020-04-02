@@ -1,7 +1,9 @@
 import sys
 import getopt
-import UserBasedExplicitCF
-from evaluators import PrequentialEvaluatorExplicit
+from algorithms.collaborative_filtering.neighborhood.\
+    explicit_feedback import UserBasedExplicitCF
+from evaluators.prequential.\
+    explicit_feedback import PrequentialEvaluatorExplicit
 from graphic import EvaluationAnimation
 from stream import FileStream
 

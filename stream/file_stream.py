@@ -1,7 +1,4 @@
 # Assuming files as (user_id, item_id, rating)
-import time
-
-
 class FileStream:
 
     def __init__(self, path, sep=" "):
@@ -22,13 +19,11 @@ class FileStream:
         return stream
 
     def process_stream(self, model):
+        # it = 0
         for rating in self.stream:
-            print(f"New rating entering: {rating}")
-            start_time = time.time()
+            # print(f"New rating entering: {rating} -> Iter: {it}")
+            # it += 1
             model.new_rating(rating)
-            end_time = time.time()
-            elapsed = end_time - start_time
-            print(f"{elapsed} seconds elapsed.")
         return model
 
     def process_stream_eval_anim(

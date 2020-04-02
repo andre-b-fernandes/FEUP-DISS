@@ -31,7 +31,7 @@ class PrequentialEvaluatorImplicitTest(unittest.TestCase):
         ]
         lsh_based = UserBasedImplicitCF(matrix)
         evaluator = PrequentialEvaluatorImplicit(lsh_based)
-        ev, _elap = evaluator.new_rating((0, 2))
+        ev, _elap1, _elap2 = evaluator.new_rating((0, 2, 1))
         self.assertEqual(ev, 0.0)
 
 

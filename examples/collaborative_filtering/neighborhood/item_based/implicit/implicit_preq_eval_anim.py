@@ -7,7 +7,7 @@ from evaluators.prequential.\
     implicit_feedback import PrequentialEvaluatorImplicit
 from graphic.animation import EvaluationAnimation
 
-path = getopt.getopt(sys.argv[1:], "")[1][1]
+path = getopt.getopt(sys.argv[1:], "")[1][0]
 fs = FileStream(path, sep="\t")
 fs.process_stream_eval_anim(
     PrequentialEvaluatorImplicit, ItemLSH, EvaluationAnimation)
