@@ -1,25 +1,29 @@
 from algorithms.collaborative_filtering\
     .matrix_factorization import (
-        MatrixFactorization, U_DECOMPOSED_KEY, V_DECOMPOSED_KEY)
+        MatrixFactorization,
+        U_DECOMPOSED_KEY,
+        V_DECOMPOSED_KEY,
+        P_KEY)
 from data_structures import DynamicArray
 from utils import avg
 from numpy import dot
-from random import randint
+from random import uniform
 
 
 PREPROCESSED_MATRIX_KEY = "PREP_MATRIX"
 
 
 class MatrixFactorizationExplicit(MatrixFactorization):
-    def __init__(self, matrix=[], u=[], v=[], lf=2, perturbation=5, prep=[]):
-        super().__init__(matrix, u, v, lf)
+    def __init__(self, matrix=[], u=[], v=[], p=[], lf=2, prep=[]):
+        super().__init__(matrix, u, v, p, lf)
         self._init_model(
             prep,
             PREPROCESSED_MATRIX_KEY, self._init_preprocessed_matrix)
+        self._initial_training()
 
     def _init_preprocessed_matrix(self):
         self.model[PREPROCESSED_MATRIX_KEY] = DynamicArray(
-            default_value=DynamicArray())
+            default_value=lambda: DynamicArray())
         u_avg, i_avg = {}, {}
 
         for u_id, ratings in enumerate(self.matrix):
@@ -40,15 +44,20 @@ class MatrixFactorizationExplicit(MatrixFactorization):
     def _init_u(self):
         self.model[U_DECOMPOSED_KEY] = DynamicArray([
             DynamicArray(
-                [randint(0, 5) for _ in range(self.latent_factors)],
-                default_value=0) for _ in range(
-                    len(self.matrix))], default_value=DynamicArray())
+                [uniform(0, 1) for _ in range(self.latent_factors)],
+                default_value=lambda: uniform(0, 1)) for _ in range(
+                    len(self.matrix))], default_value=lambda: DynamicArray(
+                        default_value=lambda: uniform(0, 1)
+                    ))
 
     def _init_v(self):
         self.model[V_DECOMPOSED_KEY] = DynamicArray([
-            DynamicArray([randint(0, 5) for _ in range(
-                len(self.matrix[0]))]) for _ in range(
-                    self.latent_factors)], default_value=DynamicArray())
+            DynamicArray([uniform(0, 1) for _ in range(len(
+                self.items))], default_value=lambda: uniform(
+                    0, 1)) for _ in range(
+                    self.latent_factors)], default_value=lambda: DynamicArray(
+                        default_value=lambda: uniform(0, 1)
+                    ))
 
     def _calculate_factor_u(self, user_id, index_factor):
         ratings = self.model[PREPROCESSED_MATRIX_KEY][user_id]
@@ -98,6 +107,9 @@ class MatrixFactorizationExplicit(MatrixFactorization):
             new_v = self._calculate_factor_v(item_id, lf)
             self.model[V_DECOMPOSED_KEY][lf][item_id] = new_v
 
+    def _update_p(self, user_id, item_id):
+        self.model[P_KEY][user_id][item_id] = self.predict(user_id, item_id)
+
     def new_rating(self, rating):
         user_id, item_id, value = rating[0], rating[1], rating[2]
         self.items.add(item_id)
@@ -108,19 +120,21 @@ class MatrixFactorizationExplicit(MatrixFactorization):
         self.model[PREPROCESSED_MATRIX_KEY][user_id][item_id] = raw_value
         self._update_u_factors(user_id)
         self._update_v_factors(item_id)
+        self._update_p(user_id, item_id)
 
-    def _predict_raw(self, user_id, item_id):
+    def predict_prep(self, user_id, item_id):
         u_values = self.model[U_DECOMPOSED_KEY][user_id]
+        u_values.extend(self.latent_factors - 1)
         v_values = self.model[V_DECOMPOSED_KEY].col(item_id)
         return dot(u_values, v_values)
 
     def predict(self, user_id, item_id):
         u_avg = avg(self.matrix[user_id])
         i_avg = avg(self.matrix.col(item_id))
-        dot_prod = self._predict_raw(user_id, item_id)
+        dot_prod = self.predict_prep(user_id, item_id)
         return dot_prod + 0.5*(i_avg + u_avg)
 
-    def recommend(self, user_id, n_rec, repeated=False):
+    def recommend(self, user_id, n_rec=20, repeated=False):
         candidates = self.items
         if not repeated:
             item_ids = {item_id for item_id, rating in enumerate(
@@ -128,8 +142,8 @@ class MatrixFactorizationExplicit(MatrixFactorization):
             candidates = candidates.difference(item_ids)
 
         return sorted(
-            candidates, key=lambda item_id: self.predict(
-                user_id, item_id))[-n_rec:]
+            candidates,
+            key=lambda item_id: self.model[P_KEY][user_id][item_id])[-n_rec:]
 
     def preprocessed_matrix(self):
         return self.model[PREPROCESSED_MATRIX_KEY]

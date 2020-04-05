@@ -15,7 +15,7 @@ class DynamicArrayTest(unittest.TestCase):
             DynamicArray([None, None, 1])
         ]
         da = DynamicArray(
-            matrix, default_value=DynamicArray(default_value=None))
+            matrix, default_value=lambda: DynamicArray())
 
         self.assertEqual(da._size, len(matrix))
         self.assertEqual(da._data, matrix)
@@ -28,7 +28,7 @@ class DynamicArrayTest(unittest.TestCase):
             DynamicArray([None, None, 1])
         ]
         da = DynamicArray(
-            matrix, default_value=DynamicArray(default_value=None))
+            matrix, default_value=lambda: DynamicArray())
         self.assertEqual(da._size, len(matrix))
         da[4][4] = 1
         self.assertEqual(len(da), 5)

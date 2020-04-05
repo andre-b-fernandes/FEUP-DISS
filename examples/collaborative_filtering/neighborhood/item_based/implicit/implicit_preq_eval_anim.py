@@ -9,5 +9,6 @@ from graphic.animation import EvaluationAnimation
 
 path = getopt.getopt(sys.argv[1:], "")[1][0]
 fs = FileStream(path, sep="\t")
-fs.process_stream_eval_anim(
-    PrequentialEvaluatorImplicit, ItemLSH, EvaluationAnimation)
+cf = ItemLSH(n_perms=100, n_bands=2)
+ev = PrequentialEvaluatorImplicit(cf)
+fs.process_stream_eval_anim(ev, EvaluationAnimation)

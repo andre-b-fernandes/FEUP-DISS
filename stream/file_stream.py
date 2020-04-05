@@ -26,9 +26,6 @@ class FileStream:
             model.new_rating(rating)
         return model
 
-    def process_stream_eval_anim(
-            self, eval_class, model_class, anim_class, window=10):
-        model = model_class()
-        evaluator = eval_class(model, window=window)
+    def process_stream_eval_anim(self, evaluator, anim_class):
         animation = anim_class(self.stream, evaluator)
         animation.show()
