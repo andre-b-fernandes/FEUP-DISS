@@ -11,6 +11,7 @@ class PrequentialEvaluatorImplicit(PrequentialEvaluator):
     def evaluate(self, user_id, item_id):
         start = time()
         item_ids = self.model.recommend(user_id, self.n_rec)
+        print(f"Is {item_id} in {item_ids} ?")
         end = time()
         diff = end - start
         return (item_id in item_ids), diff

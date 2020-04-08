@@ -34,3 +34,7 @@ class DynamicArray:
 
     def col(self, position):
         return [elem[position] for elem in self._data]
+
+    def set_col(self, position, value):
+        for i in range(len(value)):
+            self._data[i][position] = value[i]

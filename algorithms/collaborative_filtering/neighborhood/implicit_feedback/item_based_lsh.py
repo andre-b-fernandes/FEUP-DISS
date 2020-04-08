@@ -84,7 +84,7 @@ class ItemLSH(CollaborativeFiltering):
         self.model[SIGNATURE_MATRIX_KEY][item_id] = sign
 
     def new_rating(self, rating):
-        user_id, item_id, value = rating[0], rating[1], rating[2]
+        user_id, item_id, value = rating
         self.matrix[user_id][item_id] = value
         self._remove_item_id(item_id)
         self._update_signature_matrix(item_id)
