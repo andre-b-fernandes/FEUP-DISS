@@ -9,14 +9,15 @@ class FileStream:
         with open(path, "r") as f:
             line = f.readline()
             while line:
-                stream_arr = line.split(sep)
-                user_id = int(stream_arr[0])
-                item_id = int(stream_arr[1])
-                rating = float(stream_arr[2])
-                stream.append((user_id, item_id, rating))
+                rating_arr = line.split(sep)
+                rating = self._parse_rating(rating_arr)
+                stream.append((rating))
                 line = f.readline()
             f.close()
         return stream
+
+    def _parse_rating(self, stream_arr):
+        raise NotImplementedError("_parse_rating is not implemented.")
 
     def process_stream(self, model):
         # it = 0
@@ -26,9 +27,6 @@ class FileStream:
             model.new_rating(rating)
         return model
 
-    def process_stream_eval_anim(
-            self, eval_class, model_class, anim_class, window=10):
-        model = model_class()
-        evaluator = eval_class(model, window=window)
+    def process_stream_eval_anim(self, evaluator, anim_class):
         animation = anim_class(self.stream, evaluator)
         animation.show()

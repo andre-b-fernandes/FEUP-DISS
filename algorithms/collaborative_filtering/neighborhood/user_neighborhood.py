@@ -43,7 +43,7 @@ class NeighborhoodUserCF(CollaborativeFiltering):
     def _init_neighborhood(self):
         self.model[NEIGHBORS_KEY] = DynamicArray(
             [self._neighborhood(
-                u_id) for u_id in self.users], default_value=list())
+                u_id) for u_id in self.users], default_value=lambda: list())
 
     # updating the co_rated matrix inside the model
     def _update_co_rated(self, user_id, item_id, comp):

@@ -7,12 +7,12 @@ class EvaluationAnimation:
         self.stream = stream
         self.evaluator = evaluator
         self.fig, self.ax = plt.subplots()
-        self.line, = plt.plot([], [], 'r.', label="Accuracy")
+        self.line, = plt.plot([], [], 'r.', label="Error")
         self.time_l_rec, = plt.plot([], [], 'g.', label="Elapsed Rec Time")
         self.time_l_nr, = plt.plot([], [], 'b.', label="Elapsed Nr Time")
         plt.legend(
             [self.line, self.time_l_rec, self.time_l_nr],
-            ['Accuracy', 'Elapsed Rec Time', "Elapsed NR time"])
+            ['Error', 'Elapsed Rec Time', "Elapsed NR time"])
         self.x, self.y = [], []
         self.time_rec, self.time_nr = [], []
         self.animation = animation.FuncAnimation(

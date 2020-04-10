@@ -23,10 +23,12 @@ class CollaborativeFiltering(ABC):
             matrix: array
                 Ratings matrix.
         """
-        self.matrix = DynamicArray(default_value=DynamicArray(
-            default_value=None))
+        self.items = set(
+            {item_id for row in matrix for item_id in range(len(row))})
+        self.users = set({user_id for user_id in range(len(matrix))})
+        self.matrix = DynamicArray(default_value=lambda: DynamicArray())
         for row in matrix:
-            self.matrix.append(DynamicArray(row, default_value=None))
+            self.matrix.append(DynamicArray(row))
         self.model = dict()
 
     def _init_model(self, model, model_name, callback):

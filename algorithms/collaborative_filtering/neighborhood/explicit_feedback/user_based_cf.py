@@ -33,7 +33,7 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
 
     # initializing the average ratings
     def _init_avg_ratings(self):
-        self.model[AVG_RATINGS_KEY] = DynamicArray(default_value=0)
+        self.model[AVG_RATINGS_KEY] = DynamicArray(default_value=lambda: 0)
         for index, user in enumerate(self.matrix):
             self.model[AVG_RATINGS_KEY][index] = avg(user)
 
@@ -146,7 +146,8 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
 
     # new rating incoming as (user_id, item_id, rating)
     def new_rating(self, rating):
-        user_id, item_id, value = rating[0], rating[1], rating[2]
+        user_id, item_id, value = rating
+        self.users.add(user_id)
         # rating update
         if self.matrix[user_id][item_id] is not None:
             # TODO correct papagelis equations
