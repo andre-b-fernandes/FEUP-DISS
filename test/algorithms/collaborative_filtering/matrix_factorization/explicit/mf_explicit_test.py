@@ -49,7 +49,7 @@ class MatrixFactorizationExplicitTest(unittest.TestCase):
             [7, None, 1, None, 6],
         ]
         cf = MatrixFactorizationExplicit(matrix)
-        self.assertIn(4, cf.recommend(3, 1))
+        self.assertIn(0, cf.recommend(3, 1))
 
 
 if __name__ == "__main__":

@@ -15,11 +15,11 @@ class PrequentialEvaluatorImplicitTest(unittest.TestCase):
             [1, None, 1, None, 1],
         ]
         lsh_based = UserBasedImplicitCF(matrix)
-        evaluator = PrequentialEvaluatorImplicit(lsh_based)
+        evaluator = PrequentialEvaluatorImplicit(lsh_based, n_rec=1)
         ev, _elap = evaluator.evaluate(0, 2)
-        self.assertTrue(ev)
-        ev, _elap = evaluator.evaluate(0, 0)
         self.assertFalse(ev)
+        ev, _elap = evaluator.evaluate(0, 0)
+        self.assertTrue(ev)
 
     def test_new_rating(self):
         matrix = [
@@ -31,7 +31,7 @@ class PrequentialEvaluatorImplicitTest(unittest.TestCase):
         ]
         lsh_based = UserBasedImplicitCF(matrix)
         evaluator = PrequentialEvaluatorImplicit(lsh_based)
-        ev, _elap1, _elap2 = evaluator.new_rating((0, 2, 1))
+        ev, _elap1, _elap2 = evaluator.new_rating((0, 2))
         self.assertEqual(ev, 0.0)
 
 

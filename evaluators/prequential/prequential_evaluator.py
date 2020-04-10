@@ -12,7 +12,7 @@ class PrequentialEvaluator(ABC):
         self.n_rec = n_rec
 
     def _calculate_window_error(self):
-        self.window_avg_error = 1 - (sum(
+        self.window_avg_error = (sum(
             self.window_data) / self.window_counter)
 
     def _increment_counter(self):

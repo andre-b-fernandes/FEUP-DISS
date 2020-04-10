@@ -5,10 +5,10 @@ from algorithms.collaborative_filtering.neighborhood.\
 from evaluators.prequential.\
     implicit_feedback import PrequentialEvaluatorImplicit
 from graphic import EvaluationAnimation
-from stream import FileStream
+from stream.file_stream.implicit import FileStreamImplicit
 
 path = getopt.getopt(sys.argv[1:], "")[1][0]
-fs = FileStream(path, sep="\t")
+fs = FileStreamImplicit(path, sep="\t")
 cf = UserBasedImplicitCF()
 ev = PrequentialEvaluatorImplicit(cf)
 fs.process_stream_eval_anim(ev, EvaluationAnimation)

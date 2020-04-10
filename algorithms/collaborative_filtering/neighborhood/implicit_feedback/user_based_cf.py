@@ -33,9 +33,9 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
         return self.model[SIMILARITIES_KEY][(user, another_user)]
 
     def new_rating(self, rating):
-        user_id, item_id, value = rating
+        user_id, item_id = rating
         self.users.add(user_id)
-        self.matrix[user_id][item_id] = value
+        self.matrix[user_id][item_id] = 1
         self._update_co_rated(user_id, item_id, lambda value: value == 1)
         self._update_similarities(user_id)
         self._init_neighborhood()

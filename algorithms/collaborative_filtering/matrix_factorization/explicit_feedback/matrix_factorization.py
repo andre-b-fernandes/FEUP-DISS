@@ -2,8 +2,7 @@ from algorithms.collaborative_filtering\
     .matrix_factorization import (
         MatrixFactorization,
         U_DECOMPOSED_KEY,
-        V_DECOMPOSED_KEY,
-        P_KEY)
+        V_DECOMPOSED_KEY)
 from data_structures import DynamicArray
 from utils import avg
 
@@ -11,12 +10,18 @@ PREPROCESSED_MATRIX_KEY = "PREP_MATRIX"
 
 
 class MatrixFactorizationExplicit(MatrixFactorization):
-    def __init__(self, matrix=[], u=[], v=[], p=[], lf=2, prep=[]):
-        super().__init__(matrix, u, v, p, lf)
+    def __init__(self, matrix=[], u=[], v=[], lf=2, prep=[]):
+        super().__init__(matrix, u, v, lf)
         self._init_model(
             prep,
             PREPROCESSED_MATRIX_KEY, self._init_preprocessed_matrix)
         self._initial_training()
+
+    def _initial_training(self):
+        for user_id, ratings in enumerate(self.matrix):
+            for item_id, value in enumerate(ratings):
+                if value is not None:
+                    self.new_rating((user_id, item_id, value))
 
     def _init_preprocessed_matrix(self):
         self.model[PREPROCESSED_MATRIX_KEY] = DynamicArray(
@@ -96,7 +101,6 @@ class MatrixFactorizationExplicit(MatrixFactorization):
         self.model[PREPROCESSED_MATRIX_KEY][user_id][item_id] = raw_value
         self._update_u_factors(user_id)
         self._update_v_factors(item_id)
-        self._update_p(user_id, item_id)
 
     def predict_prep(self, user_id, item_id):
         return super().predict(user_id, item_id)
@@ -104,8 +108,8 @@ class MatrixFactorizationExplicit(MatrixFactorization):
     def predict(self, user_id, item_id):
         u_avg = avg(self.matrix[user_id])
         i_avg = avg(self.matrix.col(item_id))
-        dot_prod = self.predict_prep(user_id, item_id)
-        return dot_prod + 0.5*(i_avg + u_avg)
+        inner_prod = self.predict_prep(user_id, item_id)
+        return inner_prod + 0.5*(i_avg + u_avg)
 
     def recommend(self, user_id, n_rec=20, repeated=False):
         candidates = self.items
@@ -116,7 +120,7 @@ class MatrixFactorizationExplicit(MatrixFactorization):
 
         return sorted(
             candidates,
-            key=lambda item_id: self.model[P_KEY][user_id][item_id])[-n_rec:]
+            key=lambda item_id: self.predict(user_id, item_id))[-n_rec:]
 
     def preprocessed_matrix(self):
         return self.model[PREPROCESSED_MATRIX_KEY]
