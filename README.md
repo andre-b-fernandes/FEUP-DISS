@@ -12,24 +12,30 @@ the **Faculty of Engineering of the University of Porto**.
 
 ## Contents
 
-This software library contains code regarding the implementation of recommendation systems on online platforms. It implements some algorithms, test metrics and data structures, so that it can process incoming information, denoted as a stream of ratings. Eeach rating can be **implicit** or **explicit** and is given from an user to an item. Explicit ratings are direct evaluations given by users, for example on a 1-10 scale. Implicit ratings can be interpreted as actions users took on items(for example a page click) which can be interpreted as the user *liking* that specific item. Each rating is a **tuple** : *(user_id, item_id, rating)*.
+This software library contains code regarding the implementation of recommendation systems on online platforms. It implements some algorithms, test metrics and data structures, so that it can process incoming information, denoted as a stream of ratings. Each rating can be **implicit** or **explicit** and is given from an user to an item. Explicit ratings are direct evaluations given by users, for example on a 1-10 scale. Implicit ratings can be interpreted as actions users took on items(for example a page click) which can be interpreted as the user *liking* that specific item. Each rating is a **tuple** : *(user_id, item_id, rating)*. For implicit feedback the tuple becomes: *(user_id, item_id)*
 
 Current implemented algorithms:
 
 1. **Explicit User-Based Collaborative Filtering**
 2. **Implicit User-Based Collaborative Filtering**
 3. **Implicit Locality-Sensitive-Hashing Item-Based Collaborative Filtering**
+4. **Implicit Matrix Factorization**
+5. **Explicit Matrix Factorization**
 
 ## Install
 
-`pip install -i https://test.pypi.org/simple/ IncREC-Marko50`
+Currently the library is only deployed on **Pypi Test**.
+
+`pip install -i https://test.pypi.org/simple/ increc`
 
 ## Dependencies
 
-To run this library locally:
+For development purposes:
 
 1. **Python3.7**
 2. **Pipenv** is required to run this on a virtual environment. `pip install --user pipenv`
+3. `python -m pipenv lock -r > requirements.txt`
+4. `pipenv install -r requirements.txt`
 
 ## Run Tests
 
