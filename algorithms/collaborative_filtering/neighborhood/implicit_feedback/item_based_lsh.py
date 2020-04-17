@@ -1,6 +1,7 @@
 from algorithms.collaborative_filtering import CollaborativeFiltering
 from numpy.random import permutation
-from pandas import DataFrame
+from time import time
+from data_structures import DynamicArray
 
 SIGNATURE_MATRIX_KEY = "signature_matrix"
 BUCKETS_KEY = "buckets"
@@ -19,44 +20,45 @@ class ItemLSH(CollaborativeFiltering):
 
     def _init_signature_matrix(self):
         signatures = self._calculate_signatures(self.matrix)
-        self.model[SIGNATURE_MATRIX_KEY] = DataFrame(signatures)
+        self.model[SIGNATURE_MATRIX_KEY] = DynamicArray(
+            signatures, lambda: DynamicArray())
 
     def _calculate_signatures(self, matrix):
         signatures = []
         for i in range(self.n_permutations):
-            permutated_matrix = DataFrame(permutation(matrix))
+            permutated_matrix = DynamicArray(permutation(matrix))
             sign = self._generate_signature(permutated_matrix)
             signatures.append(sign)
         return signatures
 
     def _generate_signature(self, perm_matrix):
         signature = []
-        for col in range(len(perm_matrix.columns)):
-            column = perm_matrix[col]  # Assuming the data structure complies.
+        for col in range(len(self.items)):
+            column = perm_matrix.col(col)
             identifier = self._min_hash(column)
             signature.append(identifier)
-        return signature
+        return DynamicArray(signature)
 
     def _min_hash(self, column):
         return next((i for i, x in enumerate(column) if x == 1), None)
 
     def _init_buckets(self):
         self.model[BUCKETS_KEY] = dict()
-        for i in self.model[SIGNATURE_MATRIX_KEY].columns:
-            column = self.model[SIGNATURE_MATRIX_KEY][i]
+        for i in range(len(self.items)):
+            column = self.model[SIGNATURE_MATRIX_KEY].col(i)
             candidates = self._group_by_bands(column)
             for candidate in candidates:
                 self._add_to_bucket(candidate, i)
 
     def _update_buckets(self, item_id):
-        column = self.model[SIGNATURE_MATRIX_KEY][item_id]
+        column = self.model[SIGNATURE_MATRIX_KEY].col(item_id)
         bands = self._group_by_bands(column)
         for band in bands:
             self._add_to_bucket(band, item_id)
 
     def _remove_item_id(self, item_id):
-        if item_id in self.model[SIGNATURE_MATRIX_KEY].columns:
-            column = self.model[SIGNATURE_MATRIX_KEY][item_id]
+        if item_id in range(len(self.items)):
+            column = self.model[SIGNATURE_MATRIX_KEY].col(item_id)
             bands = self._group_by_bands(column)
             for band in bands:
                 self._remove_from_bucket(band, item_id)
@@ -81,10 +83,12 @@ class ItemLSH(CollaborativeFiltering):
         column = self.matrix.col(item_id)
         sign = [self._min_hash(permutation(column))
                 for _ in range(self.n_permutations)]
-        self.model[SIGNATURE_MATRIX_KEY][item_id] = sign
+        self.model[SIGNATURE_MATRIX_KEY].set_col(item_id, sign)
 
     def new_rating(self, rating):
         user_id, item_id = rating
+        self.items.add(item_id)
+        self.users.add(user_id)
         self.matrix[user_id][item_id] = 1
         self._remove_item_id(item_id)
         self._update_signature_matrix(item_id)
@@ -94,13 +98,10 @@ class ItemLSH(CollaborativeFiltering):
         row = self.matrix[identifier]
         row_filtered = [index for index, value in enumerate(row)
                         if value == 1]
-        signatures = [self.model[SIGNATURE_MATRIX_KEY][elem_id]
+        signatures = [self.model[SIGNATURE_MATRIX_KEY].col(elem_id)
                       for elem_id in row_filtered]
-
         rec = set()
-        candidates = {
-            item_id: 0 for item_id in self.model[SIGNATURE_MATRIX_KEY].columns
-            }
+        candidates = {item_id: 0 for item_id in self.items}
         for sign in signatures:
             bands = self._group_by_bands(sign)
             for band in bands:
