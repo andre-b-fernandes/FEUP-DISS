@@ -94,12 +94,12 @@ class ItemLSH(CollaborativeFiltering):
         self._update_signature_matrix(item_id)
         self._update_buckets(item_id)
 
-    def recommend(self, identifier, n_rec, repeated=False):
-        row = self.matrix[identifier]
-        row_filtered = [index for index, value in enumerate(row)
-                        if value == 1]
-        signatures = [self.model[SIGNATURE_MATRIX_KEY].col(elem_id)
-                      for elem_id in row_filtered]
+    def recommend(self, user_id, n_rec, repeated=False):
+        row = self.matrix[user_id]
+        row_filtered = [
+            item_id for item_id in self.items if row[item_id] == 1]
+        signatures = [self.model[SIGNATURE_MATRIX_KEY].col(item_id)
+                      for item_id in row_filtered]
         rec = set()
         candidates = {item_id: 0 for item_id in self.items}
         for sign in signatures:
