@@ -35,14 +35,15 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
     def new_rating(self, rating):
         user_id, item_id = rating
         self.users.add(user_id)
+        self.items.add(item_id)
         self.matrix[user_id][item_id] = 1
         self._update_co_rated(user_id, item_id, lambda value: value == 1)
         self._update_similarities(user_id)
         self._init_neighborhood()
 
     def recommend(self, user_id, n_products):
-        item_ids = [i for i in range(len(self.matrix[user_id]))
-                    if self.matrix[user_id][i] is None]
+        item_ids = [i for i in self.items if self.matrix[
+            user_id][i] is None]
         return sorted(item_ids,
                       key=lambda item_id:
                       self._activation_weight(user_id, item_id))[-n_products:]

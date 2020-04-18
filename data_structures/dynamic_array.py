@@ -1,7 +1,9 @@
 class DynamicArray:
     def __init__(self, data=None, default_value=lambda: None):
         self.default_value = default_value
-        self._data = data or list()
+        self._data = data
+        if self._data is None:
+            self._data = list()
         self._size = len(self._data)
 
     def __iter__(self):

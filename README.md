@@ -49,4 +49,3 @@ This library uses **unittest** for unit testing and **flake8** as its linter.
 Usage examples are located in the `examples` folder.
 
 `pipenv run python -m examples.collaborative_filtering.neighborhood.item_based.implicit.implicit_preq_eval_anim "data_set"`
-

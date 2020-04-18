@@ -12,7 +12,7 @@ class LSHBasedTest(unittest.TestCase):
         lh_based = ItemLSH(matrix)
         self.assertEqual(lh_based.n_permutations,
                          len(lh_based.signature_matrix()))
-        self.assertEqual(len(lh_based.signature_matrix().loc[0]),
+        self.assertEqual(len(lh_based.signature_matrix()[0]),
                          len(matrix[0]))
         self.assertNotEqual(len(lh_based.buckets()), 0)
 
