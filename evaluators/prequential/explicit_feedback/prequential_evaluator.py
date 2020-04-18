@@ -13,7 +13,7 @@ class PrequentialEvaluatorExplicit(PrequentialEvaluator):
 
     def evaluate(self, user_id, item_id, value):
         prediction = self.model.predict(user_id, item_id)
-        print(f"Prediction {prediction}")
+        # print(f"Prediction {prediction}")
         start = time()
         self.model.recommend(user_id, n_rec=self.n_rec)
         end = time()
@@ -31,7 +31,7 @@ class PrequentialEvaluatorExplicit(PrequentialEvaluator):
         self.model.new_rating(rating)
         end = time()
         elap_nr = end - start
-        print(f"Elapsed Recommendation Time: {elap_pred}")
-        print(f"Elapsed New Rating Time: {elap_nr}")
-        print(f"Average Window Error: {self.window_avg_error}")
+        # print(f"Elapsed Recommendation Time: {elap_pred}")
+        # print(f"Elapsed New Rating Time: {elap_nr}")
+        # print(f"Average Window Error: {self.window_avg_error}")
         return self.window_avg_error, elap_pred, elap_nr

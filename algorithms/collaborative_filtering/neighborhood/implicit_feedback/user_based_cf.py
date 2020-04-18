@@ -40,8 +40,6 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
         self._update_co_rated(user_id, item_id, lambda value: value == 1)
         self._update_similarities(user_id)
         self._init_neighborhood()
-        if user_id == 150 and item_id == 293:
-            import pdb; pdb.set_trace()
 
     def recommend(self, user_id, n_products):
         item_ids = [i for i in self.items if self.matrix[

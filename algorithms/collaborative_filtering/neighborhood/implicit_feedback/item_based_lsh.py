@@ -94,7 +94,7 @@ class ItemLSH(CollaborativeFiltering):
                 rec = rec.union(items)
         if not repeated:
             rec = rec.difference(set(row_filtered))
-        return sorted(rec, key=lambda item_id: candidates[item_id])[-n_rec:]        
+        return sorted(rec, key=lambda item_id: candidates[item_id])[-n_rec:]
 
     def signature_matrix(self):
         return self.model[SIGNATURE_MATRIX_KEY]
