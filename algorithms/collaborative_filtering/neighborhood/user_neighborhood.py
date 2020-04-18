@@ -2,7 +2,6 @@ from algorithms.collaborative_filtering import CollaborativeFiltering
 from data_structures import SymmetricMatrix
 from data_structures import DynamicArray
 from utils import knn
-from copy import copy
 
 
 CO_RATED_KEY = "co_rated"
@@ -21,14 +20,15 @@ class NeighborhoodUserCF(CollaborativeFiltering):
 
     def _init_similarities(self):
         self.model[SIMILARITIES_KEY] = SymmetricMatrix(
-            len(self.matrix), copy(self.similarity_default))
+            len(self.matrix), lambda: self.similarity_default)
         for user_id in range(0, len(self.matrix)):
             for another_user_id in range(0, user_id + 1):
                 self._init_similarity(user_id, another_user_id)
 
     # initializing the co rated items with the item id's
     def _init_co_rated(self):
-        self.model[CO_RATED_KEY] = SymmetricMatrix(len(self.matrix), set())
+        self.model[CO_RATED_KEY] = SymmetricMatrix(
+            len(self.matrix), lambda: set())
         for index, user in enumerate(self.matrix):
             for another_index, another_user in enumerate(
                     self.matrix[0:index + 1]):

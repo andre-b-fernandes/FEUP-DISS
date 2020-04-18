@@ -1,7 +1,7 @@
 from algorithms.collaborative_filtering import CollaborativeFiltering
 from numpy.random import permutation
-from time import time
 from data_structures import DynamicArray
+from collections import defaultdict
 
 SIGNATURE_MATRIX_KEY = "signature_matrix"
 BUCKETS_KEY = "buckets"
@@ -43,7 +43,7 @@ class ItemLSH(CollaborativeFiltering):
         return next((i for i, x in enumerate(column) if x == 1), None)
 
     def _init_buckets(self):
-        self.model[BUCKETS_KEY] = dict()
+        self.model[BUCKETS_KEY] = defaultdict(set)
         for i in range(len(self.items)):
             column = self.model[SIGNATURE_MATRIX_KEY].col(i)
             candidates = self._group_by_bands(column)
@@ -56,24 +56,8 @@ class ItemLSH(CollaborativeFiltering):
         for band in bands:
             self._add_to_bucket(band, item_id)
 
-    def _remove_item_id(self, item_id):
-        if item_id in range(len(self.items)):
-            column = self.model[SIGNATURE_MATRIX_KEY].col(item_id)
-            bands = self._group_by_bands(column)
-            for band in bands:
-                self._remove_from_bucket(band, item_id)
-
-    def _remove_from_bucket(self, h, element):
-        try:
-            self.model[BUCKETS_KEY][h].remove(element)
-        except KeyError:
-            pass
-
     def _add_to_bucket(self, h, element):
-        if h in self.model[BUCKETS_KEY]:
-            self.model[BUCKETS_KEY][h].add(element)
-        else:
-            self.model[BUCKETS_KEY][h] = {element}
+        self.model[BUCKETS_KEY][h].add(element)
 
     def _group_by_bands(self, column):
         return [tuple(column[c:c + self.n_bands])
@@ -90,7 +74,6 @@ class ItemLSH(CollaborativeFiltering):
         self.items.add(item_id)
         self.users.add(user_id)
         self.matrix[user_id][item_id] = 1
-        self._remove_item_id(item_id)
         self._update_signature_matrix(item_id)
         self._update_buckets(item_id)
 
@@ -109,11 +92,9 @@ class ItemLSH(CollaborativeFiltering):
                 for item in items:
                     candidates[item] += 1
                 rec = rec.union(items)
-
         if not repeated:
             rec = rec.difference(set(row_filtered))
-
-        return sorted(rec, key=lambda item_id: candidates[item_id])[-n_rec:]
+        return sorted(rec, key=lambda item_id: candidates[item_id])[-n_rec:]        
 
     def signature_matrix(self):
         return self.model[SIGNATURE_MATRIX_KEY]

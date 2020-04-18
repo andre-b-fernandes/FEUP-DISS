@@ -9,7 +9,6 @@ from utils import pearson_correlation_terms, pearson_correlation, avg
 from data_structures import PairVariances
 from data_structures import DynamicArray
 
-
 AVG_RATINGS_KEY = "avg_ratings"
 COVARIANCE_KEY = "covariance"
 VARIANCES_KEY = "variances"
@@ -134,26 +133,21 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
     # new rating incoming as (user_id, item_id, rating)
     def _new_rating(self, user_id, item_id, value):
         new_avg_rating = self._new_rating_avg(user_id, value)
-        members = list(range(0, len(self.matrix)))
-        members.remove(user_id)
+        members = self.users.difference({user_id})
         for another_user_id in members:
             e, f, g = self._new_rating_terms(
                 (user_id, item_id, value, new_avg_rating), another_user_id)
             self._update_similarities_with_terms(
                 user_id, another_user_id, e, f, g)
-
         self.model[AVG_RATINGS_KEY][user_id] = new_avg_rating
 
     # new rating incoming as (user_id, item_id, rating)
     def new_rating(self, rating):
         user_id, item_id, value = rating
         self.users.add(user_id)
+        self.items.add(item_id)
         # rating update
-        if self.matrix[user_id][item_id] is not None:
-            # TODO correct papagelis equations
-            pass
-        # new rating
-        else:
+        if self.matrix[user_id][item_id] is None:
             self._new_rating(user_id, item_id, value)
         self.matrix[user_id][item_id] = value
         self._update_co_rated(
