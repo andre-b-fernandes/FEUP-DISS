@@ -6,13 +6,9 @@ class SymmetricMatrix:
         if size < 0:
             raise ValueError('size cannot be negative')
 
-        self._size = size
         self._data = DynamicArray(
             [value() for i in range((size + 1) * size // 2)],
             value)
-
-    def __len__(self):
-        return self._size
 
     def __setitem__(self, position, value):
         index = self._get_index(position)
@@ -31,13 +27,3 @@ class SymmetricMatrix:
 
     def __iter__(self):
         return iter(self._data)
-
-    def __str__(self):
-        ret = ""
-        for i in range(0, self._size):
-            ret += "[  "
-            for c in range(0, i + 1):
-                ret += str(self.__getitem__([i, c]))
-                ret += "  "
-            ret += "]\n"
-        return ret
