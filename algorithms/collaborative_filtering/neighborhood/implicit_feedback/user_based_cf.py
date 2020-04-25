@@ -10,6 +10,7 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
     def __init__(self, matrix=[], similarities=[], co_rated=[],
                  neighbors=[], n_neighbors=5):
         super().__init__(matrix, co_rated, neighbors, n_neighbors)
+        self.similarity_default = 0.0
         self._init_model(similarities, SIMILARITIES_KEY,
                          self._init_similarities)
         self._init_model(neighbors, NEIGHBORS_KEY, self._init_neighborhood)
@@ -28,9 +29,6 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
         members = self.users.difference({user_id})
         for another_user_id in members:
             self._init_similarity(user_id, another_user_id)
-
-    def similarity_between(self, user, another_user):
-        return self.model[SIMILARITIES_KEY][(user, another_user)]
 
     def new_rating(self, rating):
         user_id, item_id = rating
