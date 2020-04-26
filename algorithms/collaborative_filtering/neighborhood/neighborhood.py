@@ -30,6 +30,6 @@ class NeighborhoodCF(CollaborativeFiltering):
 
     def neighborhood_of(self, identifier):
         return self.model[NEIGHBORS_KEY][identifier]
-    
-    def similarity_between(self, user, another_user):
-        return self.model[SIMILARITIES_KEY][(user, another_user)]
+
+    def similarity_between(self, elem, another_elem):
+        return self.model[SIMILARITIES_KEY][(elem, another_elem)]

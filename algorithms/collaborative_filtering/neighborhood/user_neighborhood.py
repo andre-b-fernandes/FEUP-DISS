@@ -50,6 +50,3 @@ class NeighborhoodUserCF(NeighborhoodCF):
 
     def _init_similarity(self, user_id, another_user_id):
         raise NotImplementedError("The method is not implemented!")
-
-    def similarity_between(self, user, another_user):
-        raise NotImplementedError("The method is not implemented!")

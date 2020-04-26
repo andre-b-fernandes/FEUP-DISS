@@ -51,7 +51,8 @@ class ItemBasedImplicitCF(NeighborhoodCF):
             len(self.items), lambda: 0)
         for items in self.model[INVERTED_INDEX_KEY].values():
             for item in items:
-                for another_item in range(item + 1):
+                others = set(range(item + 1)).intersection(items)
+                for another_item in others:
                     self.model[
                         ITEM_INTERSECTION_KEY][(item, another_item)] += 1
 
@@ -134,8 +135,14 @@ class ItemBasedImplicitCF(NeighborhoodCF):
             self._merge_intersections(model)
             self._merge_l1_norms(model)
             self._merge_inverted_index(model)
+            self._merge_matrix(model)
         self._init_similarities()
         self._init_neighborhood()
+
+    def _merge_matrix(self, model):
+        for user_id in self.users:
+            for item_id in self.items:
+                self.matrix[user_id][item_id] = model.matrix[user_id][item_id]
 
     def _merge_intersections(self, model):
         for item_id in self.items:
@@ -169,5 +176,11 @@ class ItemBasedImplicitCF(NeighborhoodCF):
     def l1_norm_of(self, item):
         return self.model[ITEMS_L1_NORMS_KEY][item]
 
+    def l1_norms(self):
+        return self.model[ITEMS_L1_NORMS_KEY]
+
     def inv_index_of(self, user_id):
         return self.model[INVERTED_INDEX_KEY][user_id]
+
+    def inv_index(self):
+        return self.model[INVERTED_INDEX_KEY]
