@@ -21,6 +21,7 @@ Current implemented algorithms:
 3. **Implicit Locality-Sensitive-Hashing Item-Based Collaborative Filtering**
 4. **Implicit Matrix Factorization**
 5. **Explicit Matrix Factorization**
+6. **Implicit Parallel Item-Based Collaborative Filtering**
 
 ## Install
 
