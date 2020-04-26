@@ -39,10 +39,10 @@ class ItemBasedImplicitCFTest(unittest.TestCase):
             [1, None, 1, None, 1],
         ]
         cf = ItemBasedImplicitCF(matrix)
-        self.assertAlmostEqual(cf.similarity_between(0,0), 1.0, delta=0.0001)
-        self.assertAlmostEqual(cf.similarity_between(1,1), 1.0, delta=0.0001)
-        self.assertAlmostEqual(cf.similarity_between(2,2), 1.0, delta=0.0001)
-        self.assertAlmostEqual(cf.similarity_between(3,3), 0, delta=0.0001)
+        self.assertAlmostEqual(cf.similarity_between(0, 0), 1.0, delta=0.0001)
+        self.assertAlmostEqual(cf.similarity_between(1, 1), 1.0, delta=0.0001)
+        self.assertAlmostEqual(cf.similarity_between(2, 2), 1.0, delta=0.0001)
+        self.assertAlmostEqual(cf.similarity_between(3, 3), 0, delta=0.0001)
         self.assertAlmostEqual(cf.similarity_between(0, 3), 0, delta=0.0001)
         cf.new_rating((0, 3))
         self.assertAlmostEqual(cf.similarity_between(0, 3), 0.577, delta=0.001)

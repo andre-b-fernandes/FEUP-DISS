@@ -1,5 +1,5 @@
 from algorithms.collaborative_filtering.neighborhood import (
-    NeighborhoodCF, NEIGHBORS_KEY, SIMILARITIES_KEY) 
+    NeighborhoodCF, NEIGHBORS_KEY, SIMILARITIES_KEY)
 from data_structures import SymmetricMatrix, DynamicArray
 from collections import defaultdict
 from utils import cosine_similarity
