@@ -33,8 +33,6 @@ class UserBasedExplicitCFTest(unittest.TestCase):
         matrix = [[randint(1, 10) for _i in range(0, dimension)]
                   for _c in range(0, dimension)]
         cf = UserBasedExplicitCF(matrix)
-        self.assertEqual(len(cf.similarities()), len(matrix))
-        self.assertEqual(len(cf.co_rated()), len(matrix))
         self.assertEqual(len(cf.avg_ratings()), len(matrix))
         self.assertEqual(len(cf.neighbors()), len(matrix))
         for i in range(0, dimension):
