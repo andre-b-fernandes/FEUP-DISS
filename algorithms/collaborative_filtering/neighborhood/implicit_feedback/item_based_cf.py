@@ -1,8 +1,7 @@
 from algorithms.collaborative_filtering import CollaborativeFiltering
 from data_structures import SymmetricMatrix, DynamicArray
 from collections import defaultdict
-from utils import cosine_similarity
-from random import shuffle
+from utils import cosine_similarity, mode
 from math import sqrt
 
 ITEM_INTERSECTION_KEY = "ITEM_INTERSECTIONS"
@@ -91,16 +90,25 @@ class ItemBasedImplicitCF(CollaborativeFiltering):
             self._init_similarity(item_id, another_item_id)
         self._init_neighborhood()
 
+    def predict(self, user_id, item_id):
+        item_neighborhood = self._neighborhood_of(item_id)
+        user_ratings = [self.matrix[user_id][i] for i in item_neighborhood]
+        m = mode(user_ratings)
+        if m is None:
+            return 0
+        else:
+            return m
+
     def recommend(self, user_id, n_rec, repeated=False):
-        candidates = {
-            ident for item in self.items for ident in self._neighborhood_of(
-                item)}
         user_items = self.model[INVERTED_INDEX_KEY][user_id]
+        candidates = {
+            ident for item in user_items for ident in self._neighborhood_of(
+                item)}
         if not repeated:
             candidates = candidates.difference(user_items)
         final = list(candidates)
-        shuffle(final)
-        return final[0:n_rec]
+        return sorted(
+            final, key=lambda item_id: self.predict(user_id, item_id))[:-n_rec]
 
     def _neighborhood_of(self, item_id):
         return self.model[ITEM_NEIGHBORHOOD_KEY][item_id]

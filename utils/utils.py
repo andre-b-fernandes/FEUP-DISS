@@ -1,4 +1,5 @@
 from math import sqrt
+from collections import Counter
 
 
 def cosine_similarity(n_co_elements, n_first_element, n_second_element):
@@ -47,3 +48,9 @@ def knn(element_id, candidates, n, heuristic):
 def avg(elements):
     not_none = list(filter(None, elements))
     return 0 if len(not_none) == 0 else sum(not_none) / len(not_none)
+
+
+def mode(elements):
+    data = Counter(elements)
+    most_common = data.most_common(1)
+    return most_common[0][0]

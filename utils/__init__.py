@@ -6,7 +6,8 @@ from .utils import (
     pearson_correlation,
     pearson_correlation_terms,
     sqrt,
-    variance
+    variance,
+    mode
 )
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     "pearson_correlation",
     "pearson_correlation_terms",
     "sqrt",
-    "variance"
+    "variance",
+    "mode"
 ]
