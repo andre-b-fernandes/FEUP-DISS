@@ -3,6 +3,7 @@ from data_structures import SymmetricMatrix, DynamicArray
 from collections import defaultdict
 from utils import cosine_similarity
 from random import shuffle
+from math import sqrt
 
 ITEM_INTERSECTION_KEY = "ITEM_INTERSECTIONS"
 ITEMS_L1_NORMS_KEY = "ITEMS_L1_NORMS"
@@ -39,8 +40,8 @@ class ItemBasedImplicitCF(CollaborativeFiltering):
                         (item, another_item)] = cosine_similarity(
                         self.model[ITEM_INTERSECTION_KEY][
                             (item, another_item)],
-                        self.model[ITEMS_L1_NORMS_KEY][item],
-                        self.model[ITEMS_L1_NORMS_KEY][another_item]
+                        sqrt(self.model[ITEMS_L1_NORMS_KEY][item]),
+                        sqrt(self.model[ITEMS_L1_NORMS_KEY][another_item])
                     )
 
     def _init_neighborhood(self):
