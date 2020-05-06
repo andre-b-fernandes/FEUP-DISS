@@ -11,7 +11,7 @@ class PrequentialEvaluatorImplicit(PrequentialEvaluator):
     def evaluate(self, user_id, item_id):
         start = time()
         item_ids = self.model.recommend(user_id, self.n_rec)
-        # print(f"Is {item_id} in {item_ids} ?")
+        print(f"Is {item_id} in {item_ids} ?")
         end = time()
         diff = end - start
         return (item_id not in item_ids), diff
@@ -26,7 +26,7 @@ class PrequentialEvaluatorImplicit(PrequentialEvaluator):
         self.model.new_rating((user_id, item_id))
         end = time()
         elap_nr = end - start
-        # print(f"Window Average Error: {self.window_avg_error}")
-        # print(f"Elapsed Time on Rec: {elap_eval}")
-        # print(f"Elapsed Time on NR: {elap_nr}")
+        print(f"Window Average Error: {self.window_avg_error}")
+        print(f"Elapsed Time on Rec: {elap_eval}")
+        print(f"Elapsed Time on NR: {elap_nr}")
         return self.window_avg_error, elap_eval, elap_nr

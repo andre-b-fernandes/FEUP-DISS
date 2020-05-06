@@ -1,5 +1,5 @@
 from algorithms.collaborative_filtering.neighborhood import (
-    NeighborhoodCF, NEIGHBORS_KEY, SIMILARITIES_KEY)
+    NeighborhoodCF)
 from data_structures import SymmetricMatrix, DynamicArray
 from collections import defaultdict
 from utils import cosine_similarity
@@ -7,89 +7,94 @@ from random import shuffle
 from copy import deepcopy
 from threading import Thread
 
-ITEM_INTERSECTION_KEY = "ITEM_INTERSECTIONS"
-ITEMS_L1_NORMS_KEY = "ITEMS_L1_NORMS"
-INVERTED_INDEX_KEY = "INVERTED_INDEX"
-
 
 class ItemBasedImplicitCF(NeighborhoodCF):
     def __init__(
         self, matrix=[], intersections=[], l1=[], inv_index={},
             similarities=[], neighborhood=[], n_neighbors=5):
         super().__init__(matrix, neighborhood, n_neighbors)
-        self._init_model(inv_index, INVERTED_INDEX_KEY, self._init_inv_index)
-        self._init_model(
-            intersections, ITEM_INTERSECTION_KEY, self._init_intersections)
-        self._init_model(l1, ITEMS_L1_NORMS_KEY, self._init_l1)
-        self._init_model(
-            similarities, SIMILARITIES_KEY, self._init_similarities)
-        self._init_model(
-            neighborhood, NEIGHBORS_KEY, self._init_neighborhood)
+        self.inv_index = self._init_model(
+            inv_index, self._init_inv_index)
+        self.intersections = self._init_model(
+            intersections, self._init_intersections)
+        self.l1_norms = self._init_model(
+            l1, self._init_l1)
+        self.similarities = self._init_model(
+            similarities, self._init_similarities)
+        self.neighbors = self._init_model(
+            neighborhood, self._init_neighborhood)
 
     def _init_similarities(self):
-        self.model[SIMILARITIES_KEY] = SymmetricMatrix(
+        sims = SymmetricMatrix(
             len(self.items), value=lambda: 0)
         for item in self.items:
             for another_item in range(item + 1):
-                self._init_similarity(item, another_item)
+                sims[(item, another_item)] = self._init_similarity(
+                    item, another_item)
+        return sims
 
     def _init_similarity(self, item, another_item):
-        self.model[
-                    SIMILARITIES_KEY][
-                        (item, another_item)] = cosine_similarity(
-                        self.model[ITEM_INTERSECTION_KEY][
-                            (item, another_item)],
-                        self.model[ITEMS_L1_NORMS_KEY][item],
-                        self.model[ITEMS_L1_NORMS_KEY][another_item]
-                    )
+        return cosine_similarity(
+            self.intersections_between(item, another_item),
+            self.l1_norm_of(item),
+            self.l1_norm_of(another_item)
+        )
 
     def _init_neighborhood(self):
-        super()._init_neighborhood(self.items)
+        return super()._init_neighborhood(self.items)
 
     def _init_intersections(self):
-        self.model[ITEM_INTERSECTION_KEY] = SymmetricMatrix(
-            len(self.items), lambda: 0)
-        for items in self.model[INVERTED_INDEX_KEY].values():
+        intersections = SymmetricMatrix(len(self.items), lambda: 0)
+        for items in self.inv_index.values():
             for item in items:
                 others = set(range(item + 1)).intersection(items)
                 for another_item in others:
-                    self.model[
-                        ITEM_INTERSECTION_KEY][(item, another_item)] += 1
+                    intersections[(item, another_item)] += 1
+        return intersections
 
     def _init_l1(self):
-        self.model[ITEMS_L1_NORMS_KEY] = DynamicArray(
+        l1_norms = DynamicArray(
             [0 for _ in self.items], default_value=lambda: 0)
-        for items in self.model[INVERTED_INDEX_KEY].values():
+        for items in self.inv_index.values():
             for item in items:
-                self.model[ITEMS_L1_NORMS_KEY][item] += 1
+                l1_norms[item] += 1
+        return l1_norms
 
     def _init_inv_index(self):
-        self.model[INVERTED_INDEX_KEY] = defaultdict(set)
+        inv_index = defaultdict(set)
         for user in self.users:
             for item in self.items:
                 if self.matrix[user][item] is not None:
-                    self.model[INVERTED_INDEX_KEY][user].add(item)
+                    inv_index[user].add(item)
+        return inv_index
+
+    def _update_intersections(self, user_id, item_id):
+        for another_item_id in self.inv_index_of(user_id):
+            self.intersections[(item_id, another_item_id)] += 1
+
+    def _update_similarities(self, item_id):
+        for another_item_id in self.items:
+            self.similarities[(
+                item_id, another_item_id)] = self._init_similarity(
+                    item_id, another_item_id)
 
     def new_rating(self, rating):
         user_id, item_id = rating
         self.matrix[user_id][item_id] = 1
         self.users.add(user_id)
         self.items.add(item_id)
-        if item_id not in self.model[INVERTED_INDEX_KEY][user_id]:
-            self.model[INVERTED_INDEX_KEY][user_id].add(item_id)
-            self.model[ITEMS_L1_NORMS_KEY][item_id] += 1
-            for another_item_id in self.model[INVERTED_INDEX_KEY][user_id]:
-                self.model[ITEM_INTERSECTION_KEY][(
-                    item_id, another_item_id)] += 1
-        for another_item_id in self.items:
-            self._init_similarity(item_id, another_item_id)
-        self._init_neighborhood()
+        if item_id not in self.inv_index_of(user_id):
+            self.inv_index[user_id].add(item_id)
+            self.l1_norms[item_id] += 1
+            self._update_intersections(user_id, item_id)
+        self._update_similarities(item_id)
+        self.neighbors = self._init_neighborhood()
 
     def recommend(self, user_id, n_rec, repeated=False):
         candidates = {
             ident for item in self.items for ident in self.neighborhood_of(
                 item)}
-        user_items = self.model[INVERTED_INDEX_KEY][user_id]
+        user_items = self.inv_index_of(user_id)
         if not repeated:
             candidates = candidates.difference(user_items)
         final = list(candidates)
@@ -147,14 +152,13 @@ class ItemBasedImplicitCF(NeighborhoodCF):
     def _merge_intersections(self, model):
         for item_id in self.items:
             for another_item_id in range(item_id + 1):
-                self.model[ITEM_INTERSECTION_KEY][(
+                self.intersections[(
                     item_id, another_item_id)] += model.intersections_between(
                         item_id, another_item_id)
 
     def _merge_l1_norms(self, model):
         for item_id in self.items:
-            self.model[ITEMS_L1_NORMS_KEY][item_id] += model.l1_norm_of(
-                item_id)
+            self.l1_norms[item_id] += model.l1_norm_of(item_id)
 
     def _merge_items(self, model):
         self.items = self.items.union(model.items)
@@ -164,23 +168,14 @@ class ItemBasedImplicitCF(NeighborhoodCF):
 
     def _merge_inverted_index(self, model):
         for user_id in self.users:
-            self.model[INVERTED_INDEX_KEY][user_id] = self.inv_index_of(
-                user_id).union(model.inv_index_of(user_id))
-
-    def intersections_matrix(self):
-        return self.model[ITEM_INTERSECTION_KEY]
+            self.inv_index[user_id] = self.inv_index_of(user_id).union(
+                model.inv_index_of(user_id))
 
     def intersections_between(self, item, another_item):
-        return self.model[ITEM_INTERSECTION_KEY][(item, another_item)]
+        return self.intersections[(item, another_item)]
 
     def l1_norm_of(self, item):
-        return self.model[ITEMS_L1_NORMS_KEY][item]
-
-    def l1_norms(self):
-        return self.model[ITEMS_L1_NORMS_KEY]
+        return self.l1_norms[item]
 
     def inv_index_of(self, user_id):
-        return self.model[INVERTED_INDEX_KEY][user_id]
-
-    def inv_index(self):
-        return self.model[INVERTED_INDEX_KEY]
+        return self.inv_index[user_id]

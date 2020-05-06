@@ -1,15 +1,9 @@
 from algorithms.collaborative_filtering.neighborhood.\
-    user_neighborhood import (
-        NeighborhoodUserCF,
-        CO_RATED_KEY,
-        SIMILARITIES_KEY
-    )
-from algorithms.collaborative_filtering.neighborhood import NEIGHBORS_KEY
+    user_neighborhood import NeighborhoodUserCF
 from utils import pearson_correlation_terms, pearson_correlation, avg
 from data_structures import PairVariances
 from data_structures import DynamicArray
 
-AVG_RATINGS_KEY = "avg_ratings"
 COVARIANCE_KEY = "covariance"
 VARIANCES_KEY = "variances"
 SIM_VALUE_KEY = "similarity_value"
@@ -25,27 +19,30 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
                 VARIANCES_KEY: PairVariances(),
                 SIM_VALUE_KEY: 0
             })
-        self._init_model(avg_ratings, AVG_RATINGS_KEY, self._init_avg_ratings)
-        self._init_model(similarities, SIMILARITIES_KEY,
-                         self._init_similarities)
-        self._init_model(neighbors, NEIGHBORS_KEY, self._init_neighborhood)
+        self.avg_ratings = self._init_model(
+            avg_ratings, self._init_avg_ratings)
+        self.similarities = self._init_model(
+            similarities, self._init_similarities)
+        self.neighbors = self._init_model(
+            neighbors, self._init_neighborhood)
 
     # initializing the average ratings
     def _init_avg_ratings(self):
-        self.model[AVG_RATINGS_KEY] = DynamicArray(default_value=lambda: 0)
+        avg_r = DynamicArray(default_value=lambda: 0)
         for index, user in enumerate(self.matrix):
-            self.model[AVG_RATINGS_KEY][index] = avg(user)
+            avg_r[index] = avg(user)
+        return avg_r
 
     # Assuming user in rows and items in columns
     def _init_similarity(self, user_id, another_user_id):
         user = self.matrix[user_id]
         another_user = self.matrix[another_user_id]
-        sim = pearson_correlation_terms(self.model[CO_RATED_KEY][
-            (user_id, another_user_id)], user, another_user,
-            self.model[AVG_RATINGS_KEY][user_id],
-            self.model[AVG_RATINGS_KEY][another_user_id])
-        self._update_similarities(user_id, another_user_id, sim[0],
-                                  sim[1], sim[2], sim[3])
+        sim = pearson_correlation_terms(
+            self.co_rated_between(user_id, another_user_id),
+            user, another_user, self.avg_rating(user_id),
+            self.avg_rating(another_user_id))
+        return self._update_similarities(
+            user_id, another_user_id, sim[0], sim[1], sim[2], sim[3])
 
     # (user_id, item_id, new_rating, new_avg_rating)
     def _unpack_values(self, rating, another_user_id):
@@ -53,10 +50,10 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         current_item_id = rating[1]
         new_rating = rating[2]
         new_avg_rating = rating[3]
-        another_user_avg_rating = self.model[AVG_RATINGS_KEY][another_user_id]
+        another_user_avg_rating = self.avg_rating(another_user_id)
         another_user_ratings = self.matrix[another_user_id]
-        co_rated = self.model[CO_RATED_KEY][(user_id, another_user_id)]
-        old_avg_rating = self.model[AVG_RATINGS_KEY][user_id]
+        co_rated = self.co_rated_between(user_id, another_user_id)
+        old_avg_rating = self.avg_rating(user_id)
         difference_avg = new_avg_rating - old_avg_rating
         co_rated_length = len(co_rated)
         another_user_rating = another_user_ratings[current_item_id]
@@ -68,18 +65,15 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
 
     def _update_similarities(self, user_id, another_user_id, cov,
                              variance_first, variance_second, result):
-        self.model[SIMILARITIES_KEY][(user_id, another_user_id)] = dict()
-        self.model[SIMILARITIES_KEY][
-            (user_id, another_user_id)][COVARIANCE_KEY] = cov
-        self.model[SIMILARITIES_KEY][
-            (user_id, another_user_id)][VARIANCES_KEY] = PairVariances()
-        self.model[SIMILARITIES_KEY][
-            (user_id, another_user_id)][VARIANCES_KEY].set_variance(
-                user_id, another_user_id, variance_first, variance_second)
-        self.model[SIMILARITIES_KEY][(
-            user_id, another_user_id)][SIM_VALUE_KEY] = result
+        sim = dict()
+        sim[COVARIANCE_KEY] = cov
+        sim[VARIANCES_KEY] = PairVariances()
+        sim[VARIANCES_KEY].set_variance(
+            user_id, another_user_id, variance_first, variance_second)
+        sim[SIM_VALUE_KEY] = result
+        return sim
 
-    def _update_similarities_with_terms(self, user_id, another_user_id,
+    def _calculate_similarities_with_terms(self, user_id, another_user_id,
                                         e, f, g):
         cov = self.covariance_between(user_id, another_user_id) + e
         variance_first = self.variance(user_id, another_user_id) + f
@@ -89,8 +83,10 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         if variance_second < 0:
             variance_second = 0
         corr = pearson_correlation(cov, variance_first, variance_second)
-        self._update_similarities(user_id, another_user_id, cov,
-                                  variance_first, variance_second, corr)
+        ret = self._update_similarities(
+            user_id, another_user_id, cov,
+            variance_first, variance_second, corr)
+        return ret
 
     # arguments as ((user_id, item_id, new_rating, new_avg_rating ),
     #                       another_user_id)
@@ -125,8 +121,8 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         return e, f, g
 
     def _new_rating_avg(self, user_id, value):
-        old_avg_rating = self.model[AVG_RATINGS_KEY][user_id]
-        q = len(self.model[CO_RATED_KEY][(user_id, user_id)])
+        old_avg_rating = self.avg_rating(user_id)
+        q = len(self.co_rated_between(user_id, user_id))
         new_avg_rating = (value / (q + 1)) + (old_avg_rating * q / (q + 1))
         return new_avg_rating
 
@@ -137,9 +133,11 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         for another_user_id in members:
             e, f, g = self._new_rating_terms(
                 (user_id, item_id, value, new_avg_rating), another_user_id)
-            self._update_similarities_with_terms(
-                user_id, another_user_id, e, f, g)
-        self.model[AVG_RATINGS_KEY][user_id] = new_avg_rating
+            self.similarities[(
+                user_id,
+                another_user_id)] = self._calculate_similarities_with_terms(
+                    user_id, another_user_id, e, f, g)
+        self.avg_ratings[user_id] = new_avg_rating
 
     # new rating incoming as (user_id, item_id, rating)
     def new_rating(self, rating):
@@ -152,7 +150,7 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         self.matrix[user_id][item_id] = value
         self._update_co_rated(
             user_id, item_id, lambda value: value is not None)
-        self._init_neighborhood()
+        self.neighbors = self._init_neighborhood()
 
     def predict(self, user_id, item_id):
         if self.matrix[user_id][item_id] is None:
@@ -175,19 +173,14 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
             key=lambda item_id: predictions[item_id])[:-n_rec]
 
     def similarity_between(self, user, another_user):
-        return self.model[SIMILARITIES_KEY][
-            (user, another_user)][SIM_VALUE_KEY]
+        return self.similarities[(user, another_user)][SIM_VALUE_KEY]
 
     def covariance_between(self, user, another_user):
-        return self.model[SIMILARITIES_KEY][
-            (user, another_user)][COVARIANCE_KEY]
+        return self.similarities[(user, another_user)][COVARIANCE_KEY]
 
     def variance(self, user, another_user):
-        return self.model[SIMILARITIES_KEY][
-            (user, another_user)][VARIANCES_KEY].variance(user, another_user)
+        return self.similarities[(
+            user, another_user)][VARIANCES_KEY].variance(user, another_user)
 
     def avg_rating(self, user_id):
-        return self.model[AVG_RATINGS_KEY][user_id]
-
-    def avg_ratings(self):
-        return self.model[AVG_RATINGS_KEY]
+        return self.avg_ratings[user_id]
