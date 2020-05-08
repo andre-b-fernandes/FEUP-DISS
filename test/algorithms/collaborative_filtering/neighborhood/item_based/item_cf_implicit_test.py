@@ -8,8 +8,8 @@ class ItemBasedImplicitCFTest(unittest.TestCase):
     def test_asserts(self):
         cf = ItemBasedImplicitCF(n_neighbors=10)
         self.assertEqual(cf.n_neighbors, 10)
-        self.assertEqual(len(cf.inv_index()), 0)
-        self.assertEqual(len(cf.l1_norms()), 0)
+        self.assertEqual(len(cf.inv_index), 0)
+        self.assertEqual(len(cf.l1_norms), 0)
 
     def test_initialization(self):
         matrix = [

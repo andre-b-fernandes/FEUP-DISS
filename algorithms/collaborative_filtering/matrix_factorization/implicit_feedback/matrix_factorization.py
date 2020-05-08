@@ -1,9 +1,6 @@
 from numpy import array
 from algorithms.collaborative_filtering.\
-    matrix_factorization import (
-        MatrixFactorization,
-        U_DECOMPOSED_KEY,
-        V_DECOMPOSED_KEY)
+    matrix_factorization import MatrixFactorization
 from data_structures import DynamicArray
 from random import uniform
 
@@ -24,8 +21,8 @@ class MatrixFactorizationImplicit(MatrixFactorization):
                     self.new_rating((user_id, item_id))
 
     def _update_factors(self, user_id, item_id, error):
-        u_factors = array(self.model[U_DECOMPOSED_KEY][user_id])
-        v_factors = array(self.model[V_DECOMPOSED_KEY].col(item_id))
+        u_factors = array(self.u[user_id])
+        v_factors = array(self.v.col(item_id))
 
         updated_u = u_factors + self.learning_rate * (
             error * v_factors - self.reg_factor * u_factors)
@@ -33,10 +30,10 @@ class MatrixFactorizationImplicit(MatrixFactorization):
         updated_v = v_factors + self.learning_rate * (
             error * u_factors - self.reg_factor * v_factors)
 
-        self.model[U_DECOMPOSED_KEY][user_id] = DynamicArray(
+        self.u[user_id] = DynamicArray(
             list(updated_u), default_value=lambda: uniform(0, 1))
 
-        self.model[V_DECOMPOSED_KEY].set_col(item_id, updated_v)
+        self.v.set_col(item_id, updated_v)
 
     def new_rating(self, rating):
         user_id, item_id = rating

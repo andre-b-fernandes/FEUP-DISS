@@ -33,8 +33,8 @@ class UserBasedExplicitCFTest(unittest.TestCase):
         matrix = [[randint(1, 10) for _i in range(0, dimension)]
                   for _c in range(0, dimension)]
         cf = UserBasedExplicitCF(matrix)
-        self.assertEqual(len(cf.avg_ratings()), len(matrix))
-        self.assertEqual(len(cf.neighbors()), len(matrix))
+        self.assertEqual(len(cf.avg_ratings), len(matrix))
+        self.assertEqual(len(cf.neighbors), len(matrix))
         for i in range(0, dimension):
             with self.subTest(i=i):
                 self._test_similarity_terms_users(cf, i)

@@ -13,7 +13,7 @@ class PrequentialEvaluatorExplicit(PrequentialEvaluator):
 
     def evaluate(self, user_id, item_id, value):
         prediction = self.model.predict(user_id, item_id)
-        # print(f"Prediction {prediction}")
+        # print(f"Prediction is {prediction}.")
         start = time()
         self.model.recommend(user_id, n_rec=self.n_rec)
         end = time()

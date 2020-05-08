@@ -29,10 +29,9 @@ class CollaborativeFiltering(ABC):
         self.matrix = DynamicArray(default_value=lambda: DynamicArray())
         for row in matrix:
             self.matrix.append(DynamicArray(row))
-        self.model = dict()
 
-    def _init_model(self, model, model_name, callback):
+    def _init_model(self, model, callback):
         if len(model) == 0:
-            callback()
+            return callback()
         else:
-            self.model[model_name] = model
+            return model
