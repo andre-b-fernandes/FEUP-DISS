@@ -11,10 +11,10 @@ class LSHBasedTest(unittest.TestCase):
                   for _ in range(dimension)]
         lh_based = ItemLSH(matrix)
         self.assertEqual(lh_based.n_permutations,
-                         len(lh_based.signature_matrix()))
-        self.assertEqual(len(lh_based.signature_matrix()[0]),
+                         len(lh_based.signature_matrix))
+        self.assertEqual(len(lh_based.signature_matrix[0]),
                          len(matrix[0]))
-        self.assertNotEqual(len(lh_based.buckets()), 0)
+        self.assertNotEqual(len(lh_based.buckets), 0)
 
     def test_recommendation(self):
         matrix = [

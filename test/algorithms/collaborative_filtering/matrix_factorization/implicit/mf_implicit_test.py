@@ -18,10 +18,10 @@ class MatrixFactorizationExplicitTest(unittest.TestCase):
     def test_empty_model(self):
         cf = MatrixFactorizationImplicit()
         cf.predict(196, 203)
-        self.assertEqual(len(cf.u()), 197)
-        self.assertEqual(len(cf.v()), cf.latent_factors)
-        self.assertEqual(len(cf.u()[196]), cf.latent_factors)
-        self.assertEqual(len(cf.v()[1]), 204)
+        self.assertEqual(len(cf.u), 197)
+        self.assertEqual(len(cf.v), cf.latent_factors)
+        self.assertEqual(len(cf.u[196]), cf.latent_factors)
+        self.assertEqual(len(cf.v[1]), 204)
 
     def test_recommendation(self):
         matrix = [

@@ -27,7 +27,7 @@ class UserBasedImplicitCFTest(unittest.TestCase):
         matrix = [[choice([None, 1]) for _i in range(0, dimension)]
                   for _c in range(0, dimension)]
         cf = UserBasedImplicitCF(matrix)
-        self.assertEqual(len(matrix), len(cf.neighbors()))
+        self.assertEqual(len(matrix), len(cf.neighbors))
         for i in range(dimension):
             with self.subTest(i=i):
                 self._test_similarity_user(cf, i)

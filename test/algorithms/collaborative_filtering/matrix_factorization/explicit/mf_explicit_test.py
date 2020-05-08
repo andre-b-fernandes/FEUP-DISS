@@ -14,7 +14,7 @@ class MatrixFactorizationExplicitTest(unittest.TestCase):
         cf = MatrixFactorizationExplicit(matrix, lf=4)
         self.assertEqual(len(cf.matrix), dimension)
         elements = [
-            element for row in cf.preprocessed_matrix() for element in row]
+            element for row in cf.preprocessed_matrix for element in row]
         self.assertAlmostEqual(avg(elements), 0, delta=0.00001)
 
     def test_predict(self):
@@ -35,10 +35,10 @@ class MatrixFactorizationExplicitTest(unittest.TestCase):
     def test_empty_model(self):
         cf = MatrixFactorizationExplicit()
         cf.predict_prep(196, 203)
-        self.assertEqual(len(cf.u()), 197)
-        self.assertEqual(len(cf.v()), cf.latent_factors)
-        self.assertEqual(len(cf.u()[196]), cf.latent_factors)
-        self.assertEqual(len(cf.v()[1]), 204)
+        self.assertEqual(len(cf.u), 197)
+        self.assertEqual(len(cf.v), cf.latent_factors)
+        self.assertEqual(len(cf.u[196]), cf.latent_factors)
+        self.assertEqual(len(cf.v[1]), 204)
 
     def test_recommendation(self):
         matrix = [
