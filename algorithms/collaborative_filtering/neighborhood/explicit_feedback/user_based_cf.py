@@ -73,8 +73,8 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         sim[SIM_VALUE_KEY] = result
         return sim
 
-    def _calculate_similarities_with_terms(self, user_id, another_user_id,
-                                        e, f, g):
+    def _calculate_similarities_with_terms(
+            self, user_id, another_user_id, e, f, g):
         cov = self.covariance_between(user_id, another_user_id) + e
         variance_first = self.variance(user_id, another_user_id) + f
         variance_second = self.variance(another_user_id, user_id) + g
