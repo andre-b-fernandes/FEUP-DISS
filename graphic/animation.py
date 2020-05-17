@@ -29,6 +29,7 @@ class EvaluationAnimation:
         return self.line, self.time_l_rec, self.time_l_nr
 
     def _animate(self, i):
+        print(f"It no {i} -> {self.stream[i]}")
         err, elap, elap_nr = self.evaluator.new_rating(self.stream[i])
         self.x.append(i)
         self.y.append(err)
