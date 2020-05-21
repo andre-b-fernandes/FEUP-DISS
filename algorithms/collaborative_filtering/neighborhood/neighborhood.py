@@ -4,7 +4,7 @@ from utils import knn
 
 
 class NeighborhoodCF(CollaborativeFiltering):
-    def __init__(self, matrix, neighbors, n_neighbors):
+    def __init__(self, matrix, n_neighbors):
         super().__init__(matrix)
         self.n_neighbors = n_neighbors
 

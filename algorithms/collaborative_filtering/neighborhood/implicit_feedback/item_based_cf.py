@@ -1,5 +1,3 @@
-from algorithms.collaborative_filtering.neighborhood import (
-    NeighborhoodCF)
 from data_structures import SymmetricMatrix, DynamicArray
 from collections import defaultdict
 from utils import cosine_similarity
@@ -8,11 +6,10 @@ from copy import deepcopy
 from threading import Thread
 
 
-class ItemBasedImplicitCF(NeighborhoodCF):
+class ItemBasedImplicitCF:
     def __init__(
         self, matrix=[], intersections=[], l1=[], inv_index={},
-            similarities=[], neighborhood=[], n_neighbors=5):
-        super().__init__(matrix, neighborhood, n_neighbors)
+            similarities=[]):
         self.inv_index = self._init_model(
             inv_index, self._init_inv_index)
         self.intersections = self._init_model(
@@ -21,8 +18,6 @@ class ItemBasedImplicitCF(NeighborhoodCF):
             l1, self._init_l1)
         self.similarities = self._init_model(
             similarities, self._init_similarities)
-        self.neighbors = self._init_model(
-            neighborhood, self._init_neighborhood)
 
     def _init_similarities(self):
         sims = SymmetricMatrix(
@@ -39,9 +34,6 @@ class ItemBasedImplicitCF(NeighborhoodCF):
             self.l1_norm_of(item),
             self.l1_norm_of(another_item)
         )
-
-    def _init_neighborhood(self):
-        return super()._init_neighborhood(self.items)
 
     def _init_intersections(self):
         intersections = SymmetricMatrix(len(self.items), lambda: 0)
@@ -88,7 +80,6 @@ class ItemBasedImplicitCF(NeighborhoodCF):
             self.l1_norms[item_id] += 1
             self._update_intersections(user_id, item_id)
         self._update_similarities(item_id)
-        self.neighbors = self._init_neighborhood()
 
     def recommend(self, user_id, n_rec, repeated=False):
         candidates = {
@@ -141,8 +132,8 @@ class ItemBasedImplicitCF(NeighborhoodCF):
             self._merge_l1_norms(model)
             self._merge_inverted_index(model)
             self._merge_matrix(model)
-        self._init_similarities()
-        self._init_neighborhood()
+        self.similarities = self._init_similarities()
+        self.neighbors = self._init_neighborhood()
 
     def _merge_matrix(self, model):
         for user_id in self.users:
