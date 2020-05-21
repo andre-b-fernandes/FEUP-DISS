@@ -22,7 +22,7 @@ class FileStream:
     def process_stream(self, model):
         it = 0
         for rating in self.stream:
-            print(f"New rating entering: {rating} -> Iter: {it}")
+            # print(f"New rating entering: {rating} -> Iter: {it}")
             it += 1
             model.new_rating(rating)
         return model

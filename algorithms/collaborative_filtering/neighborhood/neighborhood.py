@@ -1,13 +1,8 @@
-from algorithms.collaborative_filtering import CollaborativeFiltering
 from data_structures import DynamicArray
 from utils import knn
 
 
-class NeighborhoodCF(CollaborativeFiltering):
-    def __init__(self, matrix, n_neighbors):
-        super().__init__(matrix)
-        self.n_neighbors = n_neighbors
-
+class NeighborhoodCF:
     # initialize neighborhood models
     def _init_neighborhood(self, candidate_set):
         neighbors = DynamicArray(

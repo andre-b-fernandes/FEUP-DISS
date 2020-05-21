@@ -1,10 +1,9 @@
 from .user_neighborhood import NeighborhoodUserCF
 from .neighborhood import NeighborhoodCF
-from .clustering import ClusteringItem, ClusteringUser
+from .clustering import Clustering
 
 __all__ = [
     "NeighborhoodUserCF",
     "NeighborhoodCF",
-    "ClusteringItem",
-    "ClusteringUser"
+    "Clustering"
 ]

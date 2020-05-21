@@ -1,12 +1,12 @@
 import unittest
 from algorithms.collaborative_filtering.\
-    neighborhood.implicit_feedback import ItemBasedImplicitCF
+    neighborhood.implicit_feedback import ItemBasedNeighborhood
 from stream.file_stream.implicit import FileStreamImplicit
 
 
-class ItemBasedImplicitCFTest(unittest.TestCase):
+class ItemBasedNeighborhoodTest(unittest.TestCase):
     def test_asserts(self):
-        cf = ItemBasedImplicitCF(n_neighbors=10)
+        cf = ItemBasedNeighborhood(n_neighbors=10)
         self.assertEqual(cf.n_neighbors, 10)
         self.assertEqual(len(cf.inv_index), 0)
         self.assertEqual(len(cf.l1_norms), 0)
@@ -19,7 +19,7 @@ class ItemBasedImplicitCFTest(unittest.TestCase):
             [None, 1, 1, None, 1],
             [1, None, 1, None, 1],
         ]
-        cf = ItemBasedImplicitCF(matrix)
+        cf = ItemBasedNeighborhood(matrix)
         self.assertEqual(cf.l1_norm_of(0), 3)
         self.assertEqual(cf.l1_norm_of(3), 0)
         self.assertEqual(cf.l1_norm_of(4), 4)
@@ -38,7 +38,7 @@ class ItemBasedImplicitCFTest(unittest.TestCase):
             [None, 1, 1, None, 1],
             [1, None, 1, None, 1],
         ]
-        cf = ItemBasedImplicitCF(matrix)
+        cf = ItemBasedNeighborhood(matrix)
         self.assertAlmostEqual(cf.similarity_between(0, 0), 1.0, delta=0.0001)
         self.assertAlmostEqual(cf.similarity_between(1, 1), 1.0, delta=0.0001)
         self.assertAlmostEqual(cf.similarity_between(2, 2), 1.0, delta=0.0001)
@@ -57,13 +57,13 @@ class ItemBasedImplicitCFTest(unittest.TestCase):
             [None, 1, 1, None, 1],
             [1, None, 1, None, 1],
         ]
-        cf = ItemBasedImplicitCF(matrix, n_neighbors=2)
+        cf = ItemBasedNeighborhood(matrix, n_neighbors=2)
         self.assertEqual(cf.neighborhood_of(0), [2, 4])
         self.assertIn(2, cf.recommend(0, 3))
         self.assertNotIn(0, cf.recommend(0, 3))
 
     def test_parallel_process(self):
-        cf = ItemBasedImplicitCF()
+        cf = ItemBasedNeighborhood()
         fs = FileStreamImplicit("test/test_dataset/test.data", sep="\t")
         cf.parallel_process_stream(fs.stream, n_cores=2)
         self.assertEqual(len(cf.matrix), 306)
