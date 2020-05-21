@@ -9,7 +9,7 @@ from graphic import EvaluationStatic
 
 path = getopt.getopt(sys.argv[1:], "")[1][0]
 fs = FileStreamExplicit(path, sep="\t")
-cf = MatrixFactorizationExplicit(lf=10)
+cf = MatrixFactorizationExplicit(lf=40)
 ev = PrequentialEvaluatorExplicit(cf)
 stat = EvaluationStatic(fs.stream, ev)
 stat.process()

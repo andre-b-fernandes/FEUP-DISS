@@ -22,12 +22,13 @@ class EvaluationStatic:
 
     def plot(self):
         plt.title("Metrics")
-        plt.plot(self.x, self.err_rate, "r", "Error")
-        plt.plot(self.x, self.elap_nr, "g", "Elapsed NR time")
-        plt.plot(self.x, self.elap_rec, "b", "Elapsed Rec time")
-        plt.legend(
-            [self.err_rate, self.elap_nr, self.elap_rec],
-            ['Error', 'Elapsed Rec time', "Elapsed NR time"])
+        plt.plot(self.x, self.err_rate, "r", label="Error")
+        plt.plot(self.x, self.elap_nr, "g", label="Elapsed NR time")
+        plt.plot(self.x, self.elap_rec, "b", label="Elapsed Rec time")
+        plt.legend()
+        # plt.legend(
+        #     [self.err_rate, self.elap_nr, self.elap_rec],
+        #     ['Error', 'Elapsed Rec time', "Elapsed NR time"])
 
     def show(self):
         plt.show()
