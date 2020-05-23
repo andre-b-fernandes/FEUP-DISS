@@ -5,10 +5,11 @@ from algorithms.collaborative_filtering.matrix_factorization\
 from evaluators.prequential.implicit_feedback import (
     PrequentialEvaluatorImplicit)
 from stream.file_stream.implicit import FileStreamImplicit
-from graphic import EvaluationAnimation
+from graphic import EvaluationStatic
 
 path = getopt.getopt(sys.argv[1:], "")[1][0]
 fs = FileStreamImplicit(path, sep="\t")
-cf = MatrixFactorizationImplicit(lf=10)
+cf = MatrixFactorizationImplicit(lf=20)
 ev = PrequentialEvaluatorImplicit(cf)
-fs.process_stream_eval_anim(ev, EvaluationAnimation)
+stat = EvaluationStatic(fs.stream, ev)
+stat.process()

@@ -1,5 +1,4 @@
-from algorithms.collaborative_filtering.neighborhood.\
-    user_neighborhood import NeighborhoodUserCF
+from algorithms.collaborative_filtering.neighborhood import UserBasedCF
 from utils import pearson_correlation_terms, pearson_correlation, avg
 from data_structures import PairVariances
 from data_structures import DynamicArray
@@ -9,10 +8,10 @@ VARIANCES_KEY = "variances"
 SIM_VALUE_KEY = "similarity_value"
 
 
-class UserBasedExplicitCF(NeighborhoodUserCF):
+class UserBasedExplicitCF(UserBasedCF):
     def __init__(self, matrix=[], similarities=[], avg_ratings=dict(),
-                 co_rated=[], neighbors=[], n_neighbors=5):
-        super().__init__(matrix, co_rated, neighbors, n_neighbors)
+                 co_rated=[]):
+        super().__init__(matrix, co_rated)
         self.similarity_default = dict(
             {
                 COVARIANCE_KEY: 0,
@@ -23,8 +22,6 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
             avg_ratings, self._init_avg_ratings)
         self.similarities = self._init_model(
             similarities, self._init_similarities)
-        self.neighbors = self._init_model(
-            neighbors, self._init_neighborhood)
 
     # initializing the average ratings
     def _init_avg_ratings(self):
@@ -150,7 +147,6 @@ class UserBasedExplicitCF(NeighborhoodUserCF):
         self.matrix[user_id][item_id] = value
         self._update_co_rated(
             user_id, item_id, lambda value: value is not None)
-        self.neighbors = self._init_neighborhood()
 
     def predict(self, user_id, item_id):
         if self.matrix[user_id][item_id] is None:

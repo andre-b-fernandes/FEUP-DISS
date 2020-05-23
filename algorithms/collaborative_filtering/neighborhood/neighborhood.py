@@ -3,6 +3,11 @@ from utils import knn
 
 
 class NeighborhoodCF:
+    def __init__(self, neighbors, n_neighbors):
+        self.n_neighbors = n_neighbors
+        self.neighbors = self._init_model(
+            neighbors, self._init_neighborhood)
+
     # initialize neighborhood models
     def _init_neighborhood(self, candidate_set):
         neighbors = DynamicArray(

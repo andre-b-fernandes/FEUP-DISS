@@ -1,18 +1,11 @@
-from algorithms.collaborative_filtering.neighborhood import (
-    NeighborhoodCF)
-from .item_based_cf import ItemBasedImplicitCF
+from .neighborhood import NeighborhoodCF
 from copy import deepcopy
 from threading import Thread
 
 
-class ItemBasedNeighborhood(ItemBasedImplicitCF, NeighborhoodCF):
-    def __init__(
-        self, matrix=[], intersections=[], l1=[], inv_index={},
-            similarities=[], neighborhood=[], n_neighbors=5):
-        super().__init__(matrix, intersections, l1, inv_index, similarities)
-        self.n_neighbors = n_neighbors
-        self.neighbors = self._init_model(
-            neighborhood, self._init_neighborhood)
+class ItemNeighborhood(NeighborhoodCF):
+    def __init__(self, neighbors, n_neighbors):
+        super().__init__(neighbors, n_neighbors)
 
     def _init_neighborhood(self):
         return super()._init_neighborhood(self.items)
@@ -82,7 +75,3 @@ class ItemBasedNeighborhood(ItemBasedImplicitCF, NeighborhoodCF):
         for user_id in self.users:
             self.inv_index[user_id] = self.inv_index_of(user_id).union(
                 model.inv_index_of(user_id))
-
-    def new_rating(self, rating):
-        super().new_rating(rating)
-        self.neighbors = self._init_neighborhood(self.items)

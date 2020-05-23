@@ -1,18 +1,13 @@
-from algorithms.collaborative_filtering.neighborhood import (
-    NeighborhoodUserCF
-)
+from algorithms.collaborative_filtering.neighborhood import UserBasedCF
 from utils import cosine_similarity as cos_sim
 
 
-class UserBasedImplicitCF(NeighborhoodUserCF):
-    def __init__(self, matrix=[], similarities=[], co_rated=[],
-                 neighbors=[], n_neighbors=5):
-        super().__init__(matrix, co_rated, neighbors, n_neighbors)
+class UserBasedImplicitCF(UserBasedCF):
+    def __init__(self, matrix=[], similarities=[], co_rated=[]):
+        super().__init__(matrix, co_rated)
         self.similarity_default = 0.0
         self.similarities = self._init_model(
             similarities, self._init_similarities)
-        self.neighbors = self._init_model(
-            neighbors, self._init_neighborhood)
 
     def _init_similarity(self, user_id, another_user_id):
         number_rated_items_user = len(self.co_rated_between(user_id, user_id))
@@ -38,7 +33,6 @@ class UserBasedImplicitCF(NeighborhoodUserCF):
         self.matrix[user_id][item_id] = 1
         self._update_co_rated(user_id, item_id, lambda value: value == 1)
         self._update_similarities(user_id)
-        self.neighbors = self._init_neighborhood()
 
     def recommend(self, user_id, n_products):
         item_ids = [i for i in self.items if self.matrix[

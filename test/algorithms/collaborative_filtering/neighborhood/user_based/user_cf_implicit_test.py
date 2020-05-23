@@ -2,10 +2,10 @@ import unittest
 from random import choice
 from utils.utils import cosine_similarity
 from algorithms.collaborative_filtering.neighborhood.\
-    implicit_feedback import UserBasedImplicitCF
+    implicit_feedback.user_based import UserBasedNeighborhood
 
 
-class UserBasedImplicitCFTest(unittest.TestCase):
+class UserBasedNeighborhoodTest(unittest.TestCase):
     def _test_similarity_user(self, cf, user_id):
         users = range(len(cf.matrix))
         for another_user_id in users:
@@ -26,7 +26,7 @@ class UserBasedImplicitCFTest(unittest.TestCase):
         dimension = 10
         matrix = [[choice([None, 1]) for _i in range(0, dimension)]
                   for _c in range(0, dimension)]
-        cf = UserBasedImplicitCF(matrix)
+        cf = UserBasedNeighborhood(matrix)
         self.assertEqual(len(matrix), len(cf.neighbors))
         for i in range(dimension):
             with self.subTest(i=i):
@@ -40,7 +40,7 @@ class UserBasedImplicitCFTest(unittest.TestCase):
             [None, 1, 1, None, None],
             [1, None, 1, None, 1],
         ]
-        cf = UserBasedImplicitCF(matrix)
+        cf = UserBasedNeighborhood(matrix)
         self._test_similarity_user(cf, 0)
         self._test_similarity_user(cf, 1)
         self._test_similarity_user(cf, 2)
@@ -56,7 +56,7 @@ class UserBasedImplicitCFTest(unittest.TestCase):
             [None, 2, 9, None, 1],
             [7, None, 2, None, 6],
         ]
-        cf = UserBasedImplicitCF(matrix)
+        cf = UserBasedNeighborhood(matrix)
         self._test_similarity_user(cf, user_id)
         self.assertNotIn(0, cf.co_rated_between(user_id, 4))
         cf.new_rating((user_id, 0))
@@ -77,7 +77,7 @@ class UserBasedImplicitCFTest(unittest.TestCase):
             [None, 1, 1, None, 1, None, 1, None, None],
             [1, None, 1, None, None, None, None, 1, None],
         ]
-        cf = UserBasedImplicitCF(matrix, n_neighbors=2)
+        cf = UserBasedNeighborhood(matrix, n_neighbors=2)
         self.assertNotIn(user_id, cf.neighborhood_of(user_id))
         self.assertIn(1, cf.neighborhood_of(user_id))
         self.assertIn(3, cf.neighborhood_of(user_id))

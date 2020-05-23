@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from progress.bar import Bar
 
+
 class EvaluationStatic:
     def __init__(self, stream, evaluator):
         self.stream = stream
@@ -21,14 +22,14 @@ class EvaluationStatic:
         bar.finish()
 
     def plot(self):
-        plt.title("Metrics")
-        plt.plot(self.x, self.err_rate, "r", label="Error")
-        plt.plot(self.x, self.elap_nr, "g", label="Elapsed NR time")
-        plt.plot(self.x, self.elap_rec, "b", label="Elapsed Rec time")
-        plt.legend()
-        # plt.legend(
-        #     [self.err_rate, self.elap_nr, self.elap_rec],
-        #     ['Error', 'Elapsed Rec time', "Elapsed NR time"])
+        fig, axs = plt.subplots(3)
+        fig.suptitle('Metrics')
+        axs[0].plot(self.x, self.err_rate, "r", label="Error")
+        axs[0].legend()
+        axs[1].plot(self.x, self.elap_nr, "g", label="Elapsed NR time")
+        axs[1].legend()
+        axs[2].plot(self.x, self.elap_rec, "b", label="Elapsed Rec time")
+        axs[2].legend()
 
     def show(self):
         plt.show()

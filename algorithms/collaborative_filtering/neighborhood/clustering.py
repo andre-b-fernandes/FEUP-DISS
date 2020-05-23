@@ -4,6 +4,16 @@ from data_structures import DynamicArray
 
 
 class Clustering(NeighborhoodCF):
+    def __init__(
+        self, neighbors=[], n_neighbors=5, treshold=0.5, clusters=[],
+            centroids=[], cluster_map=[]):
+        self.th = treshold
+        self.centroids = self._init_model(centroids, self._init_centroids)
+        self.clusters = self._init_model(clusters, self._init_clusters)
+        self.cluster_map = self._init_model(
+            cluster_map, self._init_cluster_map)
+        super().__init__(neighbors, n_neighbors)
+
     def _init_centroids(self, elements):
         if len(elements) == 0:
             return []
