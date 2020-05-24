@@ -8,7 +8,7 @@ the **Faculty of Engineering of the University of Porto**.
 
 ## General Overview
 
-![general overview](https://i.ibb.co/59SbBS5/diagram.png)
+![general overview](https://i.ibb.co/1qdmqRV/architecture.png)
 
 ## Contents
 
@@ -17,11 +17,15 @@ This software library contains code regarding the implementation of recommendati
 Current implemented algorithms:
 
 1. **Explicit User-Based Collaborative Filtering**
-2. **Implicit User-Based Collaborative Filtering**
-3. **Implicit Locality-Sensitive-Hashing Item-Based Collaborative Filtering**
-4. **Implicit Matrix Factorization**
-5. **Explicit Matrix Factorization**
-6. **Implicit Parallel Item-Based Collaborative Filtering**
+2. **Explicit User-Based Clustering Collaborative Filtering**
+3. **Implicit User-Based Collaborative Filtering**
+4. **Implicit User-Based Clustering Collaborative Filtering**
+5. **Implicit Locality-Sensitive-Hashing Item-Based Collaborative Filtering**
+6. **Implicit Matrix Factorization**
+7. **Explicit Matrix Factorization**
+8. **Implicit Item-Based Collaborative Filtering**
+9. **Implicit Parallel Item-Based Collaborative Filtering**
+10. **Implicit Item-Based Clustering Collaborative Filtering**
 
 ## Install
 
@@ -49,4 +53,4 @@ This library uses **unittest** for unit testing and **flake8** as its linter.
 
 Usage examples are located in the `examples` folder.
 
-`pipenv run python -m examples.collaborative_filtering.neighborhood.item_based.implicit.implicit_preq_eval_anim "data_set"`
+`pipenv run python -m examples.collaborative_filtering.neighborhood.explicit_feedback.user_based.user_based_clustering "data_set"`
