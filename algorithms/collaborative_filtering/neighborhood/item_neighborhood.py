@@ -47,7 +47,7 @@ class ItemNeighborhood(NeighborhoodCF):
             self._merge_inverted_index(model)
             self._merge_matrix(model)
         self.similarities = self._init_similarities()
-        self.neighbors = self._init_neighborhood(self.items)
+        self.neighbors = self._init_neighborhood()
 
     def _merge_matrix(self, model):
         for user_id in self.users:

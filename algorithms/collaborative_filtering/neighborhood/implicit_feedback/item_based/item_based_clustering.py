@@ -11,7 +11,7 @@ class ItemBasedClustering(ItemBasedImplicitCF, ItemClustering):
         super(ItemClustering, self).__init__(
             neighborhood, n_neighbors,
             treshold, clusters, centroids, cluster_map)
-    
+
     def new_rating(self, rating):
         _, item_id = rating
         super().new_rating(rating)

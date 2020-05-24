@@ -1,7 +1,6 @@
 import unittest
 from algorithms.collaborative_filtering.\
-    neighborhood.implicit_feedback import ItemBasedNeighborhood
-from stream.file_stream.implicit import FileStreamImplicit
+    neighborhood.implicit_feedback.item_based import ItemBasedNeighborhood
 
 
 class ItemBasedNeighborhoodTest(unittest.TestCase):
@@ -58,16 +57,8 @@ class ItemBasedNeighborhoodTest(unittest.TestCase):
             [1, None, 1, None, 1],
         ]
         cf = ItemBasedNeighborhood(matrix, n_neighbors=2)
-        self.assertEqual(cf.neighborhood_of(0), [2, 4])
         self.assertIn(2, cf.recommend(0, 3))
         self.assertNotIn(0, cf.recommend(0, 3))
-
-    def test_parallel_process(self):
-        cf = ItemBasedNeighborhood()
-        fs = FileStreamImplicit("test/test_dataset/test.data", sep="\t")
-        cf.parallel_process_stream(fs.stream, n_cores=2)
-        self.assertEqual(len(cf.matrix), 306)
-        self.assertEqual(len(cf.matrix[196]), 475)
 
 
 if __name__ == "__main__":

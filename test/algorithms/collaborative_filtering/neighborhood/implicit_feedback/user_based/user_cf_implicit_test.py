@@ -78,9 +78,6 @@ class UserBasedNeighborhoodTest(unittest.TestCase):
             [1, None, 1, None, None, None, None, 1, None],
         ]
         cf = UserBasedNeighborhood(matrix, n_neighbors=2)
-        self.assertNotIn(user_id, cf.neighborhood_of(user_id))
-        self.assertIn(1, cf.neighborhood_of(user_id))
-        self.assertIn(3, cf.neighborhood_of(user_id))
         self.assertIn(8, cf.recommend(user_id, 3))
 
 

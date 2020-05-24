@@ -1,6 +1,7 @@
 from random import sample
 from algorithms.collaborative_filtering.neighborhood import NeighborhoodCF
 from data_structures import DynamicArray
+from utils import knn
 
 
 class Clustering(NeighborhoodCF):
@@ -20,17 +21,17 @@ class Clustering(NeighborhoodCF):
         return sample(elements, 1)
 
     def _init_clusters(self, elements):
-        clusters = []
+        clusters = [set() for centroid in self.centroids]
         for element in elements:
             sims = [self.similarity_between(
                 element, centroid) for centroid in self.centroids]
             max_sim = max(sims)
             if max_sim < self.th:
                 self.centroids.append(element)
-                clusters.append([element])
+                clusters.append({element})
             else:
                 centroid_index = sims.index(max_sim)
-                clusters[centroid_index].append(element)
+                clusters[centroid_index].add(element)
         return clusters
 
     def _init_cluster_map(self, elements):
@@ -46,14 +47,27 @@ class Clustering(NeighborhoodCF):
         neighbors = DynamicArray(
             default_value=lambda: DynamicArray(default_value=lambda: list()))
         for cluster in self.clusters:
-            cluster_neighborhood = self._init_neighborhood(cluster)
+            cluster_neighborhood = self._init_neighborhood_cluster(cluster)
             neighbors.append(cluster_neighborhood)
         return neighbors
+
+    def _init_neighborhood_cluster(self, candidate_set):
+        neighbors = DynamicArray(
+            [self._neighborhood(
+                ide, candidate_set
+                ) for ide in candidate_set], default_value=lambda: list())
+        return neighbors
+
+    def _neighborhood(self, ident, candidate_set):
+        candidates = candidate_set.difference({ident})
+        return knn(ident, candidates, self.n_neighbors,
+                   self.similarity_between)
 
     def neighborhood_of(self, identifier):
         try:
             cluster_index = self.cluster_map[identifier]
-            return self.neighbors[cluster_index][identifier]
+            position = self.clusters[cluster_index].index(identifier)
+            return self.neighbors[cluster_index][position]
         except KeyError:
             return []
 
@@ -66,12 +80,12 @@ class Clustering(NeighborhoodCF):
             max_sim = 0
         if max_sim < self.th:
             self.centroids.append(identifier)
-            self.clusters.append([identifier])
+            self.clusters.append({identifier})
             self.cluster_map[identifier] = len(self.clusters) - 1
         else:
             centroid_index = sims.index(max_sim)
-            self.clusters[centroid_index].append(identifier)
+            self.clusters[centroid_index].add(identifier)
             self.cluster_map[identifier] = centroid_index
             cluster = self.clusters[centroid_index]
-            self.neighbors[centroid_index] = super()._init_neighborhood(
+            self.neighbors[centroid_index] = self._init_neighborhood_cluster(
                 cluster)

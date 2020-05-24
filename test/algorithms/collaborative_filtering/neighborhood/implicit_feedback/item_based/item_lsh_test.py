@@ -1,7 +1,7 @@
 import unittest
 from random import choice
 from algorithms.collaborative_filtering.neighborhood.\
-    implicit_feedback import ItemLSH
+    implicit_feedback.item_based import ItemLSH
 
 
 class LSHBasedTest(unittest.TestCase):
@@ -20,7 +20,7 @@ class LSHBasedTest(unittest.TestCase):
         matrix = [
             [1, None, None, None, 1],
             [1, None, 1, None, 1],
-            [None, None, 2, None, None],
+            [None, None, 1, None, None],
             [None, 1, 1, None, 1],
             [1, None, 1, None, 1],
         ]
