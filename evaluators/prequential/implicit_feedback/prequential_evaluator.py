@@ -26,7 +26,7 @@ class PrequentialEvaluatorImplicit(PrequentialEvaluator):
         self.model.new_rating((user_id, item_id))
         end = time()
         elap_nr = end - start
-        # print(f"Window Average Error: {self.window_avg_error}")
-        # print(f"Elapsed Time on Rec: {elap_eval}")
-        # print(f"Elapsed Time on NR: {elap_nr}")
+        # print(f"Elapsed Recommendation Time: {elap_eval}")
+        # print(f"Elapsed New Rating Time: {elap_nr}")
+        # print(f"Average Window Error: {self.window_avg_error}")
         return self.window_avg_error, elap_eval, elap_nr

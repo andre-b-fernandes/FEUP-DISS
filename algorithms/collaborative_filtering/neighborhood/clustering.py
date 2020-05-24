@@ -1,0 +1,91 @@
+from random import sample
+from algorithms.collaborative_filtering.neighborhood import NeighborhoodCF
+from data_structures import DynamicArray
+from utils import knn
+
+
+class Clustering(NeighborhoodCF):
+    def __init__(
+        self, neighbors=[], n_neighbors=5, treshold=0.5, clusters=[],
+            centroids=[], cluster_map=[]):
+        self.th = treshold
+        self.centroids = self._init_model(centroids, self._init_centroids)
+        self.clusters = self._init_model(clusters, self._init_clusters)
+        self.cluster_map = self._init_model(
+            cluster_map, self._init_cluster_map)
+        super().__init__(neighbors, n_neighbors)
+
+    def _init_centroids(self, elements):
+        if len(elements) == 0:
+            return []
+        return sample(elements, 1)
+
+    def _init_clusters(self, elements):
+        clusters = [set() for centroid in self.centroids]
+        for element in elements:
+            sims = [self.similarity_between(
+                element, centroid) for centroid in self.centroids]
+            max_sim = max(sims)
+            if max_sim < self.th:
+                self.centroids.append(element)
+                clusters.append({element})
+            else:
+                centroid_index = sims.index(max_sim)
+                clusters[centroid_index].add(element)
+        return clusters
+
+    def _init_cluster_map(self, elements):
+        cluster_map = dict()
+        for element in elements:
+            for index, cluster in enumerate(self.clusters):
+                if element in cluster:
+                    cluster_map[element] = index
+                    break
+        return cluster_map
+
+    def _init_neighborhood(self):
+        neighbors = DynamicArray(
+            default_value=lambda: DynamicArray(default_value=lambda: list()))
+        for cluster in self.clusters:
+            cluster_neighborhood = self._init_neighborhood_cluster(cluster)
+            neighbors.append(cluster_neighborhood)
+        return neighbors
+
+    def _init_neighborhood_cluster(self, candidate_set):
+        neighbors = DynamicArray(
+            [self._neighborhood(
+                ide, candidate_set
+                ) for ide in candidate_set], default_value=lambda: list())
+        return neighbors
+
+    def _neighborhood(self, ident, candidate_set):
+        candidates = candidate_set.difference({ident})
+        return knn(ident, candidates, self.n_neighbors,
+                   self.similarity_between)
+
+    def neighborhood_of(self, identifier):
+        try:
+            cluster_index = self.cluster_map[identifier]
+            position = self.clusters[cluster_index].index(identifier)
+            return self.neighbors[cluster_index][position]
+        except KeyError:
+            return []
+
+    def increment(self, identifier):
+        sims = [self.similarity_between(
+            identifier, centroid) for centroid in self.centroids]
+        try:
+            max_sim = max(sims)
+        except ValueError:
+            max_sim = 0
+        if max_sim < self.th:
+            self.centroids.append(identifier)
+            self.clusters.append({identifier})
+            self.cluster_map[identifier] = len(self.clusters) - 1
+        else:
+            centroid_index = sims.index(max_sim)
+            self.clusters[centroid_index].add(identifier)
+            self.cluster_map[identifier] = centroid_index
+            cluster = self.clusters[centroid_index]
+            self.neighbors[centroid_index] = self._init_neighborhood_cluster(
+                cluster)

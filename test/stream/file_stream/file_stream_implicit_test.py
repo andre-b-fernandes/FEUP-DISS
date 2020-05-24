@@ -1,6 +1,6 @@
 from stream.file_stream.implicit import FileStreamImplicit
 from algorithms.collaborative_filtering.neighborhood.\
-    implicit_feedback import ItemLSH
+    implicit_feedback.item_based import ItemLSH
 import unittest
 
 

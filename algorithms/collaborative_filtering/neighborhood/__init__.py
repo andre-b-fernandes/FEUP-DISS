@@ -1,7 +1,17 @@
-from .user_neighborhood import NeighborhoodUserCF
+from .user_based_cf import UserBasedCF
 from .neighborhood import NeighborhoodCF
+from .clustering import Clustering
+from .user_neighborhood import UserNeighborhood
+from .user_clustering import UserClustering
+from .item_neighborhood import ItemNeighborhood
+from .item_clustering import ItemClustering
 
 __all__ = [
-    "NeighborhoodUserCF",
-    "NeighborhoodCF"
+    "UserBasedCF",
+    "NeighborhoodCF",
+    "Clustering",
+    "UserNeighborhood",
+    "UserClustering",
+    "ItemNeighborhood",
+    "ItemClustering"
 ]
