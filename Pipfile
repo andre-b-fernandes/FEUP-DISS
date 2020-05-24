@@ -12,6 +12,7 @@ codecov = "*"
 setuptools = "*"
 wheel = "*"
 twine = "*"
+progress = "*"
 
 [requires]
 python_version = "3.7"
