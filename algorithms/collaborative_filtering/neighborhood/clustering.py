@@ -66,7 +66,7 @@ class Clustering(NeighborhoodCF):
     def neighborhood_of(self, identifier):
         try:
             cluster_index = self.cluster_map[identifier]
-            position = self.clusters[cluster_index].index(identifier)
+            position = list(self.clusters[cluster_index]).index(identifier)
             return self.neighbors[cluster_index][position]
         except KeyError:
             return []
