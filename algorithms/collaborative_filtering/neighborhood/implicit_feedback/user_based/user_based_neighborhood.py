@@ -6,7 +6,7 @@ class UserBasedNeighborhood(UserBasedImplicitCF, UserNeighborhood):
     def __init__(self, matrix=[], similarities=[], co_rated=[],
                  neighbors=[], n_neighbors=5):
         super().__init__(matrix, similarities, co_rated)
-        super(UserNeighborhood, self).__init__(neighbors, n_neighbors)
+        UserNeighborhood.__init__(self, neighbors, n_neighbors)
 
     def new_rating(self, rating):
         super().new_rating(rating)

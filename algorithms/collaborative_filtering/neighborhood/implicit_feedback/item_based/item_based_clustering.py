@@ -8,9 +8,9 @@ class ItemBasedClustering(ItemBasedImplicitCF, ItemClustering):
             similarities=[], neighborhood=[], n_neighbors=5,
             treshold=0.5, clusters=[], centroids=[], cluster_map=[]):
         super().__init__(matrix, intersections, l1, inv_index, similarities)
-        super(ItemClustering, self).__init__(
-            neighborhood, n_neighbors,
-            treshold, clusters, centroids, cluster_map)
+        ItemClustering.__init__(
+            self, neighborhood, n_neighbors, treshold, clusters, centroids,
+            cluster_map)
 
     def new_rating(self, rating):
         _, item_id = rating

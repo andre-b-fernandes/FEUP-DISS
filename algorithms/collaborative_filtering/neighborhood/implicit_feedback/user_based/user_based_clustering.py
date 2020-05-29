@@ -8,8 +8,8 @@ class UserBasedClustering(UserBasedImplicitCF, UserClustering):
         neighbors=[], n_neighbors=5, treshold=0.5,
             clusters=[], centroids=[], cluster_map=[]):
         super().__init__(matrix, similarities, co_rated)
-        super(UserClustering, self).__init__(
-            neighbors, n_neighbors, treshold,
+        UserClustering.__init__(
+            self, neighbors, n_neighbors, treshold,
             clusters, centroids, cluster_map)
 
     def new_rating(self, rating):

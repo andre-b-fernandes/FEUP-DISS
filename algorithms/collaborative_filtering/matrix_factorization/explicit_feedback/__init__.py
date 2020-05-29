@@ -1,3 +1,3 @@
-from .matrix_factorization import MatrixFactorizationExplicit
+from .matrix_factorization import MFExplicitSGD
 
-__all__ = ["MatrixFactorizationExplicit"]
+__all__ = ["MFExplicitSGD"]

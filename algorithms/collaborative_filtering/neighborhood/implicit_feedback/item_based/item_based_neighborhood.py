@@ -7,7 +7,7 @@ class ItemBasedNeighborhood(ItemBasedImplicitCF, ItemNeighborhood):
         self, matrix=[], intersections=[], l1=[], inv_index={},
             similarities=[], neighborhood=[], n_neighbors=5):
         super().__init__(matrix, intersections, l1, inv_index, similarities)
-        super(ItemNeighborhood, self).__init__(neighborhood, n_neighbors)
+        ItemNeighborhood.__init__(self, neighborhood, n_neighbors)
 
     def new_rating(self, rating):
         super().new_rating(rating)

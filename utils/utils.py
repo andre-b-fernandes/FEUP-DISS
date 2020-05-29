@@ -47,3 +47,8 @@ def knn(element_id, candidates, n, heuristic):
 def avg(elements):
     not_none = list(filter(None, elements))
     return 0 if len(not_none) == 0 else sum(not_none) / len(not_none)
+
+
+def increment_avg(old_avg, new_value, elements):
+    not_none = list(filter(None, elements))
+    return old_avg + (new_value - old_avg) / len(not_none)

@@ -24,11 +24,11 @@ class EvaluationStatic:
     def plot(self):
         fig, axs = plt.subplots(3)
         fig.suptitle('Metrics')
-        axs[0].plot(self.x, self.err_rate, "r", label="Error")
+        axs[0].plot(self.x, self.err_rate, "r", label="Average error.")
         axs[0].legend()
-        axs[1].plot(self.x, self.elap_nr, "g", label="Elapsed NR time")
+        axs[1].plot(self.x, self.elap_nr, "g", label="Rating process time.")
         axs[1].legend()
-        axs[2].plot(self.x, self.elap_rec, "b", label="Elapsed Rec time")
+        axs[2].plot(self.x, self.elap_rec, "b", label="Recommendation time.")
         axs[2].legend()
 
     def show(self):

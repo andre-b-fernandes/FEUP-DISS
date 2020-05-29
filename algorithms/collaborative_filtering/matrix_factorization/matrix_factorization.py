@@ -33,12 +33,20 @@ class MatrixFactorization(CollaborativeFiltering):
                         default_value=lambda: uniform(0, 1)
                     ))
 
-    def _update_p_factors(self, user_id):
-        for item_id in self.items:
-            self._update_p(user_id, item_id)
-
     def predict(self, user_id, item_id):
         u_values = self.u[user_id]
         u_values.extend(self.latent_factors - 1)
         v_values = self.v.col(item_id)
         return inner(u_values, v_values)
+
+    def recommend(self, user_id, n_rec, heuristic, repeated=False):
+        candidates = self.items
+
+        if not repeated:
+            item_ids = {item_id for item_id, rating in enumerate(
+                self.matrix[user_id]) if rating is not None}
+            candidates = candidates.difference(item_ids)
+
+        return sorted(
+            candidates,
+            key=heuristic)[0:n_rec]
