@@ -1,3 +1,3 @@
-from .matrix_factorization import MatrixFactorizationImplicit
+from .matrix_factorization import MFImplicitSGD
 
-__all__ = ["MatrixFactorizationImplicit"]
+__all__ = ["MFImplicitSGD"]

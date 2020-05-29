@@ -4,13 +4,13 @@ from stream.file_stream.explicit import FileStreamExplicit
 from evaluators.prequential.\
     explicit_feedback import PrequentialEvaluatorExplicit
 from algorithms.collaborative_filtering.matrix_factorization.\
-    explicit_feedback import MatrixFactorizationExplicit
+    explicit_feedback import MFExplicitSGD
 
 
 class StaticTest(unittest.TestCase):
     def test_init(self):
         fs = FileStreamExplicit("test/test_dataset/test.data", sep="\t")
-        cf = MatrixFactorizationExplicit()
+        cf = MFExplicitSGD()
         ev = PrequentialEvaluatorExplicit(cf)
         st = EvaluationStatic(fs.stream, ev)
         self.assertEqual(st.stream, fs.stream)
@@ -22,7 +22,7 @@ class StaticTest(unittest.TestCase):
 
     def test_evaluate(self):
         fs = FileStreamExplicit("test/test_dataset/test.data", sep="\t")
-        cf = MatrixFactorizationExplicit()
+        cf = MFExplicitSGD()
         ev = PrequentialEvaluatorExplicit(cf)
         st = EvaluationStatic(fs.stream, ev)
         st.evaluate()

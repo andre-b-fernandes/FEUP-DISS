@@ -1,6 +1,6 @@
 from stream.file_stream.explicit import FileStreamExplicit
 from algorithms.collaborative_filtering.matrix_factorization.\
-    explicit_feedback import MatrixFactorizationExplicit
+    explicit_feedback import MFExplicitSGD
 import unittest
 
 
@@ -12,10 +12,10 @@ class FileStreamTest(unittest.TestCase):
 
     def test_process_stream(self):
         fs = FileStreamExplicit("test/test_dataset/test.data", sep="\t")
-        cf = MatrixFactorizationExplicit()
+        cf = MFExplicitSGD()
         model = fs.process_stream(cf)
         self.assertEqual(len(model.matrix), 306)
-        self.assertEqual(type(model), MatrixFactorizationExplicit)
+        self.assertEqual(type(model), MFExplicitSGD)
 
 
 if __name__ == "__main__":

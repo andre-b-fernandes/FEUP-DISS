@@ -2,16 +2,16 @@ import unittest
 from random import randint
 from utils import avg
 from algorithms.collaborative_filtering\
-    .matrix_factorization.explicit_feedback import MatrixFactorizationExplicit
+    .matrix_factorization.explicit_feedback import MFExplicitSGD
 
 
-class MatrixFactorizationExplicitTest(unittest.TestCase):
+class MFExplicitSGDTest(unittest.TestCase):
 
     def test_initialization(self):
         dimension = 10
         matrix = [[randint(1, 10) for _i in range(0, dimension)]
                   for _c in range(0, dimension)]
-        cf = MatrixFactorizationExplicit(matrix, lf=4)
+        cf = MFExplicitSGD(matrix, lf=4)
         self.assertEqual(len(cf.matrix), dimension)
         elements = [
             element for row in cf.preprocessed_matrix for element in row]
@@ -21,7 +21,7 @@ class MatrixFactorizationExplicitTest(unittest.TestCase):
         dimension = 10
         matrix = [[randint(1, 10) for _i in range(0, dimension)]
                   for _c in range(0, dimension)]
-        cf = MatrixFactorizationExplicit(matrix, lf=4)
+        cf = MFExplicitSGD(matrix, lf=4)
         for user_id in range(dimension):
             with self.subTest(i=user_id):
                 avg_user = avg(matrix[user_id])
@@ -33,7 +33,7 @@ class MatrixFactorizationExplicitTest(unittest.TestCase):
                         self.assertEqual(cf.predict(user_id, item_id), real)
 
     def test_empty_model(self):
-        cf = MatrixFactorizationExplicit()
+        cf = MFExplicitSGD()
         cf.predict_prep(196, 203)
         self.assertEqual(len(cf.u), 197)
         self.assertEqual(len(cf.v), cf.latent_factors)
@@ -48,8 +48,8 @@ class MatrixFactorizationExplicitTest(unittest.TestCase):
             [None, 1, 8, None, None],
             [7, None, 1, None, 6],
         ]
-        cf = MatrixFactorizationExplicit(matrix)
-        self.assertIn(0, cf.recommend(3, 1))
+        cf = MFExplicitSGD(matrix)
+        self.assertIn(3, cf.recommend(3, 1))
 
 
 if __name__ == "__main__":
