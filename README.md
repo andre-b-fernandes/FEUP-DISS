@@ -22,10 +22,11 @@ Current implemented algorithms:
 4. **Implicit User-Based Clustering Collaborative Filtering**
 5. **Implicit Locality-Sensitive-Hashing Item-Based Collaborative Filtering**
 6. **Implicit Matrix Factorization**
-7. **Explicit Matrix Factorization**
-8. **Implicit Item-Based Collaborative Filtering**
-9. **Implicit Parallel Item-Based Collaborative Filtering**
-10. **Implicit Item-Based Clustering Collaborative Filtering**
+7. **Explicit Matrix Factorization with matrix preprocessing**
+8. **Explicit Matrix Factorization without matrix preprocessing**
+9. **Implicit Item-Based Collaborative Filtering**
+10. **Implicit Parallel Item-Based Collaborative Filtering**
+11. **Implicit Item-Based Clustering Collaborative Filtering**
 
 ## Install
 
