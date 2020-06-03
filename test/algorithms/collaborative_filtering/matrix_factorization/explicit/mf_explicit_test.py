@@ -1,6 +1,5 @@
 import unittest
 from random import randint
-from utils import avg
 from algorithms.collaborative_filtering\
     .matrix_factorization.explicit_feedback import MFExplicitSGD
 
