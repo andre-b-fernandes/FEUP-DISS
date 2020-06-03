@@ -16,9 +16,6 @@ class FileStream:
             f.close()
         return stream
 
-    def _parse_rating(self, stream_arr):
-        raise NotImplementedError("_parse_rating is not implemented.")
-
     def process_stream(self, model):
         it = 0
         for rating in self.stream:
@@ -26,7 +23,3 @@ class FileStream:
             it += 1
             model.new_rating(rating)
         return model
-
-    def process_stream_eval_anim(self, evaluator, anim_class):
-        animation = anim_class(self.stream, evaluator)
-        animation.show()

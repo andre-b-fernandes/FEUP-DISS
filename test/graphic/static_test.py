@@ -30,6 +30,14 @@ class StaticTest(unittest.TestCase):
         self.assertEqual(len(st.elap_rec), len(st.stream))
         self.assertEqual(len(st.elap_nr), len(st.stream))
 
+    def test_plot(self):
+        fs = FileStreamExplicit("test/test_dataset/test.data", sep="\t")
+        cf = MFExplicitSGD()
+        ev = PrequentialEvaluatorExplicit(cf)
+        st = EvaluationStatic(fs.stream, ev)
+        st.evaluate()
+        self.assertEqual(st.plot(), None)
+
 
 if __name__ == "__main__":
     unittest.main()
