@@ -6,10 +6,9 @@ from .preprocess_matrix import PreprocessMatrix
 class MFExplicitPrepSGD(PreprocessMatrix, SGD):
     def __init__(
             self, matrix=[], u=[], v=[], user_avg=[],
-            item_avg=[], lf=2, prep=[], lr=0.01, reg=0.1,
-            scale=5):
+            item_avg=[], lf=2, prep=[], lr=0.01, reg=0.1):
         super().__init__(matrix, u, v, lf, user_avg, item_avg, prep)
-        SGD.__init__(self, lambda: uniform(0, scale), lr, reg)
+        SGD.__init__(self, lambda: uniform(0, 1), lr, reg)
         self._initial_training()
 
     def _initial_training(self):

@@ -8,9 +8,8 @@ from algorithms.collaborative_filtering.\
 class PreprocessMatrix(MatrixFactorization):
     def __init__(
             self, matrix=[], u=[], v=[],
-            lf=2, user_avg=[], item_avg=[], prep=[],
-            scale=5):
-        super().__init__(matrix, u, v, lf, scale)
+            lf=2, user_avg=[], item_avg=[], prep=[]):
+        super().__init__(matrix, u, v, lf, 1)
         self.user_avg = self._init_model(user_avg, self._init_user_avg)
         self.item_avg = self._init_model(item_avg, self._init_item_avg)
         self.preprocessed_matrix = self._init_model(
