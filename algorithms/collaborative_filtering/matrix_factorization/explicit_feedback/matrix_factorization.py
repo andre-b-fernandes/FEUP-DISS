@@ -8,7 +8,7 @@ class MFExplicitSGD(MatrixFactorization, SGD):
     def __init__(
             self, matrix=[], u=[], v=[], lf=2, lr=0.01, reg=0.1,
             scale=5):
-        super().__init__(matrix, u, v, lf)
+        super().__init__(matrix, u, v, lf, scale)
         SGD.__init__(self, lambda: uniform(0, scale), lr, reg)
 
     def _initial_training(self):
