@@ -1,10 +1,10 @@
 from numpy import array
 from data_structures import DynamicArray
+from random import uniform
 
 
 class SGD:
-    def __init__(self, default_lambda, lr, reg):
-        self.default_lambda = default_lambda
+    def __init__(self, lr, reg):
         self.learning_rate = lr
         self.reg_factor = reg
 
@@ -16,5 +16,5 @@ class SGD:
         updated_v = v_factors + self.learning_rate * (
             error * u_factors - self.reg_factor * v_factors)
         self.u[user_id] = DynamicArray(
-            list(updated_u), default_value=self.default_lambda)
+            list(updated_u), default_value=uniform(0, 1))
         self.v.set_col(item_id, updated_v)
