@@ -1,6 +1,5 @@
 from algorithms.collaborative_filtering.\
     matrix_factorization import MatrixFactorization
-from random import uniform
 from algorithms.collaborative_filtering.matrix_factorization import SGD
 
 
@@ -8,8 +7,8 @@ class MFImplicitSGD(MatrixFactorization, SGD):
     def __init__(
         self, matrix=[], u=[], v=[], lf=2,
             lr=0.01, reg=0.1):
-        super().__init__(matrix, u, v, lf, 1)
-        SGD.__init__(self, lambda: uniform(0, 1), lr, reg)
+        super().__init__(matrix, u, v, lf)
+        SGD.__init__(self, lr, reg)
         self._initial_training()
 
     def _initial_training(self):

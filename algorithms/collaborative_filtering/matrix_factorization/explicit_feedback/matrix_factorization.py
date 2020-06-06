@@ -1,15 +1,13 @@
 from algorithms.collaborative_filtering\
     .matrix_factorization import MatrixFactorization
 from algorithms.collaborative_filtering.matrix_factorization import SGD
-from random import uniform
 
 
 class MFExplicitSGD(MatrixFactorization, SGD):
     def __init__(
-            self, matrix=[], u=[], v=[], lf=2, lr=0.01, reg=0.1,
-            scale=5):
-        super().__init__(matrix, u, v, lf, scale)
-        SGD.__init__(self, lambda: uniform(0, scale), lr, reg)
+            self, matrix=[], u=[], v=[], lf=2, lr=0.01, reg=0.1):
+        super().__init__(matrix, u, v, lf)
+        SGD.__init__(self, lr, reg)
 
     def _initial_training(self):
         for user_id, ratings in enumerate(self.matrix):
