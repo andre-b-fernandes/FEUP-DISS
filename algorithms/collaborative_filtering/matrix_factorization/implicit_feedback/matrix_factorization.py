@@ -1,6 +1,5 @@
 from algorithms.collaborative_filtering.\
     matrix_factorization import MatrixFactorization
-from random import uniform
 from algorithms.collaborative_filtering.matrix_factorization import SGD
 
 
