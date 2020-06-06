@@ -5,8 +5,9 @@ from numpy import inner
 
 
 class MatrixFactorization(CollaborativeFiltering):
-    def __init__(self, matrix, u, v, lf):
+    def __init__(self, matrix, u, v, lf, sc):
         super().__init__(matrix)
+        self.scale = sc
         self.latent_factors = lf
         self.u, self.v = self._init_u_v(u, v)
 
@@ -18,19 +19,19 @@ class MatrixFactorization(CollaborativeFiltering):
     def _init_u(self):
         return DynamicArray([
             DynamicArray(
-                [uniform(0, 1) for _ in range(self.latent_factors)],
-                default_value=lambda: uniform(0, 1)) for _ in range(
+                [uniform(0, self.scale) for _ in range(self.latent_factors)],
+                default_value=lambda: uniform(0, self.scale)) for _ in range(
                     len(self.matrix))], default_value=lambda: DynamicArray(
-                        default_value=lambda: uniform(0, 1)
+                        default_value=lambda: uniform(0, self.scale)
                     ))
 
     def _init_v(self):
         return DynamicArray([
-            DynamicArray([uniform(0, 1) for _ in range(len(
+            DynamicArray([uniform(0, self.scale) for _ in range(len(
                 self.items))], default_value=lambda: uniform(
                     0, 1)) for _ in range(
                     self.latent_factors)], default_value=lambda: DynamicArray(
-                        default_value=lambda: uniform(0, 1)
+                        default_value=lambda: uniform(0, self.scale)
                     ))
 
     def predict(self, user_id, item_id):
