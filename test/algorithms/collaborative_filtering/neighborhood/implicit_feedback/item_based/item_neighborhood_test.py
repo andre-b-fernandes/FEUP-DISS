@@ -24,13 +24,6 @@ class ItemNeighborhoodTest(unittest.TestCase):
         cf = ItemBasedNeighborhood(matrix, n_neighbors=2)
         self._test_neighbors(cf, [[2, 4], [2, 4], [0, 4], [2, 4], [2, 0]])
 
-    def test_parallel_process(self):
-        cf = ItemBasedNeighborhood()
-        fs = FileStreamImplicit("test/test_dataset/test.data", sep="\t")
-        cf.parallel_process_stream(fs.stream, n_cores=2)
-        self.assertEqual(len(cf.matrix), 306)
-        self.assertEqual(len(cf.matrix[196]), 475)
-
 
 if __name__ == "__main__":
     unittest.main()

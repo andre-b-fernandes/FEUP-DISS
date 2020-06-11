@@ -21,12 +21,13 @@ Current implemented algorithms:
 3. **Implicit User-Based Collaborative Filtering**
 4. **Implicit User-Based Clustering Collaborative Filtering**
 5. **Implicit Locality-Sensitive-Hashing Item-Based Collaborative Filtering**
-6. **Implicit Matrix Factorization**
-7. **Explicit Matrix Factorization with matrix preprocessing**
-8. **Explicit Matrix Factorization without matrix preprocessing**
-9. **Implicit Item-Based Collaborative Filtering**
-10. **Implicit Parallel Item-Based Collaborative Filtering**
-11. **Implicit Item-Based Clustering Collaborative Filtering**
+6. **Implicit Locality-Sensitive-Hashing User-Based Collaborative Filtering**
+7. **Implicit Matrix Factorization**
+8. **Explicit Matrix Factorization with matrix preprocessing**
+9. **Explicit Matrix Factorization without matrix preprocessing**
+10. **Implicit Item-Based Collaborative Filtering**
+11. **Implicit Parallel Item-Based Collaborative Filtering**
+12. **Implicit Item-Based Clustering Collaborative Filtering**
 
 ## Install
 
@@ -55,3 +56,14 @@ This library uses **unittest** for unit testing and **flake8** as its linter.
 Usage examples are located in the `examples` folder.
 
 `pipenv run python -m examples.collaborative_filtering.neighborhood.explicit_feedback.user_based.user_based_clustering "data_set"`
+
+## Documentation
+
+Documentation is created using **Sphinx**.
+
+1. `pipenv run sphinx-apidoc -f -o docs/source algorithms`
+2. `pipenv run sphinx-apidoc -f -o docs/source stream`
+3. `pipenv run sphinx-apidoc -f -o docs/source data_structures`
+4. `pipenv run sphinx-apidoc -f -o docs/source utils`
+5. `pipenv run sphinx-apidoc -f -o docs/source graphic`
+6. `pipenv run sphinx-build -b html docs/source/ docs/build`

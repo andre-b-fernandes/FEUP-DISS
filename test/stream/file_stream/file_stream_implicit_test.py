@@ -1,6 +1,6 @@
 from stream.file_stream.implicit import FileStreamImplicit
 from algorithms.collaborative_filtering.neighborhood.\
-    implicit_feedback.item_based import ItemLSH
+    implicit_feedback.item_based import ItemLSHMinHash
 import unittest
 
 
@@ -12,10 +12,10 @@ class FileStreamTest(unittest.TestCase):
 
     def test_process_stream(self):
         fs = FileStreamImplicit("test/test_dataset/test.data", sep="\t")
-        cf = ItemLSH()
+        cf = ItemLSHMinHash()
         model = fs.process_stream(cf)
         self.assertEqual(len(model.matrix), 306)
-        self.assertEqual(type(model), ItemLSH)
+        self.assertEqual(type(model), ItemLSHMinHash)
 
 
 if __name__ == "__main__":

@@ -5,7 +5,6 @@ backup.txt
 .coverage
 *.swp
 dist/
-build/
 *.egg-info
 htmlcov/
 coverage.xml

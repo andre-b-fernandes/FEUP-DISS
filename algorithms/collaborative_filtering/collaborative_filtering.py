@@ -4,24 +4,18 @@ from data_structures import DynamicArray
 
 class CollaborativeFiltering(ABC):
     """
-        The definition of a Collaborative Filtering Model.\n
-
-        Attributes
-        ----------
-
-        matrix : array
-            The ratings matrix
-        model: array
-            The collaborative filtering model
+    Description
+        The CollaborativeFiltering abstract class. Intended
+        for generalizing collaborative filtering algorithms.
     """
     def __init__(self, matrix):
         """
-            Constructor
+        Description
+            CollaborativeFiltering's constructor.
 
-            Parameters
-            ----------
-            matrix: array
-                Ratings matrix.
+        Arguments
+            :param matrix: The ratings matrix.
+            :type matrix: list.
         """
         self.items = set(
             {item_id for row in matrix for item_id in range(len(row))})
@@ -31,6 +25,18 @@ class CollaborativeFiltering(ABC):
             self.matrix.append(DynamicArray(row))
 
     def _init_model(self, model, callback):
+        """
+        Description
+            A function which returns a collaborative filtering model,
+            initializing it if empty.
+
+        Arguments
+            :param model: The collaborative filtering model. E.g list of
+            average ratings. Has to have __len__ implemented.
+            :type model: Any.
+            :param callback: The function which returns a computed model.
+            :type callback: function.
+        """
         if len(model) == 0:
             return callback()
         else:
