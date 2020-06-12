@@ -11,7 +11,6 @@ from graphic import EvaluationStatic
 path = getopt.getopt(sys.argv[1:], "")[1][0]
 fs = FileStreamImplicit(path, sep="\t")
 cf = ItemBasedNeighborhood()
-# cf.parallel_process_stream(fs.stream, 4)
 ev = PrequentialEvaluatorImplicit(cf)
 stat = EvaluationStatic(fs.stream, ev)
 stat.process()
