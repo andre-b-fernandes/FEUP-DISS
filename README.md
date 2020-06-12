@@ -67,3 +67,5 @@ Documentation is created using **Sphinx**.
 4. `pipenv run sphinx-apidoc -f -o docs/source utils`
 5. `pipenv run sphinx-apidoc -f -o docs/source graphic`
 6. `pipenv run sphinx-build -b html docs/source/ docs/build`
+
+https://marko50.github.io/increc-documentation
