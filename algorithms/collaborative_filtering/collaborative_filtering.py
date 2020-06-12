@@ -31,8 +31,8 @@ class CollaborativeFiltering(ABC):
             initializing it if empty.
 
         Arguments
-            :param model: The collaborative filtering model. E.g list of
-            average ratings. Has to have __len__ implemented.
+            :param model: The collaborative filtering model. E.g list of\
+                average ratings. Has to have __len__ implemented.
             :type model: Any.
             :param callback: The function which returns a computed model.
             :type callback: function.

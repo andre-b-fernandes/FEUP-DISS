@@ -7,40 +7,31 @@ Submodules
 algorithms.collaborative\_filtering.neighborhood.implicit\_feedback.item\_based.item\_based\_cf module
 ------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.item_based.item_based_cf
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.item_based.item_based_cf.ItemBasedImplicitCF
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.implicit\_feedback.item\_based.item\_based\_clustering module
 --------------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.item_based.item_based_clustering
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.item_based.item_based_clustering.ItemBasedClustering
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.implicit\_feedback.item\_based.item\_based\_lsh\_mh module
 -----------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.item_based.item_based_lsh_mh
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.item_based.item_based_lsh_mh.ItemLSHMinHash
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.implicit\_feedback.item\_based.item\_based\_neighborhood module
 ----------------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.item_based.item_based_neighborhood
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.item_based.item_based_neighborhood.ItemBasedNeighborhood
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.item_based
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

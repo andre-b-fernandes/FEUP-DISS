@@ -49,7 +49,7 @@ class MFExplicitSGD(MatrixFactorization, SGD):
         """
         Description
             The function which processes a new iteration. Expects a tuple
-            (user, item)
+            (user, item).
 
         Arguments
             :param rating: The rating tuple.
@@ -72,8 +72,8 @@ class MFExplicitSGD(MatrixFactorization, SGD):
             :type user_id: int
             :param n_rec: The number of items to recommend.
             :type n_rec: int
-            :param repeated: Variable which defines if already rated products
-            can be recommended.
+            :param repeated: Variable which defines if already rated products\
+                can be recommended.
             :type repeated: boolean
         """
         return super().recommend(user_id, n_rec, lambda item_id: self.predict(

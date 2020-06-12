@@ -7,32 +7,23 @@ Submodules
 algorithms.collaborative\_filtering.neighborhood.explicit\_feedback.user\_based.user\_based\_cf module
 ------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based.user_based_cf
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based.user_based_cf.UserBasedExplicitCF
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.explicit\_feedback.user\_based.user\_based\_clustering module
 --------------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based.user_based_clustering
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based.user_based_clustering.UserBasedClustering
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.explicit\_feedback.user\_based.user\_based\_neighborhood module
 ----------------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based.user_based_neighborhood
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based.user_based_neighborhood.UserBasedNeighborhood
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: algorithms.collaborative_filtering.neighborhood.explicit_feedback.user_based
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

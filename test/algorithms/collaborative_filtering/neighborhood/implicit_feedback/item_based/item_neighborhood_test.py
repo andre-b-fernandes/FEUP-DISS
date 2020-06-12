@@ -1,7 +1,6 @@
 import unittest
 from algorithms.collaborative_filtering.\
     neighborhood.implicit_feedback.item_based import ItemBasedNeighborhood
-from stream.file_stream.implicit import FileStreamImplicit
 
 
 class ItemNeighborhoodTest(unittest.TestCase):

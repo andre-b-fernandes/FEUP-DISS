@@ -16,16 +16,7 @@ Submodules
 stream.file\_stream.file\_stream module
 ---------------------------------------
 
-.. automodule:: stream.file_stream.file_stream
+.. autoclass:: stream.file_stream.file_stream.FileStream
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: stream.file_stream
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

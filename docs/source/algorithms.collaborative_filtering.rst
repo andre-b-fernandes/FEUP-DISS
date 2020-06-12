@@ -16,16 +16,7 @@ Submodules
 algorithms.collaborative\_filtering.collaborative\_filtering module
 -------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.collaborative_filtering
+.. autoclass:: algorithms.collaborative_filtering.collaborative_filtering.CollaborativeFiltering
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: algorithms.collaborative_filtering
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

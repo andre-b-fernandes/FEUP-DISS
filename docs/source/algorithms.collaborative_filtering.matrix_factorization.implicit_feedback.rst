@@ -7,16 +7,7 @@ Submodules
 algorithms.collaborative\_filtering.matrix\_factorization.implicit\_feedback.matrix\_factorization module
 ---------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.matrix_factorization.implicit_feedback.matrix_factorization
+.. autoclass:: algorithms.collaborative_filtering.matrix_factorization.implicit_feedback.matrix_factorization.MFImplicitSGD
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: algorithms.collaborative_filtering.matrix_factorization.implicit_feedback
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

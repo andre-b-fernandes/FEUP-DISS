@@ -7,16 +7,7 @@ Submodules
 graphic.static module
 ---------------------
 
-.. automodule:: graphic.static
+.. autoclass:: graphic.static.EvaluationStatic
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: graphic
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

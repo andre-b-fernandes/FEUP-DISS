@@ -7,32 +7,23 @@ Submodules
 algorithms.collaborative\_filtering.matrix\_factorization.explicit\_feedback.matrix\_factorization module
 ---------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.matrix_factorization.explicit_feedback.matrix_factorization
+.. autoclass:: algorithms.collaborative_filtering.matrix_factorization.explicit_feedback.matrix_factorization.MFExplicitSGD
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.matrix\_factorization.explicit\_feedback.matrix\_factorization\_prep module
 ---------------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.matrix_factorization.explicit_feedback.matrix_factorization_prep
+.. autoclass:: algorithms.collaborative_filtering.matrix_factorization.explicit_feedback.matrix_factorization_prep.MFExplicitPrepSGD
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.matrix\_factorization.explicit\_feedback.preprocess\_matrix module
 ------------------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.matrix_factorization.explicit_feedback.preprocess_matrix
+.. autoclass:: algorithms.collaborative_filtering.matrix_factorization.explicit_feedback.preprocess_matrix.PreprocessMatrix
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: algorithms.collaborative_filtering.matrix_factorization.explicit_feedback
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

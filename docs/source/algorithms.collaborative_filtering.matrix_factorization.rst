@@ -16,24 +16,16 @@ Submodules
 algorithms.collaborative\_filtering.matrix\_factorization.matrix\_factorization module
 --------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.matrix_factorization.matrix_factorization
+.. autoclass:: algorithms.collaborative_filtering.matrix_factorization.matrix_factorization.MatrixFactorization
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
+
 
 algorithms.collaborative\_filtering.matrix\_factorization.stochastic\_gradient\_descent module
 ----------------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.matrix_factorization.stochastic_gradient_descent
+.. autoclass:: algorithms.collaborative_filtering.matrix_factorization.stochastic_gradient_descent.SGD
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: algorithms.collaborative_filtering.matrix_factorization
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

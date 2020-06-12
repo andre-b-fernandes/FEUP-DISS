@@ -78,7 +78,7 @@ class PreprocessMatrix(MatrixFactorization):
     def _init_preprocessed_matrix(self):
         """
         Description
-            A function which computes and returns a preprocessed matrix as a 
+            A function which computes and returns a preprocessed matrix as a
             DynamicArray.
         """
         prep = DynamicArray(default_value=lambda: DynamicArray())

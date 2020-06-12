@@ -115,16 +115,43 @@ class ItemBasedImplicitCF(CollaborativeFiltering):
         return inv_index
 
     def _update_intersections(self, user_id, item_id):
+        """
+        Description
+            A function which updates the intersection matrix.
+
+        Arguments
+            :param user_id: The user identifier.
+            :type user_id: int
+            :param item_id: The item identifier.
+            :type item_id: int
+        """
         for another_item_id in self.inv_index_of(user_id):
             self.intersections[(item_id, another_item_id)] += 1
 
     def _update_similarities(self, item_id):
+        """
+        Description
+            A function which updates the similarity matrix.
+
+        Arguments
+            :param item_id: The item identifier.
+            :type item_id: int
+        """
         for another_item_id in self.items:
             self.similarities[(
                 item_id, another_item_id)] = self._init_similarity(
                     item_id, another_item_id)
 
     def new_rating(self, rating):
+        """
+        Description
+            The function which processes a new iteration. Expects a tuple
+            (user, item).
+
+        Arguments
+            :param rating: The rating tuple.
+            :type rating: tuple
+        """
         user_id, item_id = rating
         self.matrix[user_id][item_id] = 1
         self.users.add(user_id)
@@ -136,6 +163,19 @@ class ItemBasedImplicitCF(CollaborativeFiltering):
         self._update_similarities(item_id)
 
     def recommend(self, user_id, n_rec, repeated=False):
+        """
+        Description
+            A function which returns recommendations for a user.
+
+        Arguments
+            :param user_id: The user identifier.
+            :type user_id: int
+            :param n_rec: The number of items to recommend.
+            :type n_rec: int
+            :param repeated: Variable which defines if already rated products\
+                can be recommended.
+            :type repeated: boolean
+        """
         candidates = {
             ident for item in self.items for ident in self.neighborhood_of(
                 item)}
@@ -146,15 +186,38 @@ class ItemBasedImplicitCF(CollaborativeFiltering):
         shuffle(final)
         return final[0:n_rec]
 
-    def process_stream(self, stream):
-        for rating in stream:
-            self.new_rating(rating)
-
     def intersections_between(self, item, another_item):
+        """
+        Description
+            A function which returns the item intersections between
+            two items.
+
+        Arguments
+            :param item: The first item.
+            :type item: int
+            :param another_item: The second item.
+            :type another_item: int
+        """
         return self.intersections[(item, another_item)]
 
     def l1_norm_of(self, item):
+        """
+        Description
+            A function which returns an item's l1_norm.
+
+        Arguments
+            :param item: The item identifier.
+            :type item: int
+        """
         return self.l1_norms[item]
 
     def inv_index_of(self, user_id):
+        """
+        Description
+            A function which returns a users' rated items.
+
+        Arguments
+            :param user_id: The user identifier.
+            :type user_id: int
+        """
         return self.inv_index[user_id]

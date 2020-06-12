@@ -7,16 +7,7 @@ Submodules
 stream.file\_stream.implicit.file\_stream module
 ------------------------------------------------
 
-.. automodule:: stream.file_stream.implicit.file_stream
+.. autoclass:: stream.file_stream.implicit.file_stream.FileStreamImplicit
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: stream.file_stream.implicit
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

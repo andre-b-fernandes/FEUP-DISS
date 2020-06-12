@@ -106,8 +106,8 @@ class MatrixFactorization(CollaborativeFiltering):
             :type user_id: int
             :param n_rec: The number of items to recommend.
             :type n_rec: int
-            :param heuristic: A function which takes a item and computes
-            a value to be used while sorting.
+            :param heuristic: A function which takes a item and computes\
+                a value to be used while sorting.
             :type heuristic: function
             :param repeated: Can be previously rated products be recommended.
             :type repeated: boolean

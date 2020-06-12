@@ -16,64 +16,55 @@ Submodules
 algorithms.collaborative\_filtering.neighborhood.clustering module
 ------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.clustering
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.clustering.Clustering
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.item\_clustering module
 ------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.item_clustering
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.item_clustering.ItemClustering
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.item\_neighborhood module
 --------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.item_neighborhood
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.item_neighborhood.ItemNeighborhood
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.neighborhood module
 --------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.neighborhood
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.neighborhood.NeighborhoodCF
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.user\_based\_cf module
 -----------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.user_based_cf
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.user_based_cf.UserBasedCF
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.user\_clustering module
 ------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.user_clustering
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.user_clustering.UserClustering
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 algorithms.collaborative\_filtering.neighborhood.user\_neighborhood module
 --------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.user_neighborhood
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.user_neighborhood.UserNeighborhood
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: algorithms.collaborative_filtering.neighborhood
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

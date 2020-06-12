@@ -19,7 +19,7 @@ class LSHMinHash(CollaborativeFiltering):
         Arguments
             :param matrix: A ratings matrix.
             :type matrix: list
-            :param signature_matrix: The signature matrix which contains
+            :param signature_matrix: The signature matrix which contains\
                 elements' signatures in the columns.
             :type signature_matrix: DynamicArray
             :param buckets: The buckets where elements are hashed into.
@@ -52,7 +52,7 @@ class LSHMinHash(CollaborativeFiltering):
             A function which calculates signatures for a matrix.
 
         Arguments
-            :param matrix: A ratings matrix
+            :param matrix: A ratings matrix.
             :type matrix: DynamicArray
         """
         signatures = []
@@ -119,13 +119,13 @@ class LSHMinHash(CollaborativeFiltering):
             self.buckets[band].add(identifier)
 
     def _group_by_bands(self, vector):
-        """"
+        """
         Description
             A function which groups an element by the number
             of bands.
 
         Arguments
-            :param vector: The element to be grouped
+            :param vector: The element to be grouped.
             :type vector: DynamicArray
         """
         return [tuple(vector[c:c + self.n_bands])

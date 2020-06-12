@@ -16,16 +16,7 @@ Submodules
 algorithms.collaborative\_filtering.neighborhood.implicit\_feedback.lsh\_min\_hash module
 -----------------------------------------------------------------------------------------
 
-.. automodule:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.lsh_min_hash
+.. autoclass:: algorithms.collaborative_filtering.neighborhood.implicit_feedback.lsh_min_hash.LSHMinHash
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: algorithms.collaborative_filtering.neighborhood.implicit_feedback
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:

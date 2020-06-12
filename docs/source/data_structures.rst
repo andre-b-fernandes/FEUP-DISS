@@ -7,32 +7,23 @@ Submodules
 data\_structures.dynamic\_array module
 --------------------------------------
 
-.. automodule:: data_structures.dynamic_array
+.. autoclass:: data_structures.dynamic_array.DynamicArray
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 data\_structures.pair\_variances module
 ---------------------------------------
 
-.. automodule:: data_structures.pair_variances
+.. autoclass:: data_structures.pair_variances.PairVariances
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
 
 data\_structures.symmetric\_matrix module
 -----------------------------------------
 
-.. automodule:: data_structures.symmetric_matrix
+.. autoclass:: data_structures.symmetric_matrix.SymmetricMatrix
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: data_structures
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :private-members:
+   :special-members:
