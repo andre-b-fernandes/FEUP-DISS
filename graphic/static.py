@@ -55,29 +55,33 @@ class EvaluationStatic:
         axs[2].plot(self.x, self.elap_rec, "b", label="Recommendation time.")
         axs[2].legend()
 
-    def export(self, show=False):
+    def export(self, path, show=False):
         """
         Description
             A function which exports the plots to an image format. Displays
             it if show=True.
 
         Arguments
+            :param path: The output path of the figure.
+            :type path: string
             :param show: Does it show the image or not.
             :type show: boolean
         """
         if show:
             plt.show()
-        plt.savefig("output.png")
+        plt.savefig(path)
 
-    def process(self, show=False):
+    def process(self, path, show=False):
         """
         Description
             A function which processes a data stream and creates a graph.
 
         Arguments
+            :param path: The output path of the figure.
+            :type path: string
             :param show: Does it show the image or not.
             :type show: boolean
         """
         self.evaluate()
         self.plot()
-        self.export(show)
+        self.export(path, show)

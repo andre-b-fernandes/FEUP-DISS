@@ -8,9 +8,9 @@ from stream.file_stream.explicit import FileStreamExplicit
 from graphic import EvaluationStatic
 
 path = getopt.getopt(sys.argv[1:], "")[1][0]
+output = getopt.getopt(sys.argv[1:], "")[1][1]
 fs = FileStreamExplicit(path, sep="\t")
 cf = UserBasedNeighborhood()
 ev = PrequentialEvaluatorExplicit(cf)
 stat = EvaluationStatic(fs.stream, ev)
-stat.process()
-# fs.process_stream(cf)
+stat.process(path=output)

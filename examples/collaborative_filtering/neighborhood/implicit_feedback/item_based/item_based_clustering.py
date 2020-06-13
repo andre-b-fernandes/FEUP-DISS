@@ -8,8 +8,9 @@ from stream.file_stream.implicit import FileStreamImplicit
 from graphic import EvaluationStatic
 
 path = getopt.getopt(sys.argv[1:], "")[1][0]
+output = getopt.getopt(sys.argv[1:], "")[1][1]
 fs = FileStreamImplicit(path, sep="\t")
 cf = ItemBasedClustering()
 ev = PrequentialEvaluatorImplicit(cf)
 stat = EvaluationStatic(fs.stream, ev)
-stat.process()
+stat.process(path=output)

@@ -39,7 +39,7 @@ Currently the library is only deployed on **Pypi Test**.
 
 For development purposes:
 
-1. **Python3.7**
+1. **Python3.8**
 2. **Pipenv** is required to run this on a virtual environment. `pip install --user pipenv`
 3. `python -m pipenv lock -r > requirements.txt`
 4. `pipenv install -r requirements.txt`
