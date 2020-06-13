@@ -26,8 +26,7 @@ Current implemented algorithms:
 8. **Explicit Matrix Factorization with matrix preprocessing**
 9. **Explicit Matrix Factorization without matrix preprocessing**
 10. **Implicit Item-Based Collaborative Filtering**
-11. **Implicit Parallel Item-Based Collaborative Filtering**
-12. **Implicit Item-Based Clustering Collaborative Filtering**
+11. **Implicit Item-Based Clustering Collaborative Filtering**
 
 ## Install
 
