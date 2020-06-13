@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="increc",  # Replace with your own username
-    version="0.0.13",
+    version="0.0.14",
     author="Fernando André Fernandes",
     author_email="fernandoandre49@gmail.com",
     description="Software library on stream based recommender systems",
