@@ -113,7 +113,7 @@ class LSHMinHash(CollaborativeFiltering):
             :param identifier: An element identifier.
             :type identifier: int
         """
-        vector = self.get_vector(self.signature_matrix, identifier)
+        vector = self.signature_matrix.col(identifier)
         bands = self._group_by_bands(vector)
         for band in bands:
             self.buckets[band].add(identifier)
