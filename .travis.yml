@@ -18,6 +18,5 @@ deploy:
   user: __token__
   on:
     branch: master
-  server: https://test.pypi.org/legacy/
   password:
     secure: $PYPI_PASSWORD_HASH
