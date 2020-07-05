@@ -39,5 +39,5 @@ steps:
     pipenv run flake8
   displayName: 'linter'
 
-- script: pipenv run codecov
+- script: pipenv run codecov -t ${{ secrets.CODECOV_TOKEN }}
   displayName: 'codecov'

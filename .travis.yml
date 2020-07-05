@@ -16,6 +16,6 @@ deploy:
   provider: pypi
   user: __token__
   on:
-    # branch: master
+    branch: master
   password:
-    secure: bZhCV948hLPpwHpM2SUdMw8BLdpWKetoy4KwxS4LKPAGymfDdb/b4e7or2I2xrugO2w/CGtN6vvLIg5iool/INWB6vHJLWscANKebB2kyTFtjPs5N0fXyM+XWok7cLm2V1rCrzeZu6qLJBPWls5zIwZDan8E5tOp5By2X2P8CWlt/JeLJSEcxU1jM/UDdCWErErocVm51nj1SdnOdC+eMPpCyjQq4UvmcwhvCB7nzxfn/HVenRS7tomQ7ubk1PcZ8jL2lLOFaX5amjBUuB3kHycaRcRaOvqib4H+MwCRyPHuQ7/ffHqv+a231Z/GPCgYHiEdQ+xNqzy7Fu1PZwTpyDklMKkCLdiApwBJfh8+0U2yPafASkBb4q5bv/1jPFMX6zHbB/U532os3xz7dnDpTDIgaCkWJMJxg+GZ42onEIVpYHClWfi1YCqhtyfCgD772haq3mzvNbfCfNvuZWBNSnqGv0caEiQ8Jpxfi5AHB2Pgmnq5hvS3LQ/+Ftzx3mwBOQIuSVbux9x1wkONiDJ+tD/ta9dYkjWze4ouhiiwh7aT1j6tVD51vo0yOUh1BxVC7INrKfzxt6HmBG/ZxThhQ6s9pqCo7UfJGoICKMJf1mBXKSPHy5+0oJyKdsHbj5Egukg0o9zZgZfZX03jnZ242bEoP43l35VBKCEYy2npPIg=
+    secure: ${{ secrets.PYPI_SECURE_HASH }}
