@@ -25,6 +25,6 @@ class LSHBasedTest(unittest.TestCase):
             [None, 1, 1, None, 1],
             [1, None, 1, None, 1],
         ]
-        lh_based = UserLSHMinHash(matrix, n_perms=20)
+        lh_based = UserLSHMinHash(matrix, n_perms=120)
         lh_based.new_rating((1, 1))
         self.assertIn(1, lh_based.recommend(4, 5))
