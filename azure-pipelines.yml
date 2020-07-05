@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 strategy:
   matrix:
-    Python37:
+    Python38:
       python.version: '3.8'
 
 steps:
@@ -39,5 +39,5 @@ steps:
     pipenv run flake8
   displayName: 'linter'
 
-- script: pipenv run codecov -t 7ae0b673-79dc-4607-bb40-bdbbd13f33fa
+- script: pipenv run codecov
   displayName: 'codecov'
