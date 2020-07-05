@@ -21,8 +21,8 @@ jobs:
         pip install pipenv
         python -m pipenv lock -r > requirements.txt
         pipenv install -r requirements.txt
-        coverage run --source=. -m unittest discover -v -p "*_test.py"
-        coverage xml
+        pipenr run coverage run --source=. -m unittest discover -v -p "*_test.py"
+        pipenv run coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
