@@ -13,6 +13,7 @@ script:
 - pipenv run python -m unittest discover -v -p "*_test.py"
 - pipenv run flake8
 deploy:
+  skip_cleanup: true
   provider: pypi
   user: __token__
   on:
