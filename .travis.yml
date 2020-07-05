@@ -12,6 +12,8 @@ install:
 script:
 - pipenv run python -m unittest discover -v -p "*_test.py"
 - pipenv run flake8
+coverage:
+  - pipenv run codecov -t ${{ secrets.CODECOV_TOKEN }}
 deploy:
   provider: pypi
   user: __token__
