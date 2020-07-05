@@ -22,7 +22,7 @@ copyright = '2020, Fernando Fernandes'
 author = 'Fernando Fernandes'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.14'
+release = '0.0.16'
 
 
 # -- General configuration ---------------------------------------------------

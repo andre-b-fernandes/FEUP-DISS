@@ -30,9 +30,9 @@ Current implemented algorithms:
 
 ## Install
 
-Currently the library is only deployed on **Pypi Test**.
+Currently the library is deployed on **Pypi**.
 
-`pip install -i https://test.pypi.org/simple/ increc`
+`pip install increc`
 
 ## Dependencies
 
